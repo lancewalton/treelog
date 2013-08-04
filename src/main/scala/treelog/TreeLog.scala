@@ -1,11 +1,6 @@
 package treelog
 
-import scalaz.{ -\/, \/-, \/ }
-import scalaz.EitherT
-import scalaz.Monoid
-import scalaz.Show
-import scalaz.Writer
-import scalaz.idInstance
+import scalaz.{ -\/, \/-, \/, EitherT, Monoid, Show, Writer, idInstance }
 import scalaz.syntax.monadListen._
 
 sealed trait LogTreeLabel[+R] {
