@@ -7,7 +7,7 @@ import IO._
 object BuildSettings {
 
   val buildSettings: Seq[Setting[_]] = Defaults.defaultSettings ++ Seq[Setting[_]](
-    organization := "treelog",
+    organization := "org.treelog",
     name := "treelog",
     version := "1.0.0-SNAPSHOT",
     scalaVersion := "2.10.2",
@@ -81,7 +81,7 @@ object TreeLogBuild extends Build {
   import Publishing._
 
   lazy val flyScala = Project(
-    "TreeLog",
+    "treeLog",
     file("."),
     settings = buildSettings ++ publishSettings ++ Seq(resolvers := Seq(Classpaths.typesafeResolver), libraryDependencies ++= allDependencies))
 }
