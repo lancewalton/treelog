@@ -7,7 +7,7 @@ import IO._
 object BuildSettings {
 
   val buildSettings: Seq[Setting[_]] = Defaults.defaultSettings ++ Seq[Setting[_]](
-    organization := "com.casualmiracles",
+    organization := "treelog",
     name := "treelog",
     version := "1.0.0-SNAPSHOT",
     scalaVersion := "2.10.2",
