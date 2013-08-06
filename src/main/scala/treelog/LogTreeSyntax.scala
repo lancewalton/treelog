@@ -41,8 +41,7 @@ trait LogTreeSyntax[R] {
       err ← eitherWriter.left(description)
     } yield err
 
-  private def success[A](a: A, tree: LogTree): DescribedComputation[A] =
-    eitherWriter.right(a) :++>> (_ ⇒ tree)
+  private def success[A](a: A, tree: LogTree): DescribedComputation[A] = eitherWriter.right(a) :++>> (_ ⇒ tree)
 
   def failureLog[A](dc: DescribedComputation[A]): DescribedComputation[A] = {
     val logTree = dc.run.written match {
@@ -56,8 +55,7 @@ trait LogTreeSyntax[R] {
     }
   }
 
-  def failure[A](description: String): DescribedComputation[A] =
-    failure(description, TreeNode(DescribedLogTreeLabel(description, false, referencesMonoid.zero)))
+  def failure[A](description: String): DescribedComputation[A] = failure(description, TreeNode(DescribedLogTreeLabel(description, false, referencesMonoid.zero)))
 
   def success[A](a: A, description: String): DescribedComputation[A] =
     success(a, TreeNode(DescribedLogTreeLabel(description, true, referencesMonoid.zero)))
@@ -120,13 +118,9 @@ trait LogTreeSyntax[R] {
         DescribedLogTreeLabel(
           description,
           allSuccessful(children),
-          children.foldLeft(referencesMonoid.zero)((acc, child) ⇒ referencesMonoid.append(acc, references(child)))),
-        parts.map(_._2))
+          children.foldLeft(referencesMonoid.zero)((acc, child) ⇒ referencesMonoid.append(acc, references(child)))), parts.map(_._2))
 
-      if (mapped.exists(_.run.value.isLeft))
-        failure(description, branch)
-      else
-        success(parts.flatMap(_._1.toOption), branch)
+      if (mapped.exists(_.run.value.isLeft)) failure(description, branch) else success(parts.flatMap(_._1.toOption), branch)
     }
   }
 
