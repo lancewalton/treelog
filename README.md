@@ -1,4 +1,62 @@
 treelog
 =======
 
-Allows logging in a tree structure so that comprehensive logging does not become incomprehensible.
+TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.
+
+It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
+TreeLog is an attempt to add a Writer monad in the form of a Tree structure that can be used in for-comprehensions to produce a heirarchical log of a computation.
+
+An Example
+----------
+
+It is extremely important to log what is going on in the computation of roots of a quadratic equation. What we want is this:
+(See LogTreeExample.scala in the test package)
+
+    root(Parameters(2, 5, 3)).run.written.shows
+ 
+ results in 
+
+<pre>   
+Extracting root
+  Calculating Numerator
+    Calculating Determinant
+      Calculating b^2
+        Got b: 5.0
+        Got b^2: 25.0
+      Calculating 4ac
+        Got a: 2.0
+        Got c: 3.0
+        Got 4ac: 24.0
+      Got b^2 - 4ac: 1.0
+    Calculating sqrt(determinant)
+      Determinant (1.0) is >= 0
+      Got sqrt(determinant): 1.0
+    Got b: 5.0
+    Got -b: -5.0
+    Got -b + sqrt(determinant): -4.0
+  Calculating Denominator
+    Got a: 2.0
+    Got 2a: 4.0
+  Got root = numerator / denominator: -1.0
+</pre>
+
+Or, in the case of a failure (no complex roots)
+
+    root(Parameters(2, 5, 10)).run.written.shows
+
+gives 
+<pre>    
+Extracting root: Failed
+  Calculating Numerator: Failed
+    Calculating Determinant
+      Calculating b^2
+        Got b: 5.0
+        Got b^2: 25.0
+      Calculating 4ac
+        Got a: 2.0
+        Got c: 10.0
+        Got 4ac: 80.0
+      Got b^2 - 4ac: -55.0
+    Calculating sqrt(determinant): Failed
+      Determinant (-55.0) is < 0: Failed
+</pre>
