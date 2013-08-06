@@ -12,8 +12,10 @@ An Example
 It is extremely important to log what is going on in the computation of roots of a quadratic equation. What we want is this:
 (See LogTreeExample.scala in the test package)
 
+```scala
     root(Parameters(2, 5, 3)).run.written.shows
- 
+ ```
+
  results in 
 
 <pre>   
@@ -42,7 +44,9 @@ Extracting root
 
 Or, in the case of a failure (no complex roots)
 
+```scala
     root(Parameters(2, 5, 10)).run.written.shows
+```
 
 gives 
 <pre>    
