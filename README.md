@@ -6,6 +6,19 @@ TreeLog enables logging as a tree structure so that comprehensive logging does n
 It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
 TreeLog is an attempt to add a Writer monad in the form of a Tree structure that can be used in for-comprehensions to produce a heirarchical log of a computation.
 
+Getting TreeLog
+---------------
+
+In SBT do this:
+
+```scala
+resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
+
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.0.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.0.2")
+```
+
 An Example
 ----------
 
@@ -14,9 +27,9 @@ It is extremely important to log what is going on in the computation of roots of
 
 ```scala
 root(Parameters(2, 5, 3)).run.written.shows
- ```
+```
 
- results in 
+results in 
 
 <pre>   
 Extracting root
@@ -48,7 +61,8 @@ Or, in the case of a failure (no complex roots)
 root(Parameters(2, 5, 10)).run.written.shows
 ```
 
-gives 
+gives
+
 <pre>    
 Extracting root: Failed
   Calculating Numerator: Failed
@@ -63,17 +77,5 @@ Extracting root: Failed
       Got b^2 - 4ac: -55.0
     Calculating sqrt(determinant): Failed
       Determinant (-55.0) is < 0: Failed
+
 </pre>
-
-Getting TreeLog
----------------
-In SBT do this:
-
-```scala
-resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
-
-libraryDependencies ++= Seq (
-    "com.casualmiracles" %% "treelog" % "1.0.0-SNAPSHOT",
-    "org.scalaz" %% "scalaz-core" % "7.0.2"
-)
-```
