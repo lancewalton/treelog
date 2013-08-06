@@ -141,12 +141,6 @@ trait LogTreeSyntax[R] {
     def ~>!(description: A ⇒ String): DescribedComputation[A] = ~>!(description(a))
   }
 
-  private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
-    case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true, referencesMonoid.zero))
-    case TreeNode(l: UndescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children), l.references), children)
-    case TreeNode(l: DescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree)), l.references), List(tree))
-  }
-
   private def references(t: LogTree) = t match {
     case NilTree ⇒ referencesMonoid.zero
     case TreeNode(l: LogTreeLabel[R], _) ⇒ l.references
@@ -166,6 +160,12 @@ trait LogTreeSyntax[R] {
         case -\/(error) ⇒ failure(error, branchHoister(ew.run.written, description))
         case \/-(value) ⇒ success(value, branchHoister(ew.run.written, description))
       }
+
+    private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
+      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true, referencesMonoid.zero))
+      case TreeNode(l: UndescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children), l.references), children)
+      case TreeNode(l: DescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree)), l.references), List(tree))
+    }
   }
 
   implicit class LabellingSyntax[A](w: DescribedComputation[A]) {
