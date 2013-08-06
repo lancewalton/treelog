@@ -13,7 +13,3 @@ case class DescribedLogTreeLabel[+R](description: String, success: Boolean, refe
 case class UndescribedLogTreeLabel[+R](success: Boolean, references: R) extends LogTreeLabel[R] {
   def fold[T](f: DescribedLogTreeLabel[R] ⇒ T, g: UndescribedLogTreeLabel[R] ⇒ T) = g(this)
 }
-
-sealed trait Tree[+Label]
-case object NilTree extends Tree[Nothing]
-case class TreeNode[Label](label: Label, children: List[Tree[Label]] = Nil) extends Tree[Label]
