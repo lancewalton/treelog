@@ -10,7 +10,7 @@ An Example
 ----------
 
 It is extremely important to log what is going on in the computation of roots of a quadratic equation. What we want is this:
-(See LogTreeExample.scala in the test package)
+(See [LogTreeExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/LogTreeExample.scala) in the test package)
 
 ```scala
 root(Parameters(2, 5, 3)).run.written.shows
