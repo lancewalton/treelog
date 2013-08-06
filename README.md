@@ -64,3 +64,16 @@ Extracting root: Failed
     Calculating sqrt(determinant): Failed
       Determinant (-55.0) is < 0: Failed
 </pre>
+
+Getting TreeLog
+---------------
+In SBT do this:
+
+```scala
+resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
+
+libraryDependencies ++= Seq (
+    "com.casualmiracles" %% "treelog" % "1.0.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.0.2"
+)
+```
