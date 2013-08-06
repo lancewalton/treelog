@@ -12,7 +12,9 @@ object BuildSettings {
     version := "1.0.0-SNAPSHOT",
     scalaVersion := "2.10.2",
     scalaBinaryVersion := "2.10",
-    scalacOptions := Seq("-language:_")
+    scalacOptions := Seq("-language:_"),
+    unmanagedSourceDirectories in Compile := Seq(file("src/main/scala") ),
+    unmanagedSourceDirectories in Test := Seq(file("src/test/scala") )
   )
 }
 

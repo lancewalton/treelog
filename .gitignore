@@ -4,7 +4,6 @@ target/
 /.classpath
 /bin
 /.cache
-
 .ensime
-
 .ensime_lucene
+.settings
