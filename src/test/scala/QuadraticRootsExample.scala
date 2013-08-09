@@ -1,8 +1,8 @@
-import treelog.LogTreeSyntax
+import treelog.LogTreeSyntaxWithoutAnnotations._
 import scalaz._
 import Scalaz._
 
-object LoggingTreeMain extends App with LogTreeSyntax {
+object LoggingTreeMain extends App {
 
   case class Parameters(a: Double, b: Double, c: Double)
 

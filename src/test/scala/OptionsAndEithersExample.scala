@@ -1,9 +1,8 @@
-import treelog.LogTreeSyntax
-
+import treelog.LogTreeSyntaxWithoutAnnotations._
 import scalaz._
 import Scalaz._
 
-object OptionsAndEithersExample extends App with LogTreeSyntax {
+object OptionsAndEithersExample extends App {
   val simple = "Calculating sum" ~< {
     for {
       x ← 11 ~> (v ⇒ s"x = $v")

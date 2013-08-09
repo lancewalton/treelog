@@ -2,12 +2,9 @@ package treelog
 
 import org.scalatest._
 import scalaz.{ -\/, \/- }
-import scalaz.Monoid
-
-object TestLogTreeSyntax extends LogTreeSyntax
 
 class LogTreeSyntaxSpec extends Spec with MustMatchers {
-  import TestLogTreeSyntax._
+  import LogTreeSyntaxWithoutAnnotations._
 
   object `success must` {
     def `produce a value with the given value on the right` { success(1, "Yay").run.value must be === \/-(1) }
@@ -17,6 +14,17 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
   object `failure must` {
     def `produce a value with the given message on the left` { failure("Boo").run.value must be === -\/("Boo") }
     def `produce a written with a failure leaf node and the given desscription` { failure("Boo").run.written must be === node("Boo", false) }
+  }
+
+  object `~~ must` {
+    def `add the annotation to the relevant node's annotation set` {
+      val s = new LogTreeSyntax[Int] {}
+      import s._
+
+      val node = success(1, "Yay") ~~ 1 ~~ 2
+      node.run.value must be === \/-(1)
+      node.run.written must be === TreeNode(DescribedLogTreeLabel("Yay", true, Set(1, 2)))
+    }
   }
 
   object `leaf creation with ~> and a string must` {
@@ -155,12 +163,9 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
   }
 
-  private def node(description: String, success: Boolean, children: TreeNode[LogTreeLabel]*) =
-    nodeWithData(description, success, children: _*)
-
-  private def node(success: Boolean, children: TreeNode[LogTreeLabel]*) =
-    TreeNode(UndescribedLogTreeLabel(success), children.toList)
-
-  private def nodeWithData(description: String, success: Boolean, children: TreeNode[LogTreeLabel]*) =
+  private def node(description: String, success: Boolean, children: TreeNode[LogTreeLabel[Nothing]]*) =
     TreeNode(DescribedLogTreeLabel(description, success), children.toList)
+
+  private def node(success: Boolean, children: TreeNode[LogTreeLabel[Nothing]]*) =
+    TreeNode(UndescribedLogTreeLabel(success), children.toList)
 }

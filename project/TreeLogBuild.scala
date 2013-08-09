@@ -82,7 +82,7 @@ object TreeLogBuild extends Build {
   import Dependencies._
   import Publishing._
 
-  lazy val flyScala = Project(
+  lazy val treeLog = Project(
     "treeLog",
     file("."),
     settings = buildSettings ++ publishSettings ++ Seq(resolvers := Seq(Classpaths.typesafeResolver), libraryDependencies ++= allDependencies))
