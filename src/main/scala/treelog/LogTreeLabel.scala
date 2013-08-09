@@ -1,15 +1,14 @@
 package treelog
 
-sealed trait LogTreeLabel[+R] {
-  def references: R
+sealed trait LogTreeLabel {
   def success(): Boolean
-  def fold[T](f: DescribedLogTreeLabel[R] ⇒ T, g: UndescribedLogTreeLabel[R] ⇒ T): T
+  def fold[T](f: DescribedLogTreeLabel ⇒ T, g: UndescribedLogTreeLabel ⇒ T): T
 }
 
-case class DescribedLogTreeLabel[+R](description: String, success: Boolean, references: R) extends LogTreeLabel[R] {
-  def fold[T](f: DescribedLogTreeLabel[R] ⇒ T, g: UndescribedLogTreeLabel[R] ⇒ T) = f(this)
+case class DescribedLogTreeLabel(description: String, success: Boolean) extends LogTreeLabel {
+  def fold[T](f: DescribedLogTreeLabel ⇒ T, g: UndescribedLogTreeLabel ⇒ T) = f(this)
 }
 
-case class UndescribedLogTreeLabel[+R](success: Boolean, references: R) extends LogTreeLabel[R] {
-  def fold[T](f: DescribedLogTreeLabel[R] ⇒ T, g: UndescribedLogTreeLabel[R] ⇒ T) = g(this)
+case class UndescribedLogTreeLabel(success: Boolean) extends LogTreeLabel {
+  def fold[T](f: DescribedLogTreeLabel ⇒ T, g: UndescribedLogTreeLabel ⇒ T) = g(this)
 }

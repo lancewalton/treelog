@@ -24,14 +24,6 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     def `produce a written with a failure leaf node and the given desscription` { failure("Boo").run.written must be === node("Boo", false) }
   }
 
-  object `~~ must` {
-    def `add the data to the root node's data` {
-      val node = success(1, "Yay") ~~ Set(1, 2)
-      node.run.value must be === \/-(1)
-      node.run.written must be === nodeWithData("Yay", true, Set(1, 2))
-    }
-  }
-
   object `leaf creation with ~> and a string must` {
     def `do the same as 'success'` { (1 ~> "Foo").run.run must be === success(1, "Foo").run.run }
   }
@@ -99,14 +91,6 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
       val result = List(1, 2) ~>* ("Parent", x ⇒ (x == 1) ~>? s"Child: $x")
       result.run.written must be === node("Parent", false, node("Child: 1", true), node("Child: 2", false))
       result.run.value must be === -\/("Parent")
-    }
-
-    def `accumulate all references from the children into the parent` {
-      val result = List(1, 2) ~>* ("Parent", x ⇒ (x == 1) ~>? s"Child: $x" ~~ Set(x, x * 10))
-      result.run.written match {
-        case NilTree ⇒ fail
-        case TreeNode(l, _) ⇒ l.references must be === Set(1, 10, 2, 20)
-      }
     }
   }
 
@@ -176,12 +160,12 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
   }
 
-  private def node(description: String, success: Boolean, children: TreeNode[LogTreeLabel[_]]*) =
-    nodeWithData(description, success, Set(), children: _*)
+  private def node(description: String, success: Boolean, children: TreeNode[LogTreeLabel]*) =
+    nodeWithData(description, success, children: _*)
 
-  private def node(success: Boolean, children: TreeNode[LogTreeLabel[_]]*) =
-    TreeNode(UndescribedLogTreeLabel(success, Set()), children.toList)
+  private def node(success: Boolean, children: TreeNode[LogTreeLabel]*) =
+    TreeNode(UndescribedLogTreeLabel(success), children.toList)
 
-  private def nodeWithData(description: String, success: Boolean, data: Set[Int], children: TreeNode[LogTreeLabel[_]]*) =
-    TreeNode(DescribedLogTreeLabel(description, success, data), children.toList)
+  private def nodeWithData(description: String, success: Boolean, children: TreeNode[LogTreeLabel]*) =
+    TreeNode(DescribedLogTreeLabel(description, success), children.toList)
 }

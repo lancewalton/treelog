@@ -4,11 +4,9 @@ import scalaz.{ -\/, \/-, \/, EitherT, Monoid, Show, Writer, idInstance }
 import scalaz.syntax.monadListen._
 
 trait LogTreeSyntax[R] {
-  type LogTree = Tree[LogTreeLabel[R]]
+  type LogTree = Tree[LogTreeLabel]
   type LogTreeWriter[+V] = Writer[LogTree, V]
   type DescribedComputation[+V] = EitherT[LogTreeWriter, String, V]
-
-  val referencesMonoid: Monoid[R]
 
   implicit val logTreeMonoid = new Monoid[LogTree] {
     val zero = NilTree
@@ -19,17 +17,17 @@ trait LogTreeSyntax[R] {
 
         case (l, NilTree) ⇒ l
 
-        case (TreeNode(UndescribedLogTreeLabel(leftSuccess, leftData), leftChildren), TreeNode(UndescribedLogTreeLabel(rightSuccess, rightData), rightChildren)) ⇒
-          TreeNode(UndescribedLogTreeLabel(leftSuccess && rightSuccess, referencesMonoid.append(leftData, rightData)), leftChildren ::: rightChildren)
+        case (TreeNode(UndescribedLogTreeLabel(leftSuccess), leftChildren), TreeNode(UndescribedLogTreeLabel(rightSuccess), rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftSuccess && rightSuccess), leftChildren ::: rightChildren)
 
-        case (TreeNode(UndescribedLogTreeLabel(leftSuccess, leftData), leftChildren), rightNode @ TreeNode(rightLabel, rightChildren)) ⇒
-          TreeNode(UndescribedLogTreeLabel(leftSuccess && rightLabel.success, referencesMonoid.append(leftData, rightLabel.references)), leftChildren :+ rightNode)
+        case (TreeNode(UndescribedLogTreeLabel(leftSuccess), leftChildren), rightNode @ TreeNode(rightLabel, rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftSuccess && rightLabel.success), leftChildren :+ rightNode)
 
-        case (leftNode @ TreeNode(leftLabel, leftChildren), TreeNode(UndescribedLogTreeLabel(rightSuccess, rightData), rightChildren)) ⇒
-          TreeNode(UndescribedLogTreeLabel(leftLabel.success && rightSuccess, referencesMonoid.append(leftLabel.references, rightData)), leftNode :: rightChildren)
+        case (leftNode @ TreeNode(leftLabel, leftChildren), TreeNode(UndescribedLogTreeLabel(rightSuccess), rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftLabel.success && rightSuccess), leftNode :: rightChildren)
 
-        case (leftNode: TreeNode[LogTreeLabel[R]], rightNode: TreeNode[LogTreeLabel[R]]) ⇒
-          TreeNode(UndescribedLogTreeLabel(leftNode.label.success && rightNode.label.success, referencesMonoid.append(leftNode.label.references, rightNode.label.references)), List(augend, addend))
+        case (leftNode: TreeNode[LogTreeLabel], rightNode: TreeNode[LogTreeLabel]) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftNode.label.success && rightNode.label.success), List(augend, addend))
       }
   }
 
@@ -45,37 +43,20 @@ trait LogTreeSyntax[R] {
 
   def failureLog[A](dc: DescribedComputation[A]): DescribedComputation[A] = {
     val logTree = dc.run.written match {
-      case NilTree                                     ⇒ NilTree
-      case TreeNode(UndescribedLogTreeLabel(s, r), c)  ⇒ TreeNode(UndescribedLogTreeLabel(false, r), c)
-      case TreeNode(DescribedLogTreeLabel(d, s, r), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false, r), c)
+      case NilTree ⇒ NilTree
+      case TreeNode(UndescribedLogTreeLabel(s), c) ⇒ TreeNode(UndescribedLogTreeLabel(false), c)
+      case TreeNode(DescribedLogTreeLabel(d, s), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
-      case \/-(a)   ⇒ success(a, logTree)
+      case \/-(a) ⇒ success(a, logTree)
     }
   }
 
-  def failure[A](description: String): DescribedComputation[A] = failure(description, TreeNode(DescribedLogTreeLabel(description, false, referencesMonoid.zero)))
+  def failure[A](description: String): DescribedComputation[A] = failure(description, TreeNode(DescribedLogTreeLabel(description, false)))
 
   def success[A](a: A, description: String): DescribedComputation[A] =
-    success(a, TreeNode(DescribedLogTreeLabel(description, true, referencesMonoid.zero)))
-
-  implicit class ReferencesSyntax[A](w: DescribedComputation[A]) {
-    def ~~(references: ⇒ R) = {
-      val newTree = w.run.written match {
-        case NilTree                                    ⇒ NilTree
-        case TreeNode(l: DescribedLogTreeLabel[R], c)   ⇒ TreeNode(l.copy(references = referencesMonoid.append(l.references, references)), c)
-        case TreeNode(l: UndescribedLogTreeLabel[R], c) ⇒ TreeNode(l.copy(references = referencesMonoid.append(l.references, references)), c)
-      }
-
-      w.run.value match {
-        case -\/(error) ⇒ failure(error, newTree)
-        case \/-(value) ⇒ success(value, newTree)
-      }
-    }
-
-    def refersTo(references: ⇒ R) = ~~(references)
-  }
+    success(a, TreeNode(DescribedLogTreeLabel(description, true)))
 
   implicit class BooleanSyntax[A](b: Boolean) {
     def ~>?(description: String): DescribedComputation[Boolean] =
@@ -120,8 +101,7 @@ trait LogTreeSyntax[R] {
       val branch = TreeNode(
         DescribedLogTreeLabel(
           description,
-          allSuccessful(children),
-          children.foldLeft(referencesMonoid.zero)((acc, child) ⇒ referencesMonoid.append(acc, references(child)))), parts.map(_._2))
+          allSuccessful(children)), parts.map(_._2))
 
       if (mapped.exists(_.run.value.isLeft)) failure(description, branch) else success(parts.flatMap(_._1.toOption), branch)
     }
@@ -138,15 +118,10 @@ trait LogTreeSyntax[R] {
     def ~>!(description: A ⇒ String): DescribedComputation[A] = ~>!(description(a))
   }
 
-  private def references(t: LogTree) = t match {
-    case NilTree                         ⇒ referencesMonoid.zero
-    case TreeNode(l: LogTreeLabel[R], _) ⇒ l.references
-  }
-
   private def allSuccessful(trees: Iterable[LogTree]) =
     trees.forall {
       _ match {
-        case NilTree        ⇒ true
+        case NilTree ⇒ true
         case TreeNode(l, _) ⇒ l.success
       }
     }
@@ -159,9 +134,9 @@ trait LogTreeSyntax[R] {
       }
 
     private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
-      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true, referencesMonoid.zero))
-      case TreeNode(l: UndescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children), l.references), children)
-      case TreeNode(l: DescribedLogTreeLabel[R], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree)), l.references), List(tree))
+      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true))
+      case TreeNode(l: UndescribedLogTreeLabel, children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children)), children)
+      case TreeNode(l: DescribedLogTreeLabel, children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree))), List(tree))
     }
   }
 
@@ -174,11 +149,11 @@ trait LogTreeSyntax[R] {
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       tree match {
-        case NilTree                   ⇒ List((depth, "NilTree"))
+        case NilTree ⇒ List((depth, "NilTree"))
         case TreeNode(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1))
       }
 
-    private def line(depth: Int, label: LogTreeLabel[R]) =
+    private def line(depth: Int, label: LogTreeLabel) =
       (depth, (if (label.success) "" else "Failed: ") + label.fold(l ⇒ l.description, l ⇒ "No Description"))
   }
 }
