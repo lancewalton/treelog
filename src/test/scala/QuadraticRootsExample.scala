@@ -2,16 +2,14 @@ import treelog.LogTreeSyntax
 import scalaz._
 import Scalaz._
 
-object LoggingTreeMain extends App with LogTreeSyntax[Double] {
+object LoggingTreeMain extends App with LogTreeSyntax {
 
-  val referencesMonoid: Monoid[Double] = implicitly[Monoid[Double]]
-  
   case class Parameters(a: Double, b: Double, c: Double)
- 
-    // Roots are real
-    println(root(Parameters(2, 5, 3)).run.written.shows)
- 
-    /*
+
+  // Roots are real
+  println(root(Parameters(2, 5, 3)).run.written.shows)
+
+  /*
 Extracting root
   Calculating Numerator
     Calculating Determinant
@@ -34,10 +32,10 @@ Extracting root
     Got 2a: 4.0
   Got root = numerator / denominator: -1.0
 */
- 
-    // Roots are complex
-    println(root(Parameters(2, 5, 10)).run.written.shows)
-    /*
+
+  // Roots are complex
+  println(root(Parameters(2, 5, 10)).run.written.shows)
+  /*
 Extracting root: Failed
   Calculating Numerator: Failed
     Calculating Determinant
@@ -52,7 +50,7 @@ Extracting root: Failed
     Calculating sqrt(determinant): Failed
       Determinant (-55.0) is < 0: Failed
 */
- 
+
   private def root(parameters: Parameters) = {
     "Extracting root" ~< {
       for {
@@ -62,7 +60,7 @@ Extracting root: Failed
       } yield root
     }
   }
- 
+
   private def numerator(parameters: Parameters) =
     for {
       det ← determinant(parameters)
@@ -71,7 +69,7 @@ Extracting root: Failed
       minusB ← -b ~> ("Got -b: " + _)
       sum ← (minusB + sqrtDet) ~> ("Got -b + sqrt(determinant): " + _)
     } yield sum
- 
+
   private def sqrtDeterminant(det: Double) =
     "Calculating sqrt(determinant)" ~< {
       for {
@@ -79,13 +77,13 @@ Extracting root: Failed
         sqrtDet ← Math.sqrt(det) ~> ("Got sqrt(determinant): " + _)
       } yield sqrtDet
     }
- 
+
   private def denominator(parameters: Parameters) =
     for {
       a ← parameters.a ~> ("Got a: " + _)
       twoA ← (2 * a) ~> ("Got 2a: " + _)
     } yield twoA
- 
+
   private def determinant(parameters: Parameters) =
     "Calculating Determinant" ~< {
       for {
@@ -94,7 +92,7 @@ Extracting root: Failed
         determinant ← (bSquared - fourac) ~> ("Got b^2 - 4ac: " + _)
       } yield determinant
     }
- 
+
   private def bSquared(parameters: Parameters) =
     "Calculating b^2" ~< {
       for {
@@ -102,7 +100,7 @@ Extracting root: Failed
         bSquared ← (b * b) ~> ("Got b^2: " + _)
       } yield bSquared
     }
- 
+
   private def fourac(parameters: Parameters) =
     "Calculating 4ac" ~< {
       for {

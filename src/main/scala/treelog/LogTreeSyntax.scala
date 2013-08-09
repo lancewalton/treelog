@@ -3,7 +3,7 @@ package treelog
 import scalaz.{ -\/, \/-, \/, EitherT, Monoid, Show, Writer, idInstance }
 import scalaz.syntax.monadListen._
 
-trait LogTreeSyntax[R] {
+trait LogTreeSyntax {
   type LogTree = Tree[LogTreeLabel]
   type LogTreeWriter[+V] = Writer[LogTree, V]
   type DescribedComputation[+V] = EitherT[LogTreeWriter, String, V]

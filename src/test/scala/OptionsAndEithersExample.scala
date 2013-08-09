@@ -3,9 +3,7 @@ import treelog.LogTreeSyntax
 import scalaz._
 import Scalaz._
 
-object OptionsAndEithersExample extends App with LogTreeSyntax[Double] {
-  val referencesMonoid: Monoid[Double] = implicitly[Monoid[Double]]
-
+object OptionsAndEithersExample extends App with LogTreeSyntax {
   val simple = "Calculating sum" ~< {
     for {
       x ← 11 ~> (v ⇒ s"x = $v")

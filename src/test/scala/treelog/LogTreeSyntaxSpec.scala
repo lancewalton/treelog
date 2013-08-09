@@ -4,12 +4,7 @@ import org.scalatest._
 import scalaz.{ -\/, \/- }
 import scalaz.Monoid
 
-object TestLogTreeSyntax extends LogTreeSyntax[Set[Int]] {
-  val referencesMonoid = new Monoid[Set[Int]] {
-    def zero = Set()
-    def append(a: Set[Int], b: ⇒ Set[Int]) = a ++ b
-  }
-}
+object TestLogTreeSyntax extends LogTreeSyntax
 
 class LogTreeSyntaxSpec extends Spec with MustMatchers {
   import TestLogTreeSyntax._
