@@ -27,6 +27,22 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
   }
 
+  object `allAnnotations must` {
+    def `compile the set of all annotations in the tree` {
+      val s = new LogTreeSyntax[Int] {}
+      import s._
+
+      val computation = "Parent" ~< {
+        for {
+          i ← 1 ~> "Child One" ~~ 1
+          j ← 2 ~> "Child Two" ~~ 2
+        } yield 3
+      } ~~ 3
+
+      computation.allAnnotations must be === Set(1, 2, 3)
+    }
+  }
+
   object `leaf creation with ~> and a string must` {
     def `do the same as 'success'` { (1 ~> "Foo").run.run must be === success(1, "Foo").run.run }
   }

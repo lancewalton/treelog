@@ -2,6 +2,7 @@ package treelog
 
 import scalaz.{ -\/, \/-, \/, EitherT, Monoid, Show, Writer, idInstance }
 import scalaz.syntax.monadListen._
+import scala.annotation.tailrec
 
 trait LogTreeSyntax[Annotation] {
   type LogTree = Tree[LogTreeLabel[Annotation]]
@@ -76,6 +77,16 @@ trait LogTreeSyntax[Annotation] {
 
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[A] = ~~(annotations)
     def annotateWith(annotation: Annotation): DescribedComputation[A] = ~~(annotation)
+
+    def allAnnotations = {
+      def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
+        tree match {
+          case NilTree ⇒ accumulator
+          case t: TreeNode[LogTreeLabel[Annotation]] ⇒ t.children.foldLeft(accumulator ++ t.label.annotations)((acc, child) ⇒ recurse(child, acc))
+        }
+      }
+      recurse(w.run.written, Set())
+    }
   }
 
   implicit class BooleanSyntax[A](b: Boolean) {
