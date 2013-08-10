@@ -81,7 +81,7 @@ Extracting root: Failed
         Got 4ac: 80.0
       Got b^2 - 4ac: -55.0
     Calculating sqrt(determinant): Failed
-      Determinant (-55.0) is < 0: Failed
+      Determinant (-55.0) is &lt; 0: Failed
 </pre>
 
 ### Annotations ###
