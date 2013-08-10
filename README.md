@@ -4,7 +4,7 @@ treelog
 TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.
 
 It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
-TreeLog is an attempt to add a Writer monad in the form of a Tree structure that can be used in for-comprehensions to produce a heirarchical log of a computation.
+TreeLog is an attempt to add a Writer monad in the form of a Tree structure that can be used in for-comprehensions to produce a hierarchical log of a computation.
 
 Getting TreeLog
 ---------------
@@ -19,11 +19,11 @@ libraryDependencies ++= Seq(
     "org.scalaz" %% "scalaz-core" % "7.0.2")
 ```
 
-Using TreeLog by an Example
+Using TreeLog - Examples
 ----------
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala) in the test package is the simplest way to see how to use TreeLog.
 
-The quadratic example does the extremely important of logging the computation of roots of a quadratic equation. This:
+The quadratic example does the extremely important job of logging the computation of roots of a quadratic equation. This:
 
 ```scala
 root(Parameters(2, 5, 3)).run.written.shows
@@ -55,7 +55,7 @@ Extracting root
   Got root = numerator / denominator: -1.0
 </pre>
 
-Or, in the case of a failure (roots are complex)
+Or, in the case of a failure (when the roots are complex)
 
 ```scala
 root(Parameters(2, 5, 10)).run.written.shows
@@ -79,3 +79,10 @@ Extracting root: Failed
       Determinant (-55.0) is < 0: Failed
 
 </pre>
+
+
+[AnnotationsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala) shows how nodes in the log tree can be annotated
+with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities in a database, and you
+want to make sure that the audit trail is associated with each of the modified entities. You can use the annotation facility to carry the key (or something richer) for each
+modified entity.
+

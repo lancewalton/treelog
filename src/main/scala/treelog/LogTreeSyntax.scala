@@ -189,7 +189,7 @@ trait LogTreeSyntax[Annotation] {
     private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success, showDescription(label))))
 
     private def showAnnotations(annotations: Set[Annotation], line: String) =
-      if (annotations.isEmpty) line else (line + " - [" + annotations.map(_.toString).mkString(", ") + "]")
+      if (annotations.isEmpty) line else (line + " - [" + annotations.map(annotationShow.show(_)).mkString(", ") + "]")
 
     private def showDescription(label: LogTreeLabel[Annotation]) = label.fold(l ⇒ l.description, l ⇒ "No Description")
 
