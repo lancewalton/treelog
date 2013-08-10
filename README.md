@@ -21,6 +21,9 @@ libraryDependencies ++= Seq(
 
 Using TreeLog - Examples
 ----------
+
+### Quadratic Roots ###
+
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala) in the test package is the simplest way to see how to use TreeLog.
 
 The quadratic example does the extremely important job of logging the computation of roots of a quadratic equation. This:
@@ -79,6 +82,7 @@ Extracting root: Failed
       Determinant (-55.0) is < 0: Failed
 </pre>
 
+### Annotations ###
 
 [AnnotationsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala) shows how nodes in the log tree can be annotated
 with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities in a database, and you
