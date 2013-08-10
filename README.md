@@ -24,7 +24,9 @@ Using TreeLog - Examples
 
 ### Quadratic Roots ###
 
-[QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala) in the test package is the simplest way to see how to use TreeLog.
+[QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and
+[OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala)
+in the test package is the simplest way to see how to use TreeLog.
 
 The quadratic example does the extremely important job of logging the computation of roots of a quadratic equation. This:
 
