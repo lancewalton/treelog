@@ -77,7 +77,6 @@ Extracting root: Failed
       Got b^2 - 4ac: -55.0
     Calculating sqrt(determinant): Failed
       Determinant (-55.0) is < 0: Failed
-
 </pre>
 
 
