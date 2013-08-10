@@ -1,7 +1,8 @@
 package treelog
 
 import scalaz.{ -\/, \/-, \/, EitherT, Functor, Traverse, Monad, Monoid, Show, Writer, idInstance }
-import scalaz.syntax.foldable._
+import scalaz.syntax.foldable
+import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
 import scala.annotation.tailrec
 
@@ -129,14 +130,14 @@ trait LogTreeSyntax[Annotation] {
 
     def ~<[F[_], A](mapped: F[DescribedComputation[A]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[A]] = {
       val parts = monad.map(mapped)(m ⇒ (m.run.value, m.run.written))
-      import scalaz._, Scalaz._
-      val children = monad.map(parts)(_._2)
+
+      val children = monad.map(parts)(_._2).toList
       val branch = TreeNode(
         DescribedLogTreeLabel(
           description,
-          allSuccessful(children.toList),
+          allSuccessful(children),
           Set[Annotation]()),
-        monad.map(parts)(_._2).toList)
+        children)
 
       mapped.sequence.run.value match {
         case -\/(_) ⇒ failure(description, branch)
