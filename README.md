@@ -55,7 +55,7 @@ Extracting root
   Got root = numerator / denominator: -1.0
 </pre>
 
-Or, in the case of a failure (no complex roots)
+Or, in the case of a failure (roots are complex)
 
 ```scala
 root(Parameters(2, 5, 10)).run.written.shows
