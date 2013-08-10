@@ -1,6 +1,7 @@
 package treelog
 
-import scalaz.{ -\/, \/-, \/, EitherT, Monoid, Show, Writer, idInstance }
+import scalaz.{ -\/, \/-, \/, EitherT, Functor, Traverse, Monad, Monoid, Show, Writer, idInstance }
+import scalaz.syntax.foldable._
 import scalaz.syntax.monadListen._
 import scala.annotation.tailrec
 
@@ -44,13 +45,13 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[A](dc: DescribedComputation[A]): DescribedComputation[A] = {
     val logTree = dc.run.written match {
-      case NilTree ⇒ NilTree
-      case TreeNode(UndescribedLogTreeLabel(s, a), c) ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
+      case NilTree                                     ⇒ NilTree
+      case TreeNode(UndescribedLogTreeLabel(s, a), c)  ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
       case TreeNode(DescribedLogTreeLabel(d, s, a), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
-      case \/-(a) ⇒ success(a, logTree)
+      case \/-(a)   ⇒ success(a, logTree)
     }
   }
 
@@ -81,7 +82,7 @@ trait LogTreeSyntax[Annotation] {
     def allAnnotations = {
       def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
         tree match {
-          case NilTree ⇒ accumulator
+          case NilTree                               ⇒ accumulator
           case t: TreeNode[LogTreeLabel[Annotation]] ⇒ t.children.foldLeft(accumulator ++ t.label.annotations)((acc, child) ⇒ recurse(child, acc))
         }
       }
@@ -124,24 +125,28 @@ trait LogTreeSyntax[Annotation] {
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
   }
 
-  implicit class IterableSyntax(description: String) {
-    def ~<[A](mapped: List[DescribedComputation[A]]): DescribedComputation[List[A]] = {
-      val parts = mapped.map(m ⇒ (m.run.value, m.run.written)).toList
+  implicit class DescriptionSyntax(description: String) {
 
-      val children = parts.map(_._2)
+    def ~<[F[_], A](mapped: F[DescribedComputation[A]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[A]] = {
+      val parts = monad.map(mapped)(m ⇒ (m.run.value, m.run.written))
+      import scalaz._, Scalaz._
+      val children = monad.map(parts)(_._2)
       val branch = TreeNode(
         DescribedLogTreeLabel(
           description,
-          allSuccessful(children),
+          allSuccessful(children.toList),
           Set[Annotation]()),
-        parts.map(_._2))
+        monad.map(parts)(_._2).toList)
 
-      if (mapped.exists(_.run.value.isLeft)) failure(description, branch) else success(parts.flatMap(_._1.toOption), branch)
+      mapped.sequence.run.value match {
+        case -\/(_) ⇒ failure(description, branch)
+        case \/-(v) ⇒ success(v, branch)
+      }
     }
   }
 
-  implicit class ListSyntax[A](as: List[A]) {
-    def ~>*[B](description: String, f: A ⇒ DescribedComputation[B]): DescribedComputation[List[B]] = description ~< as.map(f)
+  implicit class TraversableMonadSyntax[F[_], A](as: F[A])(implicit monad: Monad[F], traverse: Traverse[F]) {
+    def ~>*[B](description: String, f: A ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< monad.map(as)(f)
   }
 
   implicit class LeafSyntax[A](a: A) {
@@ -154,7 +159,7 @@ trait LogTreeSyntax[Annotation] {
   private def allSuccessful(trees: Iterable[LogTree]) =
     trees.forall {
       _ match {
-        case NilTree ⇒ true
+        case NilTree        ⇒ true
         case TreeNode(l, _) ⇒ l.success
       }
     }
@@ -182,7 +187,7 @@ trait LogTreeSyntax[Annotation] {
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       tree match {
-        case NilTree ⇒ List((depth, "NilTree"))
+        case NilTree                   ⇒ List((depth, "NilTree"))
         case TreeNode(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1))
       }
 

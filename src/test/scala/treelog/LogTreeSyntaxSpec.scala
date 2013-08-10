@@ -2,6 +2,7 @@ package treelog
 
 import org.scalatest._
 import scalaz.{ -\/, \/- }
+import scalaz.std.list._
 
 class LogTreeSyntaxSpec extends Spec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
