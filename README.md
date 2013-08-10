@@ -87,7 +87,7 @@ Extracting root: Failed
 ### Annotations ###
 
 [AnnotationsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala) shows how nodes in the log tree can be annotated
-with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities in a database, and you
+with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities, and you
 want to make sure that the audit trail is associated with each of the modified entities. You can use the annotation facility to carry the key (or something richer) for each
 modified entity.
 
