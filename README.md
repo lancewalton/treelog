@@ -1,6 +1,8 @@
 treelog
 =======
 
+[![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
+
 TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.
 
 It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
