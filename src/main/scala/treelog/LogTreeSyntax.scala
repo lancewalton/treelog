@@ -6,6 +6,51 @@ import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
 import scala.annotation.tailrec
 
+/**
+ * <p>TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.</p>
+ * <p>It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
+ * TreeLog is an attempt to produce a 'described computation', which is a hierarchical log of the processing that led to the result.</p>
+ *
+ * <p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+ * a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
+ * the annotation facility to carry the key (or something richer) for each modified entity.</p>
+ *
+ * <p>This trait provides syntax for manipulating log trees. Either:
+ * <ul>
+ *   <li>extend this trait, or</li>
+ *   <li>define an object with the appropriate Annotation type and import on demand</li>
+ * </ul>
+ * </p>
+ *
+ * <p>Please look at the <a href="https://github.com/lancewalton/treelog#using-treelog---examples">examples on GitHub</a> to get started.</p>
+ *
+ * <p>When a computation is 'lifted' into a {@link #DescribedComputation DescribedComputation} by one of the many methods in this trait, it is possible
+ * to retrieve the 'value' of the computation like this:</p>
+ * <code>
+ * import treelog.LogTreeSyntaxWithoutAnnotation._
+ * val foo = 1 ~> "Here's one"
+ * val value = foo.run.value
+ * // value will now be equal to scalaz.\/-(1), which represents a successful computation.
+ * </code>
+ * <p>The 'value' is a scalaz 'Either' (scalaz.\/). Following the convention, if it a 'left' (-\/) then the computation is a failure.
+ * If it is a 'right' (\/-), then the computation is a success</p>
+ * <p>Likewise, it is possible to retrieve the log tree like this:</p>
+ * <code>
+ * import treelog.LogTreeSyntaxWithoutAnnotation._
+ * val foo = 1 ~> "Here's one"
+ * val logtree = foo.run.written
+ * // logtree will now be equal to a {@link #LogTree LogTree} which is a type alias which in this case expands to:
+ * // TreeNode[LogTreeLabel[Nothing]](DescribedLogTreeLabel[Nothing]("Here's one", true, Set[Nothing]())
+ * // Where "Here's one" is the description provided in the definition of foo, true indicates that the computation
+ * // represented by the node was successful, and the empty set represents the annotations specified for this node.
+ * </code>
+ * <p>Generally, once a value has been so lifted, it is a good idea to keep working with it in that form for as long
+ * as possible before accessing the <code>value</code> and <code>written</code> properties. Think monadically!</p>
+ * <p>It may seem strange that both the <code>value</code> and the log tree provide indications of success and failure (the <code>value</code>
+ * through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the {@link TreeNode} label. The reason for this is
+ * that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy is tried
+ * which succeeds leading to a successful overall result.</p>
+ */
 trait LogTreeSyntax[Annotation] {
   type LogTree = Tree[LogTreeLabel[Annotation]]
   type LogTreeWriter[+V] = Writer[LogTree, V]
@@ -46,20 +91,28 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[A](dc: DescribedComputation[A]): DescribedComputation[A] = {
     val logTree = dc.run.written match {
-      case NilTree                                     ⇒ NilTree
-      case TreeNode(UndescribedLogTreeLabel(s, a), c)  ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
+      case NilTree ⇒ NilTree
+      case TreeNode(UndescribedLogTreeLabel(s, a), c) ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
       case TreeNode(DescribedLogTreeLabel(d, s, a), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
-      case \/-(a)   ⇒ success(a, logTree)
+      case \/-(a) ⇒ success(a, logTree)
     }
   }
 
+  /**
+   * Create a failure {@link DescribedComputation} using the given <code>description</code> for both the log tree label and as the content of the
+   * <code>value</code>, which will be a <code>scalaz.-\/</code>.
+   */
   def failure[A](description: String): DescribedComputation[A] = failure(description, TreeNode(DescribedLogTreeLabel(description, false)))
 
-  def success[A](a: A, description: String): DescribedComputation[A] =
-    success(a, TreeNode(DescribedLogTreeLabel(description, true, Set[Annotation]())))
+  /**
+   * Create a success {@link DescribedComputation} with the given <code>value</code> (lifted into a <code>scalaz.\/-) and the given
+   * <code>description</code> in the log tree.
+   */
+  def success[A](value: A, description: String): DescribedComputation[A] =
+    success(value, TreeNode(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   implicit class AnnotationsSyntax[A](w: DescribedComputation[A]) {
     def ~~(annotations: Set[Annotation]): DescribedComputation[A] = {
@@ -83,7 +136,7 @@ trait LogTreeSyntax[Annotation] {
     def allAnnotations = {
       def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
         tree match {
-          case NilTree                               ⇒ accumulator
+          case NilTree ⇒ accumulator
           case t: TreeNode[LogTreeLabel[Annotation]] ⇒ t.children.foldLeft(accumulator ++ t.label.annotations)((acc, child) ⇒ recurse(child, acc))
         }
       }
@@ -160,7 +213,7 @@ trait LogTreeSyntax[Annotation] {
   private def allSuccessful(trees: Iterable[LogTree]) =
     trees.forall {
       _ match {
-        case NilTree        ⇒ true
+        case NilTree ⇒ true
         case TreeNode(l, _) ⇒ l.success
       }
     }
@@ -188,7 +241,7 @@ trait LogTreeSyntax[Annotation] {
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       tree match {
-        case NilTree                   ⇒ List((depth, "NilTree"))
+        case NilTree ⇒ List((depth, "NilTree"))
         case TreeNode(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1))
       }
 
