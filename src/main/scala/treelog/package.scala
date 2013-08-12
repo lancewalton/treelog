@@ -177,5 +177,30 @@
  * Both of these approaches are demonstrated in the
  * [[https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala quadratic roots example]]. There is no good
  * reason for mixing the two approaches in that example, other than for purposes of demonstration.
+ *
+ * = Special Lifting =
+ *
+ * <code>Boolean</code>, <code>Option</code> and <code>\/</code> (scalaz's 'Either'), have some special syntax <code>~&gt;?</code> associated with
+ * them to allow <code>true</code>, <code>Some(.)</code> and <code>\/-(.)</code> to be treated as successful computational outcomes, and
+ * <code>false</code>, <code>None</code> and <code>-\/(.)</code> to be treated as failure conditions. For example:
+ *
+ * {{{
+ * val result = false ~>? "Doing a thing with a Boolean"
+ * println(result.run.value)
+ * // Will print -\/("Doing a thing with a Boolean") (note that it's a 'left')
+ *
+ * println(result.run.written.shows)
+ * // Will print:
+ * // Failed: Doing a thing with a Boolean
+ * }}}
+ *
+ * Notice how the <code>Show</code> for the [[treelog.Tree Tree]] indicates that the result is a failure. This failure information exists in the
+ * [[treelog.TreeNode TreeNode's]] <code>label</code> property (which is generic in [[treelog.TreeNode TreeNode]] and instantiated as a
+ * [[treelog.LogTreeLabel LogTreeLabel]] in the [[treelog.LogTreeSyntax LogTreeSyntax]] methods.
+ *
+ * <code>~&gt;?</code> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
+ * or for different descriptions to be given in the success versus failure case. Also, in the case of <code>Option</code> and <code>\/</code>,
+ * overloads are provided to pass the values contained. See [[treelog.LogTreeSyntax.BooleanSyntax BooleanSyntax]],
+ * [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]], [[treelog.LogTreeSyntax.EitherSyntax EitherSyntax]].
  */
 package object treelog
