@@ -165,17 +165,48 @@ trait LogTreeSyntax[Annotation] {
       if (b) success(true, successDescription) else failure(failureDescription)
   }
 
+  /**
+   * Syntax for treating <code>Options</code> as signifiers of success or failure in a computation.
+   *
+   * The simplest usage is something like: <code>myOption ~>? "Do I have Some?"</code>. The 'value'
+   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
+   * depending on the value of <code>myOption</code>.
+   */
   implicit class OptionSyntax[Value](option: Option[Value]) {
+    /**
+     * Use the same description whether the Option is <code>Some</code> or <code>None</code>.
+     * Equivalent to <code>~>?(description, description)</code>
+     */
     def ~>?(description: String): DescribedComputation[Value] = ~>?(description, description)
 
+    /**
+     * Use different descriptions for the <code>Some</code> and <code>None</code> cases.
+     *
+     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
+     * otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+     */
     def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] =
       ~>?(noneDescription, _ ⇒ someDescription)
 
+    /**
+     * Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
+     * value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
+     * description if you wish.
+     *
+     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
+     * otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+     */
     def ~>?(noneDescription: ⇒ String, someDescription: Value ⇒ String): DescribedComputation[Value] =
       option map { a ⇒ success(a, someDescription(a)) } getOrElse failure(noneDescription)
 
-    def ~>|[B](f: Value ⇒ DescribedComputation[B], g: ⇒ DescribedComputation[Option[B]]): DescribedComputation[Option[B]] =
-      option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Some(w))) getOrElse g
+    /**
+     * Return a default <code>DescribedComputation</code> if <code>option</code> is a <code>None</code>.
+     *
+     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(Some(x))</code>,
+     * otherwise, the returned <code>DescribedComputation</code> will be <code>dflt</code>.
+     */
+    def ~>|[B](f: Value ⇒ DescribedComputation[B], dflt: ⇒ DescribedComputation[Option[B]]): DescribedComputation[Option[B]] =
+      option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Some(w))) getOrElse dflt
   }
 
   implicit class EitherSyntax[Value](either: \/[String, Value]) {
