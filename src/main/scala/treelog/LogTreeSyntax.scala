@@ -81,33 +81,83 @@ trait LogTreeSyntax[Annotation] {
 
   /**
    * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
-   *
-   * All of the functions in this class create leaf [[treelog.TreeNode TreeNodes]].
    */
   implicit class LeafSyntax[Value](value: Value) {
     /**
-     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)<code> as the value and
+     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)</code> as the value and
      * a success [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     *
+     * {{{
+     * import treelog.LogTreeSyntaxWithoutAnnotations._
+     * import scalaz.syntax.show._
+     *
+     * val leaf = 1 ~> "One"
+     * println(result.run.value)
+     * // Will print: \/-(1) - note that the 'right' means 'success'
+     *
+     * println(result.run.written.shows)
+     * // Will print:
+     * // One
+     * }}}
      */
     def ~>(description: String): DescribedComputation[Value] = success(value, description)
 
     /**
-     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)<code> as the value and
+     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)</code> as the value and
      * a success [[treelog.TreeNode TreeNode]] using the given <code>description</code> function to generate
      * a description for the tree node's label.
+     *
+     * {{{
+     * import treelog.LogTreeSyntaxWithoutAnnotations._
+     * import scalaz.syntax.show._
+     *
+     * val leaf = 1 ~> (x => s"One: $x")
+     * println(result.run.value)
+     * // Will print: \/-(1) - note that the 'right' means 'success'
+     *
+     * println(result.run.written.shows)
+     * // Will print:
+     * // One: 1
+     * }}}
      */
     def ~>(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
 
     /**
-     * Create a 'failure' <code>DescribedComputation</code> with <code>-\/(description)<code> as the value and
+     * Create a 'failure' <code>DescribedComputation</code> with <code>-\/(description)</code> as the value and
      * a failure [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     *
+     * {{{
+     * import treelog.LogTreeSyntaxWithoutAnnotations._
+     * import scalaz.syntax.show._
+     *
+     * val leaf = 1 ~>! "One"
+     * println(result.run.value)
+     * // Will print: -\/("One") - note that the 'left' means 'failure', and the contained value is the description, not the 1.
+     *
+     * println(result.run.written.shows)
+     * // Will print:
+     * // Failed: One
+     * }}}
      */
     def ~>!(description: String): DescribedComputation[Value] = failure(description)
 
     /**
      * Create a 'failure' <code>DescribedComputation</code> using the given <code>description</code> function to
      * generate a description for the tree node's label and for the <code>DescribedComputations</code> value (i.e.
-     * the value will be <code>\/-(description(value))<code>.
+     * the value will be <code>\/-(description(value))</code>.
+     *
+     * {{{
+     * import treelog.LogTreeSyntaxWithoutAnnotations._
+     * import scalaz.syntax.show._
+     *
+     * val leaf = 1 ~>! (x => s"One - $x")
+     * println(result.run.value)
+     * // Will print: -\/("One") - note that the 'left' means 'failure', and the contained value is the description, not the 1.
+     *
+     * println(result.run.written.shows)
+     * // Will print:
+     * // Failed: One - 1
+     * }}}
      */
     def ~>!(description: Value ⇒ String): DescribedComputation[Value] = ~>!(description(value))
   }
@@ -278,9 +328,27 @@ trait LogTreeSyntax[Annotation] {
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
   }
 
+  /**
+   * Syntax for labeling or creating new branches in a log tree given a description.
+   */
   implicit class BranchLabelingSyntax(description: String) {
-    def ~<[F[_], Value](mapped: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] = {
-      val parts = monad.map(mapped)(m ⇒ (m.run.value, m.run.written))
+    /**
+     * Create a new branch given a monadic, traversable 'container' <code>F[DescribedComputation[Value]]</code>, 'sequence' it
+     * to create a <code>DescribedComputation[F[Value]]</code>, and give the new <code>DescribedComputation's</code> log tree a
+     * new root node, with the given <code>description</code> and whose children are the trees in the
+     * <code>F[DescribedComputation[Value]]</code>.
+     *
+     * For example, if we evaluate this method with <code>F</code> instantiated as <code>List</code>, we would turn a
+     * <code>List[DescribedComputation[Value]]</code> into a <code>DescribedComputation[List[Value]]</code>, such that the
+     * <code>List[Value]</code> which is the result's 'value' is obtained by extracting the 'value' from each
+     * <code>DescribedComputation</code> in the <code>describedComputations</code> parameter. Likewise, the child nodes
+     * of the returned log tree root node are obtained by extracting the log tree from each of the <code>describedComputations</code>.
+     *
+     * The 'success' status of the returned <code>DescribedComputations</code> log tree is <code>true</code> if all of the children
+     * are successful. It is <code>false</code> otherwise.
+     */
+    def ~<[F[_], Value](describedComputations: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] = {
+      val parts = monad.map(describedComputations)(m ⇒ (m.run.value, m.run.written))
 
       val children = monad.map(parts)(_._2).toList
       val branch = TreeNode(
@@ -290,38 +358,55 @@ trait LogTreeSyntax[Annotation] {
           Set[Annotation]()),
         children)
 
-      mapped.sequence.run.value match {
-        case -\/(_) ⇒ failure(description, branch)
+      describedComputations.sequence.run.value match {
+        case -\/(error) ⇒ failure(s"$description - $error", branch)
         case \/-(v) ⇒ success(v, branch)
       }
     }
 
+    /**
+     * If <code>dc</code> has a log tree with an undescribed root node, give the root node the <code>description</code> but otherwise
+     * leave it unchanged. If the log tree has a described root node, create a new root node above the existing one and give the
+     * new root node the <code>description</code>. In both cases preserve the <code>value</code> and success/failure status.
+     */
     def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
       dc.run.value match {
-        case -\/(error) ⇒ failure(error, branchHoister(dc.run.written, description))
+        case -\/(error) ⇒ failure(s"$description - $error", branchHoister(dc.run.written, description))
         case \/-(value) ⇒ success(value, branchHoister(dc.run.written, description))
       }
 
-    private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
+    private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
       case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true))
-      case TreeNode(l: UndescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children)), children)
-      case TreeNode(l: DescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree))), List(tree))
+      case TreeNode(l: UndescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, allSuccessful(children)), children)
+      case TreeNode(l: DescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, allSuccessful(List(tree))), List(tree))
     }
+
+    private def allSuccessful(trees: Iterable[LogTree]) =
+      trees.forall {
+        _ match {
+          case NilTree ⇒ true
+          case TreeNode(l, _) ⇒ l.success
+        }
+      }
   }
 
+  /**
+   * Syntax for dealing with traversable monads
+   */
   implicit class TraversableMonadSyntax[F[_], Value](values: F[Value])(implicit monad: Monad[F], traverse: Traverse[F]) {
+    /**
+     * This method is syntactic sugar for <code>description ~< monad.map(values)(f)</code>
+     */
     def ~>*[B](description: String, f: Value ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< monad.map(values)(f)
   }
 
-  private def allSuccessful(trees: Iterable[LogTree]) =
-    trees.forall {
-      _ match {
-        case NilTree ⇒ true
-        case TreeNode(l, _) ⇒ l.success
-      }
-    }
-
+  /**
+   * Syntax for labeling root nodes of trees in <code>DescribedComputions</code>
+   */
   implicit class LabellingSyntax[Value](w: DescribedComputation[Value]) {
+    /**
+     * This method is syntactic sugar for <code>description ~< w</code>
+     */
     def ~>(description: String) = description ~< w
   }
 
