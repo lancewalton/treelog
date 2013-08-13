@@ -166,18 +166,26 @@ trait LogTreeSyntax[Annotation] {
    * Syntax for allowing annotations to be added to log tree nodes.
    *
    * The best way to see how this syntax works is to take a look at the
-   * [[https://github.com/lancewalton/treelog#annotations annotations example]] on GitHub
+   * [[https://github.com/lancewalton/treelog#annotations annotations example]] on GitHub.
+   *
+   * Here is a short example:
+   *
+   * {{{
+   * import scalaz.syntax.show._
+   *
+   * val syntax = new LogTreeSyntax[String] {}
+   * import syntax._
+   *
+   * val result = 1 ~> "One" ~~ Set("Annotating with a string", "And another")
+   * println(result.run.value)
+   * // Will print: \/-(1) - note that the 'right' means 'success'
+   *
+   * println(result.run.written.shows)
+   * // Will print:
+   * // One - [Annotating with a string, And another]
+   * }}}
    */
   implicit class AnnotationsSyntax[Value](w: DescribedComputation[Value]) {
-    /**
-     * Add a set of annotations to a node. For example:
-     * {{{
-     * val foo = 1 ~> "The value is one" ~~ Set("Annotating with a string", "And another")
-     * }}}
-     *
-     * The value of the <code>DescribedComputation</code> will be 1, the description in the tree node label will be
-     * "The value is one" and the label will also contain two annotations: "Annotating with a string" and "And another"
-     */
     def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
         case NilTree ⇒ NilTree
