@@ -139,6 +139,10 @@ trait LogTreeSyntax[Annotation] {
 
   /**
    * Syntax for treating booleans as signifiers of success or failure in a computation.
+   *
+   * The simplest usage is something like: <code>myBoolean ~>? "Is my boolean true?"</code>. The 'value'
+   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
+   * depending on the value of <code>myBoolean</code>.
    */
   implicit class BooleanSyntax(b: Boolean) {
     /**
