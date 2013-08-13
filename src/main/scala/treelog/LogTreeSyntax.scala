@@ -80,6 +80,39 @@ trait LogTreeSyntax[Annotation] {
     success(value, TreeNode(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
+   * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
+   *
+   * All of the functions in this class create leaf [[treelog.TreeNode TreeNodes]].
+   */
+  implicit class LeafSyntax[Value](value: Value) {
+    /**
+     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)<code> as the value and
+     * a success [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     */
+    def ~>(description: String): DescribedComputation[Value] = success(value, description)
+
+    /**
+     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)<code> as the value and
+     * a success [[treelog.TreeNode TreeNode]] using the given <code>description</code> function to generate
+     * a description for the tree node's label.
+     */
+    def ~>(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
+
+    /**
+     * Create a 'failure' <code>DescribedComputation</code> with <code>-\/(description)<code> as the value and
+     * a failure [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     */
+    def ~>!(description: String): DescribedComputation[Value] = failure(description)
+
+    /**
+     * Create a 'failure' <code>DescribedComputation</code> using the given <code>description</code> function to
+     * generate a description for the tree node's label and for the <code>DescribedComputations</code> value (i.e.
+     * the value will be <code>\/-(description(value))<code>.
+     */
+    def ~>!(description: Value ⇒ String): DescribedComputation[Value] = ~>!(description(value))
+  }
+
+  /**
    * Syntax for allowing annotations to be added to log tree nodes.
    *
    * The best way to see how this syntax works is to take a look at the
@@ -262,17 +295,22 @@ trait LogTreeSyntax[Annotation] {
         case \/-(v) ⇒ success(v, branch)
       }
     }
+
+    def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
+      dc.run.value match {
+        case -\/(error) ⇒ failure(error, branchHoister(dc.run.written, description))
+        case \/-(value) ⇒ success(value, branchHoister(dc.run.written, description))
+      }
+
+    private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
+      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true))
+      case TreeNode(l: UndescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children)), children)
+      case TreeNode(l: DescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree))), List(tree))
+    }
   }
 
   implicit class TraversableMonadSyntax[F[_], Value](values: F[Value])(implicit monad: Monad[F], traverse: Traverse[F]) {
     def ~>*[B](description: String, f: Value ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< monad.map(values)(f)
-  }
-
-  implicit class LeafSyntax[Value](value: Value) {
-    def ~>(description: String): DescribedComputation[Value] = success(value, description)
-    def ~>(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
-    def ~>!(description: String): DescribedComputation[Value] = failure(description)
-    def ~>!(description: Value ⇒ String): DescribedComputation[Value] = ~>!(description(value))
   }
 
   private def allSuccessful(trees: Iterable[LogTree]) =
@@ -282,20 +320,6 @@ trait LogTreeSyntax[Annotation] {
         case TreeNode(l, _) ⇒ l.success
       }
     }
-
-  implicit def branchSyntax(description: String) = new {
-    def ~<[Value](ew: DescribedComputation[Value]): DescribedComputation[Value] =
-      ew.run.value match {
-        case -\/(error) ⇒ failure(error, branchHoister(ew.run.written, description))
-        case \/-(value) ⇒ success(value, branchHoister(ew.run.written, description))
-      }
-
-    private def branchHoister(tree: LogTree, description: String, forceSuccess: Boolean = false): LogTree = tree match {
-      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true))
-      case TreeNode(l: UndescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(children)), children)
-      case TreeNode(l: DescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, forceSuccess || allSuccessful(List(tree))), List(tree))
-    }
-  }
 
   implicit class LabellingSyntax[Value](w: DescribedComputation[Value]) {
     def ~>(description: String) = description ~< w
