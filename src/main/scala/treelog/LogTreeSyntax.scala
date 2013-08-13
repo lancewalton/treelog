@@ -170,8 +170,7 @@ trait LogTreeSyntax[Annotation] {
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
   }
 
-  implicit class DescriptionSyntax(description: String) {
-
+  implicit class BranchLabelingSyntax(description: String) {
     def ~<[F[_], Value](mapped: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] = {
       val parts = monad.map(mapped)(m ⇒ (m.run.value, m.run.written))
 
