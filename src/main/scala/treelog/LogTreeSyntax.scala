@@ -67,19 +67,21 @@ trait LogTreeSyntax[Annotation] {
   }
 
   /**
-   * Create a failure [[treelog.LogTreeSyntax]].DescribedComputation using the given <code>description</code> for both the log tree label and as the content of the
-   * <code>value</code>, which will be a <code>scalaz.-\/</code>.
+   * Create a <code>DescribedComputation</code> representing a failure using the given <code>description</code> for both the log tree label and as
+   * the content of the <code>value</code>, which will be a [[scalaz.-\/]].
    */
   def failure[Value](description: String): DescribedComputation[Value] = failure(description, TreeNode(DescribedLogTreeLabel(description, false)))
 
   /**
-   * Create a success [[treelog.LogTreeSyntax]].DescribedComputation with the given <code>value</code> (lifted into a <code>scalaz.\/-) and the given
+   * Create a <code>DescribedComputation</code> representing a success with the given <code>value</code> (lifted into a [[scalaz.\/-]]) and the given
    * <code>description</code> in the log tree.
    */
   def success[Value](value: Value, description: String): DescribedComputation[Value] =
     success(value, TreeNode(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
+   * Syntax for allowing annotations to be added to log tree nodes.
+   *
    * The best way to see how this syntax works is to take a look at the
    * [[https://github.com/lancewalton/treelog#annotations annotations example]] on GitHub
    */
@@ -135,10 +137,26 @@ trait LogTreeSyntax[Annotation] {
     }
   }
 
+  /**
+   * Syntax for treating booleans as signifiers of success or failure in a computation.
+   */
   implicit class BooleanSyntax(b: Boolean) {
+    /**
+     * Use the same description whether the boolean is <code>true</code> or <code>false</code>.
+     * Equivalent to <code>~>?(description, description)</code>
+     */
     def ~>?(description: String): DescribedComputation[Boolean] =
       ~>?(description, description)
 
+    /**
+     * Use different descriptions for the <code>true</code> and <code>false</code> cases. Note that unlike <code>'if'</code>
+     * the <code>false</code> / failure description is the first parameter and the <code>true</code> / success
+     * description is the second parameter. This is to maintain consistency with [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]]
+     * and [[treelog.LogTreeSyntax.EitherSyntax EitherSyntax]].
+     *
+     * If the boolean is <code>true</code> the 'value' of the returned DescribedComputation will be <code>\/-(true)</code>,
+     * otherwise, the 'value' will be <code>-\/(description)</code>.
+     */
     def ~>?(failureDescription: ⇒ String, successDescription: ⇒ String): DescribedComputation[Boolean] =
       if (b) success(true, successDescription) else failure(failureDescription)
   }
