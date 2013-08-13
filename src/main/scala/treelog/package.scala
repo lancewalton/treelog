@@ -122,13 +122,13 @@
  *
  * == Non-Leaf Nodes ==
  *
- * Non-leaf nodes (branches) are created explicitly by the developer or implicity by the [[logtree.LogTreeSyntax LogTreeSyntax]] under
+ * Non-leaf nodes (branches) are created explicitly by the developer or implicity by the [[treelog.LogTreeSyntax LogTreeSyntax]] under
  * various conditions.
  *
  * The log tree above has a root node with 'No description' and three child (leaf) nodes with descriptions obviously obtained from the
  * arguments to the right of the <code>~&gt;</code> operators in the for-comprehension. This is because the three leaf nodes explicitly
  * created in that for-comprehension need to be placed somewhere while the log tree is produced. An obvious thing to do was to make them
- * child nodes of a branch, which [[logtree.LogTreeSyntax LogTreeSyntax]] does, using some rules for when to create a new branch to
+ * child nodes of a branch, which [[treelog.LogTreeSyntax LogTreeSyntax]] does, using some rules for when to create a new branch to
  * contain existing children and when to just add new children to an existing branch.
  *
  * However, at the time the branch is created there is no ready description available for it, hence the "No description" text when the tree is

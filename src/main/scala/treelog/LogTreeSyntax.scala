@@ -209,16 +209,38 @@ trait LogTreeSyntax[Annotation] {
       option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Some(w))) getOrElse dflt
   }
 
+  /**
+   * Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.
+   *
+   * The simplest usage is something like: <code>myEither ~>? "Do I have the right?"</code>. The 'value'
+   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
+   * depending on the value of <code>myEither</code>.
+   */
   implicit class EitherSyntax[Value](either: \/[String, Value]) {
+    /**
+     * Use different descriptions depending on whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.
+     */
     def ~>?(leftDescription: String ⇒ String, rightDescription: ⇒ String): DescribedComputation[Value] =
       ~>?(leftDescription, _ ⇒ rightDescription)
 
+    /**
+     * Use the same description regardless of whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.
+     * Equivalent to: <code>~>?((error: String) ⇒ s"$description - $error", description)</code>
+     */
     def ~>?(description: String): DescribedComputation[Value] =
       ~>?((error: String) ⇒ s"$description - $error", description)
 
+    /**
+     * Use the given description if <code>either</code> is a <code>\/-</code>. If <code>either</code> is
+     * <code>-\/(message)</code>, use <code>message</code> as the description.
+     */
     def ~>?(description: Value ⇒ String): DescribedComputation[Value] =
       ~>?((error: String) ⇒ error, description)
 
+    /**
+     * Use the given functions to provide descriptions depending on whether <code>either</code> is a
+     * <code>\/-</code> or <code>-\/</code>
+     */
     def ~>?(leftDescription: String ⇒ String, rightDescription: Value ⇒ String): DescribedComputation[Value] =
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
   }
