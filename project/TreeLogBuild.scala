@@ -3,6 +3,9 @@ import Keys._
 import java.io.File
 import scala.io.Source
 import IO._
+import com.typesafe.sbt.SbtGhPages._
+import com.typesafe.sbt.SbtGit._
+import com.typesafe.sbt.SbtSite._
 
 object BuildSettings {
 
@@ -16,6 +19,13 @@ object BuildSettings {
     unmanagedSourceDirectories in Compile := Seq(file("src/main/scala") ),
     unmanagedSourceDirectories in Test := Seq(file("src/test/scala") )
   )
+}
+
+object WebsiteSettings {
+  val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
+    git.remoteRepo := "git@github.com:lancewalton/treelog.git"
+  )
+  site.includeScaladoc()
 }
 
 object Dependencies {
@@ -81,9 +91,10 @@ object TreeLogBuild extends Build {
   import BuildSettings._
   import Dependencies._
   import Publishing._
+  import WebsiteSettings._
 
   lazy val treeLog = Project(
     "treeLog",
     file("."),
-    settings = buildSettings ++ publishSettings ++ Seq(resolvers := Seq(Classpaths.typesafeResolver), libraryDependencies ++= allDependencies))
+    settings = buildSettings ++ publishSettings ++ websiteSettings ++ Seq(resolvers := Seq(Classpaths.typesafeResolver), libraryDependencies ++= allDependencies))
 }
