@@ -14,10 +14,10 @@ Getting TreeLog
 In SBT do this:
 
 ```scala
-resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
+resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/releases")
 
 libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.0.0-SNAPSHOT",
+    "com.casualmiracles" %% "treelog" % "1.0.0",
     "org.scalaz" %% "scalaz-core" % "7.0.2")
 ```
 
