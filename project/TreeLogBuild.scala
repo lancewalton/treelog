@@ -13,7 +13,7 @@ object BuildSettings {
   val buildSettings: Seq[Setting[_]] = Defaults.defaultSettings ++ Seq[Setting[_]](
     organization := "com.casualmiracles",
     name := "treelog",
-    version := "1.0.0-SNAPSHOT",
+    version := "1.0.1-SNAPSHOT",
     scalaVersion := "2.10.2",
     scalaBinaryVersion := "2.10",
     scalacOptions := Seq("-language:_"),
@@ -27,7 +27,7 @@ object WebsiteSettings {
   val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
     git.remoteRepo := "git@github.com:lancewalton/treelog.git",
     siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/SPECS2-"+v+"/"+d))
+      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/treelog-"+v+"/"+d))
     }
   )
 }
