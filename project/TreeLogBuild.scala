@@ -70,9 +70,6 @@ object Publishing {
         <url>https://github.com/lancewalton/treelog.git</url>
         <connection>scm:https://github.com/lancewalton/treelog.git</connection>
       </scm>
-      <description>
-        Allows logging in a tree structure so that comprehensive logging does not become incomprehensible.
-      </description>
       <url>https://github.com/lancewalton/treelog</url>
       <developers>
         <developer>
