@@ -5,6 +5,7 @@
 
   To actually release:
   (See section 8a https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7b.StageExistingArtifacts)
+  	  Do a staging release by removing the -SNAPSHOT in the version number
 	  Login to the Nexus UI at https://oss.sonatype.org/
 	  Under 'Build Promotion' select Staging Repositories.
 	  Find our release item and click it
