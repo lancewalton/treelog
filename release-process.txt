@@ -1,2 +1,5 @@
 1. Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
-2. Publish to sonatype with: sbt publish
+2. Publish to sonatype:
+  For snapshots make sure the version number has a -SNAPHOT suffix. To release to staging, remove the suffix.
+  In both cases use 'sbt publish'
+  For releases read section 8a at https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7b.StageExistingArtifacts
