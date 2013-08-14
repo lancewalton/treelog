@@ -1,0 +1,2 @@
+1. Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
+2. Publish to sonatype with: sbt publish

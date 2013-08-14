@@ -6,6 +6,7 @@ import IO._
 import com.typesafe.sbt.SbtGhPages._
 import com.typesafe.sbt.SbtGit._
 import com.typesafe.sbt.SbtSite._
+import SiteKeys._
 
 object BuildSettings {
 
@@ -22,10 +23,13 @@ object BuildSettings {
 }
 
 object WebsiteSettings {
-  val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
-    git.remoteRepo := "git@github.com:lancewalton/treelog.git"
-  )
   site.includeScaladoc()
+  val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
+    git.remoteRepo := "git@github.com:lancewalton/treelog.git",
+    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
+      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/SPECS2-"+v+"/"+d))
+    }
+  )
 }
 
 object Dependencies {
@@ -96,5 +100,9 @@ object TreeLogBuild extends Build {
   lazy val treeLog = Project(
     "treeLog",
     file("."),
-    settings = buildSettings ++ publishSettings ++ websiteSettings ++ Seq(resolvers := Seq(Classpaths.typesafeResolver), libraryDependencies ++= allDependencies))
+    settings =  buildSettings ++ 
+                publishSettings ++ 
+                websiteSettings ++ 
+                Seq(resolvers := Seq(Classpaths.typesafeResolver), 
+                    libraryDependencies ++= allDependencies))
 }
