@@ -75,14 +75,14 @@ object Publishing {
         <developer>
           <id>lcw</id>
           <name>Lance Walton</name>
-          <email>lance [dot] walton [at] underscoreconsulting [dot] com</email>
-          <organization>Underscore Consulting Ltd</organization>
+          <email>lance [dot] walton [at] casualmiracles [dot] com</email>
+          <organization>Casual Miracles Ltd</organization>
         </developer>
         <developer>
           <id>cjw</id>
           <name>Channing Walton</name>
-          <email>channing [dot] walton [at] underscoreconsulting [dot] com</email>
-          <organization>Underscore Consulting Ltd</organization>
+          <email>channing [dot] walton [at] casualmiracles [dot] com</email>
+          <organization>Casual Miracles Ltd</organization>
         </developer>
       </developers>))
 }
