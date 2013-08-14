@@ -4,19 +4,20 @@
  * TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.
  *
  * It is often necessary to understand exactly what happened in a computation, not just that it succeeded or failed, but what was actually done
- * and with what data. TreeLog is an attempt to produce a description of the computation (along with the result) which is a hierarchical log of
- * the processing that led to the result. Note that in the remainder of this document, results of producing log trees will be shown by rendering
- * the tree textually, but that is only one possible use. Another example of use would be to store the tree in a database so that users can see
+ * and with what data. TreeLog produces a description of a computation (along with a result) as a hierarchical log of
+ * computations that led to the result. The tree could be logged as text or stored in a database so that users can see
  * a detailed audit trail of the processing that has occurred for particular entities.
  *
+ * Note that in the remainder of this document, results of producing log trees will be shown by rendering
+ * the tree textually, but that is only one possible way.
+ *
  * Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
- * a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
- * the annotation facility to carry the key (or something richer) for each modified entity.
+ * a process that affects multiple entities, and you want to ensure that the audit trail is associated with each of the modified entities.
  *
  * =DescribedComputation=
  *
  * All of this works by 'lifting' the intermediate and final results of computations and the description of the steps into a type called <code>DescribedComputation</code>
- * (declared in [[treelog.LogTreeSyntax LogTreeSyntax]]. Although it's all very monadic, you don't have to know too much about all of that to use it.
+ * (declared in [[treelog.LogTreeSyntax LogTreeSyntax]].
  *
  * ==Some Simple Lifting==
  *
@@ -29,7 +30,7 @@
  *
  * val result1 = success(2 * 3, "Calculated product")
  * // result1 is now a DescribedComputation and carries the successful result and
- * // a single node tree telling us that produce was calculated. See below for how to
+ * // a single node tree telling us that the product was calculated. See below for how to
  * // extract these things.
  *
  * val result2 = failure("It's all wrong")
@@ -122,7 +123,7 @@
  *
  * == Non-Leaf Nodes ==
  *
- * Non-leaf nodes (branches) are created explicitly by the developer or implicity by the [[treelog.LogTreeSyntax LogTreeSyntax]] under
+ * Non-leaf nodes (branches) are created explicitly by the developer or implicitly by the [[treelog.LogTreeSyntax LogTreeSyntax]] under
  * various conditions.
  *
  * The log tree above has a root node with 'No description' and three child (leaf) nodes with descriptions obviously obtained from the
@@ -169,7 +170,7 @@
  * {{{
  * val result = for {
  *    something <- doSomething() ~> "Something has been done"
- *    more <- doMore(soemthing) ~> "More has been done"
+ *    more <- doMore(something) ~> "More has been done"
  *   } yield more
  * }}}
  *
