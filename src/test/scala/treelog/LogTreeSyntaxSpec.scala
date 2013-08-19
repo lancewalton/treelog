@@ -130,7 +130,7 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
           for (x ← failure("Child")) yield x
         }
       result.run.written must be === node("Parent", false, node("Child", false))
-      result.run.value must be === -\/("Child")
+      result.run.value must be === -\/("Parent")
     }
   }
 
