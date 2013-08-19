@@ -367,7 +367,7 @@ trait LogTreeSyntax[Annotation] {
         children)
 
       describedComputations.sequence.run.value match {
-        case -\/(error) ⇒ failure(error, branch)
+        case -\/(_) ⇒ failure(description, branch)
         case \/-(v) ⇒ success(v, branch)
       }
     }
@@ -379,7 +379,7 @@ trait LogTreeSyntax[Annotation] {
      */
     def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
       dc.run.value match {
-        case -\/(error) ⇒ failure(error, branchHoister(dc.run.written, description))
+        case -\/(_) ⇒ failure(description, branchHoister(dc.run.written, description))
         case \/-(value) ⇒ success(value, branchHoister(dc.run.written, description))
       }
 
