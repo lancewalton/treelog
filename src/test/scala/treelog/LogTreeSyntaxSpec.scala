@@ -110,7 +110,7 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     def `return a failure when one or more children is a failure` {
       val result = List(1, 2) ~>* ("Parent", x ⇒ (x == 1) ~>? s"Child: $x")
       result.run.written must be === node("Parent", false, node("Child: 1", true), node("Child: 2", false))
-      result.run.value must be === -\/("Child: 2")
+      result.run.value must be === -\/("Parent")
     }
   }
 
