@@ -3,10 +3,12 @@ treelog
 
 [![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
 
-TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.
+It is often necessary to understand exactly what happened in a computation. What went right, what went wrong
+and what was done with what. How was a result arrived at.
 
-It is often necessary to understand exactly what happened in a computation, not just what went wrong but what was actually done and with what data.
-TreeLog is an attempt to add a Writer monad in the form of a Tree structure that can be used in for-comprehensions to produce a hierarchical log of a computation.
+Furthermore, expressions build on expressions, and so computations are tree-like, and the description will mirror that structure.
+
+TreeLog makes use of a Writer monad in the form of a Tree structure that can be used to produce a hierarchical log of a computation.
 
 Getting TreeLog
 ---------------
