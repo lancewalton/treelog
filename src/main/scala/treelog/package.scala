@@ -26,7 +26,7 @@
  * {{{
  * // This is a concrete implementation of LogTreeSyntax that is provided for you
  * // to use if you don't need to use annotations (see later)
- * import treelog.LogTreeSyntaxWithoutAnnotation._
+ * import treelog.LogTreeSyntaxWithoutAnnotations._
  *
  * val result1 = success(2 * 3, "Calculated product")
  * // result1 is now a DescribedComputation and carries the successful result and
@@ -55,7 +55,7 @@
  * in the [[treelog.LogTreeSyntax LogTreeSyntax]] trait, it is possible to retrieve the 'value' of the computation like this:
  *
  * {{{
- * import treelog.LogTreeSyntaxWithoutAnnotation._
+ * import treelog.LogTreeSyntaxWithoutAnnotations._
  * val foo = 1 ~> "Here's one"
  * val value = foo.run.value
  * // value will now be equal to scalaz.\/-(1), which represents a successful computation.
@@ -70,7 +70,7 @@
  * Likewise, it is possible to retrieve the log tree like this:
  *
  * {{{
- * import treelog.LogTreeSyntaxWithoutAnnotation._
+ * import treelog.LogTreeSyntaxWithoutAnnotations._
  * val foo = 1 ~> "Here's one"
  * val logtree = foo.run.written
  * // logtree will now be an instance of LogTree which is a type alias which in this case expands to:
