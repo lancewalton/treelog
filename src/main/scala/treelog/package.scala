@@ -105,7 +105,7 @@
  *    bar <- 2 ~> ("bar = " + _) // so that we can include it in the log messages
  *    foobar <- (foo + bar) ~> ("foobar = " + _)
  *   } yield foobar
- * }
+ *
  * println(result.run.value)
  * // Will print \/-(3) (i.e. a successful computation of 1 + 2)
  *
@@ -145,7 +145,7 @@
  *    bar <- 2 ~> ("bar = " + _) // so that we can include it in the log messages
  *    foobar <- (foo + bar) ~> ("foobar = " + _)
  *   } yield foobar
- * }
+ *
  *
  * val resultWithDescription1 = result ~> "Adding up"
  * println(resultWithDescription1.run.written.shows)
@@ -210,7 +210,7 @@
  * {{{
  * val result = false ~>? "Doing a thing with a Boolean"
  * println(result.run.value)
- * // Will print -\/("Doing a thing with a Boolean") (note that it's a 'left')
+ * // Will print -\/(Doing a thing with a Boolean) (note that it's a 'left')
  *
  * println(result.run.written.shows)
  * // Will print:
@@ -241,6 +241,10 @@
  * We needed to do precisely that very often, so we wrote some syntax for it:
  *
  * {{{
+ * import treelog.LogTreeSyntaxWithoutAnnotations._
+ * import scalaz.syntax.show._
+ * import scalaz.std.list._
+ *
  * val result = List(1, 2, 3) ~>* ("Double the values", x => (x * 2) ~> (y => s"Double $x = $y"))
  *
  * println(result.run.value)
@@ -259,10 +263,10 @@
  * of all syntax that does this). Hence:
  *
  * {{{
- * val result = List(1, 2, 3) ~>* ("All even", x => (x % 2 == 0) ~>? s"Testing if $x is even"))
+ * val result = List(1, 2, 3) ~>* ("All even", x => (x % 2 == 0) ~>? s"Testing if $x is even")
  *
  * println(result.run.value)
- * // Will print -\/("All even") - Notice that it's a 'left', meaning failure
+ * // Will print -\/(All even) - Notice that it's a 'left', meaning failure
  *
  * println(result.run.written.shows)
  * // Will print:
@@ -291,15 +295,17 @@
  * {{{
  * val stringAnnotateableLogTreeSyntax = new treelog.LogTreeSyntax[String] {}
  * import stringAnnotateableLogTreeSyntax._
+ * import scalaz.syntax.show._
+ * import scalaz.std.string._
  *
- * val result = 1 <- "This is the description" ~~ "This is the annotation"
+ * val result = 1 ~> "This is the description" ~~ "This is the annotation"
  *
  * println(result.run.value)
  * // Will print \/-(1)
  *
  * println(result.run.written.shows)
  * // Will print:
- * // This is the description - [This is the annotation]
+ * // This is the description - ["This is the annotation"]
  * }}}
  *
  * See the [[https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala annotations example]]
