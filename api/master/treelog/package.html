@@ -47,7 +47,7 @@ the tree textually, but that is only one possible way.</p><p>Nodes in the log tr
 a process that affects multiple entities, and you want to ensure that the audit trail is associated with each of the modified entities.</p><h3>DescribedComputation</h3><p>All of this works by 'lifting' the intermediate and final results of computations and the description of the steps into a type called <code>DescribedComputation</code>
 (declared in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>.</p><h4>Some Simple Lifting</h4><p>You can produce a <code>DescribedComputation</code> very simply with many of the methods in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>. The simplest few are:</p><pre><span class="cmt">// This is a concrete implementation of LogTreeSyntax that is provided for you</span>
 <span class="cmt">// to use if you don't need to use annotations (see later)</span>
-<span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotation._
+<span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
 
 <span class="kw">val</span> result1 = success(<span class="num">2</span> * <span class="num">3</span>, <span class="lit">"Calculated product"</span>)
 <span class="cmt">// result1 is now a DescribedComputation and carries the successful result and</span>
@@ -66,10 +66,10 @@ a process that affects multiple entities, and you want to ensure that the audit 
 <code>DescribedComputations</code>. In this case it lifts the value into the <code>DescribedComputation</code>
 and creates a leaf node in the associated log tree. See <a href="LogTreeSyntax$LeafSyntax.html" class="extype" name="treelog.LogTreeSyntax.LeafSyntax">LeafSyntax</a> for
 related simple syntax for leaves.</p><h4> Extracting the Result and Log </h4><p>When a computation result is 'lifted' into a <code>DescribedComputation</code> by one of the many methods
-in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> trait, it is possible to retrieve the 'value' of the computation like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotation._
+in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> trait, it is possible to retrieve the 'value' of the computation like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
 <span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
 <span class="kw">val</span> value = foo.run.value
-<span class="cmt">// value will now be equal to scalaz.\/-(1), which represents a successful computation.</span></pre><p>The 'value' is a scalaz 'Either' (scalaz.\/). Following the usual convention:</p><ul><li>If it a 'left' (-\/) then the computation is a failure.</li><li>If it is a 'right' (\/-), then the computation is a success.</li></ul><p>Likewise, it is possible to retrieve the log tree like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotation._
+<span class="cmt">// value will now be equal to scalaz.\/-(1), which represents a successful computation.</span></pre><p>The 'value' is a scalaz 'Either' (scalaz.\/). Following the usual convention:</p><ul><li>If it a 'left' (-\/) then the computation is a failure.</li><li>If it is a 'right' (\/-), then the computation is a success.</li></ul><p>Likewise, it is possible to retrieve the log tree like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
 <span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
 <span class="kw">val</span> logtree = foo.run.written
 <span class="cmt">// logtree will now be an instance of LogTree which is a type alias which in this case expands to:</span>
@@ -92,7 +92,7 @@ for-comprehensions come into play:</p><pre><span class="kw">import</span> treelo
    bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
    foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
   } <span class="kw">yield</span> foobar
-}
+
 println(result.run.value)
 <span class="cmt">// Will print \/-(3) (i.e. a successful computation of 1 + 2)</span>
 
@@ -118,7 +118,7 @@ can't describe the non-leaf elements. We can provide a description in two ways (
    bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
    foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
   } <span class="kw">yield</span> foobar
-}
+
 
 <span class="kw">val</span> resultWithDescription1 = result ~&gt; <span class="lit">"Adding up"</span>
 println(resultWithDescription1.run.written.shows)
@@ -155,7 +155,7 @@ See <a href="LogTreeSyntax$BranchLabelingSyntax.html" class="extype" name="treel
 them to allow <code>true</code>, <code>Some(.)</code> and <code>\/-(.)</code> to be treated as successful computational outcomes, and
 <code>false</code>, <code>None</code> and <code>-\/(.)</code> to be treated as failure conditions. For example:</p><pre><span class="kw">val</span> result = <span class="kw">false</span> ~&gt;? <span class="lit">"Doing a thing with a Boolean"</span>
 println(result.run.value)
-<span class="cmt">// Will print -\/("Doing a thing with a Boolean") (note that it's a 'left')</span>
+<span class="cmt">// Will print -\/(Doing a thing with a Boolean) (note that it's a 'left')</span>
 
 println(result.run.written.shows)
 <span class="cmt">// Will print:</span>
@@ -170,7 +170,11 @@ means that the computation will stop, whereas 'success' will mean that the compu
 to each element of the list to produce <code>DescribedComputations</code> for each element. That's easy enough. But suppose you now want
 to take all of the 'values' (<code>vs</code>) contained in the list of <code>DescribedComputations</code> thus produced, and create a new
 <code>DescribedComputation</code> whose value is <code>vs</code> and whose log tree is a branch with a description and whose children
-are the log trees resulting from each application of <code>f(.)</code>.</p><p>We needed to do precisely that very often, so we wrote some syntax for it:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x <span class="kw">=&gt;</span> (x * <span class="num">2</span>) ~&gt; (y <span class="kw">=&gt;</span> s<span class="lit">"Double $x = $y"</span>))
+are the log trees resulting from each application of <code>f(.)</code>.</p><p>We needed to do precisely that very often, so we wrote some syntax for it:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.list._
+
+<span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x <span class="kw">=&gt;</span> (x * <span class="num">2</span>) ~&gt; (y <span class="kw">=&gt;</span> s<span class="lit">"Double $x = $y"</span>))
 
 println(result.run.value)
 <span class="cmt">// Will print \/-(List(2, 4, 6))</span>
@@ -182,10 +186,10 @@ println(result.run.written.shows)
 <span class="cmt">//   Double 2 = 4</span>
 <span class="cmt">//   Double 3 = 6</span></pre><p>This is particularly useful if there is a possibility that <code>f(.)</code> can produce <code>DescribedComputations</code> that represent failures,
 because hoisting children into a branch of a log tree gives the branch a successful status only if all of the children are successful (this is true
-of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x <span class="kw">=&gt;</span> (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>))
+of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x <span class="kw">=&gt;</span> (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>)
 
 println(result.run.value)
-<span class="cmt">// Will print -\/("All even") - Notice that it's a 'left', meaning failure</span>
+<span class="cmt">// Will print -\/(All even) - Notice that it's a 'left', meaning failure</span>
 
 println(result.run.written.shows)
 <span class="cmt">// Will print:</span>
@@ -200,15 +204,17 @@ any <code>DescribedComputation</code> and it will add the given annotation to th
 tree. Annotations can be of any type, but must all be of the same type for a particular log tree. You choose the type of annotations by instantiating
 the 'Annotation' type parameter of <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p><p>Here is a simple example using <code>Strings</code> as the annotations type:</p><pre><span class="kw">val</span> stringAnnotateableLogTreeSyntax = <span class="kw">new</span> treelog.LogTreeSyntax[<span class="std">String</span>] {}
 <span class="kw">import</span> stringAnnotateableLogTreeSyntax._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.string._
 
-<span class="kw">val</span> result = <span class="num">1</span> <span class="kw">&lt;-</span> <span class="lit">"This is the description"</span> ~~ <span class="lit">"This is the annotation"</span>
+<span class="kw">val</span> result = <span class="num">1</span> ~&gt; <span class="lit">"This is the description"</span> ~~ <span class="lit">"This is the annotation"</span>
 
 println(result.run.value)
 <span class="cmt">// Will print \/-(1)</span>
 
 println(result.run.written.shows)
 <span class="cmt">// Will print:</span>
-<span class="cmt">// This is the description - [This is the annotation]</span></pre><p>See the <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala" target="_blank">annotations example</a>
+<span class="cmt">// This is the description - ["This is the annotation"]</span></pre><p>See the <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala" target="_blank">annotations example</a>
 for a more comprehensive example.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
