@@ -4,9 +4,9 @@ treelog
 [![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
 
 It is often necessary to understand exactly what happened in a computation. What went right, what went wrong
-and what was done with what. How was a result arrived at.
+and what was done with what and how was a result arrived at.
 
-Furthermore, expressions build on expressions, and so computations are tree-like, and the description will mirror that structure.
+Computations are functions built on functions, and so computations are tree-like, and hence the description will mirror that structure.
 
 TreeLog makes use of a Writer monad in the form of a Tree structure that can be used to produce a hierarchical log of a computation.
 
