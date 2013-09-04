@@ -56,13 +56,13 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] = {
     val logTree = dc.run.written match {
-      case NilTree ⇒ NilTree
-      case TreeNode(UndescribedLogTreeLabel(s, a), c) ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
+      case NilTree                                     ⇒ NilTree
+      case TreeNode(UndescribedLogTreeLabel(s, a), c)  ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
       case TreeNode(DescribedLogTreeLabel(d, s, a), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
-      case \/-(a) ⇒ success(a, logTree)
+      case \/-(a)   ⇒ success(a, logTree)
     }
   }
 
@@ -220,7 +220,7 @@ trait LogTreeSyntax[Annotation] {
     def allAnnotations: Set[Annotation] = {
       def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
         tree match {
-          case NilTree ⇒ accumulator
+          case NilTree                               ⇒ accumulator
           case t: TreeNode[LogTreeLabel[Annotation]] ⇒ t.children.foldLeft(accumulator ++ t.label.annotations)((acc, child) ⇒ recurse(child, acc))
         }
       }
@@ -276,8 +276,7 @@ trait LogTreeSyntax[Annotation] {
      * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
      * otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
      */
-    def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] =
-      ~>?(noneDescription, _ ⇒ someDescription)
+    def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] = ~>?(noneDescription, _ ⇒ someDescription)
 
     /**
      * Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
@@ -379,7 +378,7 @@ trait LogTreeSyntax[Annotation] {
      */
     def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
       dc.run.value match {
-        case -\/(_) ⇒ failure(description, branchHoister(dc.run.written, description))
+        case -\/(_)     ⇒ failure(description, branchHoister(dc.run.written, description))
         case \/-(value) ⇒ success(value, branchHoister(dc.run.written, description))
       }
 
@@ -392,7 +391,7 @@ trait LogTreeSyntax[Annotation] {
     private def allSuccessful(trees: Iterable[LogTree]) =
       trees.forall {
         _ match {
-          case NilTree ⇒ true
+          case NilTree        ⇒ true
           case TreeNode(l, _) ⇒ l.success
         }
       }
@@ -423,7 +422,7 @@ trait LogTreeSyntax[Annotation] {
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       tree match {
-        case NilTree ⇒ List((depth, "NilTree"))
+        case NilTree                   ⇒ List((depth, "NilTree"))
         case TreeNode(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1))
       }
 
