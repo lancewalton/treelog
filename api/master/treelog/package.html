@@ -78,7 +78,7 @@ in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">
 <span class="cmt">//   - "Here's one" is the description provided in the declaration of foo</span>
 <span class="cmt">//   - true indicates that the computation represented by the node was successful</span>
 <span class="cmt">//   - the empty set represents the annotations specified for this node</span></pre><p>It may seem strange that both the <code>value</code> and the log tree provide indications of success and failure (the <code>value</code>
-through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the <a href="TreeNode.html" class="extype" name="treelog.TreeNode">TreeNode</a> label.
+through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the <span class="extype" name="treelog.TreeNode">TreeNode</span> label.
 The reason for this is that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy
 is tried which succeeds leading to a successful overall result.</p><h4> More Comprehensive Computations </h4><p>(An extended example of this kind of thing is the
 <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example on GitHub</a>)</p><p>Generally, once a value has been lifted, it is a good idea to keep working with it in that form for as long
@@ -159,8 +159,8 @@ println(result.run.value)
 
 println(result.run.written.shows)
 <span class="cmt">// Will print:</span>
-<span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p>Notice how the <code>Show</code> for the <a href="Tree.html" class="extype" name="treelog.Tree">Tree</a> indicates that the result is a failure. This failure information exists in the
-<a href="TreeNode.html" class="extype" name="treelog.TreeNode">TreeNode's</a> <code>label</code> property (which is generic in <a href="TreeNode.html" class="extype" name="treelog.TreeNode">TreeNode</a> and instantiated as a
+<span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p>Notice how the <code>Show</code> for the <span class="extype" name="treelog.Tree">Tree</span> indicates that the result is a failure. This failure information exists in the
+<span class="extype" name="treelog.TreeNode">TreeNode's</span> <code>label</code> property (which is generic in <span class="extype" name="treelog.TreeNode">TreeNode</span> and instantiated as a
 <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a> in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> methods.</p><p><code>~&gt;?</code> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
 or for different descriptions to be given in the success versus failure case. Also, in the case of <code>Option</code> and <code>\/</code>,
 overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
@@ -298,32 +298,6 @@ for a more comprehensive example.
       </h4>
       <p class="comment cmt">See the <a href="" class="extype" name="treelog">treelog</a> package documentation for a brief introduction to treelog and also,
 <a href="https://github.com/lancewalton/treelog#using-treelog---examples" target="_blank">examples on GitHub</a> to get started.</p>
-    </li><li name="treelog.Tree" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Tree[+Label]extendsAnyRef"></a>
-      <a id="Tree[+Label]:Tree[Label]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Tree.html"><span class="name">Tree</span></a><span class="tparams">[<span name="Label">+Label</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="treelog.TreeNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TreeNode[Label]extendsTree[Label]withProductwithSerializable"></a>
-      <a id="TreeNode[Label]:TreeNode[Label]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="TreeNode.html"><span class="name">TreeNode</span></a><span class="tparams">[<span name="Label">Label</span>]</span><span class="params">(<span name="label">label: <span class="extype" name="treelog.TreeNode.Label">Label</span></span>, <span name="children">children: <span class="extype" name="scala.List">List</span>[<a href="Tree.html" class="extype" name="treelog.Tree">Tree</a>[<span class="extype" name="treelog.TreeNode.Label">Label</span>]] = <span class="symbol">immutable.this.Nil</span></span>)</span><span class="result"> extends <a href="Tree.html" class="extype" name="treelog.Tree">Tree</a>[<span class="extype" name="treelog.TreeNode.Label">Label</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="treelog.UndescribedLogTreeLabel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="UndescribedLogTreeLabel[Annotation]extendsLogTreeLabel[Annotation]withProductwithSerializable"></a>
       <a id="UndescribedLogTreeLabel[Annotation]:UndescribedLogTreeLabel[Annotation]"></a>
@@ -344,7 +318,20 @@ for a more comprehensive example.
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="treelog.LogTreeSyntaxWithoutAnnotations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="treelog.LogTreeLabel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogTreeLabel"></a>
+      <a id="LogTreeLabel:LogTreeLabel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LogTreeLabel$.html"><span class="name">LogTreeLabel</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="treelog.LogTreeSyntaxWithoutAnnotations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LogTreeSyntaxWithoutAnnotations"></a>
       <a id="LogTreeSyntaxWithoutAnnotations:LogTreeSyntaxWithoutAnnotations"></a>
       <h4 class="signature">
@@ -354,19 +341,6 @@ for a more comprehensive example.
       </span>
       <span class="symbol">
         <a href="LogTreeSyntaxWithoutAnnotations$.html"><span class="name">LogTreeSyntaxWithoutAnnotations</span></a><span class="result"> extends <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
-      </span>
-      </h4>
-      
-    </li><li name="treelog.NilTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NilTree"></a>
-      <a id="NilTree:NilTree"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="NilTree$.html"><span class="name">NilTree</span></a><span class="result"> extends <a href="Tree.html" class="extype" name="treelog.Tree">Tree</a>[<span class="extype" name="scala.Nothing">Nothing</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       

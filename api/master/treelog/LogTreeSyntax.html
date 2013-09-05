@@ -178,7 +178,7 @@
       </h4>
       <p class="comment cmt">Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.</code></p>
     </li><li name="treelog.LogTreeSyntax.LogTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="LogTree=treelog.Tree[treelog.LogTreeLabel[Annotation]]"></a>
+      <a id="LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]"></a>
       <a id="LogTree:LogTree"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -186,7 +186,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">LogTree</span><span class="result"> = <a href="Tree.html" class="extype" name="treelog.Tree">Tree</a>[<a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]]</span>
+        <span class="name">LogTree</span><span class="result"> = <span class="extype" name="scalaz.Tree">Tree</span>[<a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]]</span>
       </span>
       </h4>
       
@@ -199,7 +199,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">LogTreeWriter</span><span class="tparams">[<span name="Value">+Value</span>]</span><span class="result"> = <span class="extype" name="scalaz.WriterT">WriterT</span>[<span class="extype" name="scalaz.IdInstances.Id">scalaz.Id.Id</span>, <a href="#LogTree=treelog.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>, <span class="extype" name="treelog.LogTreeSyntax.LogTreeWriter.Value">Value</span>]</span>
+        <span class="name">LogTreeWriter</span><span class="tparams">[<span name="Value">+Value</span>]</span><span class="result"> = <span class="extype" name="scalaz.WriterT">WriterT</span>[<span class="extype" name="scalaz.IdInstances.Id">scalaz.Id.Id</span>, <a href="#LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>, <span class="extype" name="treelog.LogTreeSyntax.LogTreeWriter.Value">Value</span>]</span>
       </span>
       </h4>
       
@@ -302,6 +302,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="treelog.LogTreeSyntax#NilTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NilTree:LogTreeSyntax.this.LogTree"></a>
+      <a id="NilTree:LogTree"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NilTree</span><span class="result">: <a href="#LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -448,15 +461,15 @@ the content of the <code>value</code>, which will be a <span class="extype" name
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="treelog.LogTreeSyntax#logTreeMonoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="logTreeMonoid:scalaz.Monoid[LogTreeSyntax.this.LogTree]{valzero:treelog.NilTree.type}"></a>
-      <a id="logTreeMonoid:Monoid[LogTree]{valzero:treelog.NilTree.type}"></a>
+      <a id="logTreeMonoid:scalaz.Monoid[LogTreeSyntax.this.LogTree]{valzero:LogTreeSyntax.this.LogTree}"></a>
+      <a id="logTreeMonoid:Monoid[LogTree]{valzero:LogTreeSyntax.this.LogTree}"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">logTreeMonoid</span><span class="result">: <span class="extype" name="scalaz.Monoid">Monoid</span>[<a href="#LogTree=treelog.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>] { val zero: treelog.NilTree.type }</span>
+        <span class="name">logTreeMonoid</span><span class="result">: <span class="extype" name="scalaz.Monoid">Monoid</span>[<a href="#LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>] { val zero: LogTreeSyntax.this.LogTree }</span>
       </span>
       </h4>
       
@@ -469,7 +482,7 @@ the content of the <code>value</code>, which will be a <span class="extype" name
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">logTreeShow</span><span class="params">(<span class="implicit">implicit </span><span name="annotationShow">annotationShow: <span class="extype" name="scalaz.Show">Show</span>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Show">Show</span>[<a href="#LogTree=treelog.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>]</span>
+        <span class="name">logTreeShow</span><span class="params">(<span class="implicit">implicit </span><span name="annotationShow">annotationShow: <span class="extype" name="scalaz.Show">Show</span>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.Show">Show</span>[<a href="#LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>]</span>
       </span>
       </h4>
       
