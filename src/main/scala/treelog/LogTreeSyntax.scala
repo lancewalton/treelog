@@ -1,6 +1,6 @@
 package treelog
 
-import scalaz.{ -\/, \/-, \/, EitherT, Functor, Traverse, Monad, Monoid, Show, Writer, Tree, idInstance }
+import scalaz.{ -\/, \/-, \/, EitherT, Functor, Traverse, Monad, Monoid, Show, Writer, idInstance }
 import scalaz.syntax.foldable
 import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
@@ -21,8 +21,6 @@ trait LogTreeSyntax[Annotation] {
   type LogTreeWriter[+Value] = Writer[LogTree, Value]
   type DescribedComputation[+Value] = EitherT[LogTreeWriter, String, Value]
 
-  val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
-
   implicit val logTreeMonoid = new Monoid[LogTree] {
     val zero = NilTree
 
@@ -32,17 +30,17 @@ trait LogTreeSyntax[Annotation] {
 
         case (l, NilTree) ⇒ l
 
-        case (Tree.Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), Tree.Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations), leftChildren ++ rightChildren)
+        case (TreeNode(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), TreeNode(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations), leftChildren ::: rightChildren)
 
-        case (Tree.Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), rightNode @ Tree.Node(rightLabel, rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftChildren :+ rightNode)
+        case (TreeNode(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), rightNode @ TreeNode(rightLabel, rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftChildren :+ rightNode)
 
-        case (leftNode @ Tree.Node(leftLabel, leftChildren), Tree.Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftNode #:: rightChildren)
+        case (leftNode @ TreeNode(leftLabel, leftChildren), TreeNode(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftNode :: rightChildren)
 
-        case (leftNode: Tree[LogTreeLabel[Annotation]], rightNode: Tree[LogTreeLabel[Annotation]]) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(augend, addend))
+        case (leftNode: TreeNode[LogTreeLabel[Annotation]], rightNode: TreeNode[LogTreeLabel[Annotation]]) ⇒
+          TreeNode(UndescribedLogTreeLabel(leftNode.label.success && rightNode.label.success), List(augend, addend))
       }
   }
 
@@ -58,9 +56,9 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] = {
     val logTree = dc.run.written match {
-      case NilTree                                      ⇒ NilTree
-      case Tree.Node(UndescribedLogTreeLabel(s, a), c)  ⇒ Tree.node(UndescribedLogTreeLabel(false, a), c)
-      case Tree.Node(DescribedLogTreeLabel(d, s, a), c) ⇒ Tree.node(DescribedLogTreeLabel(d, false, a), c)
+      case NilTree                                     ⇒ NilTree
+      case TreeNode(UndescribedLogTreeLabel(s, a), c)  ⇒ TreeNode(UndescribedLogTreeLabel(false, a), c)
+      case TreeNode(DescribedLogTreeLabel(d, s, a), c) ⇒ TreeNode(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
@@ -72,15 +70,14 @@ trait LogTreeSyntax[Annotation] {
    * Create a <code>DescribedComputation</code> representing a failure using the given <code>description</code> for both the log tree label and as
    * the content of the <code>value</code>, which will be a [[scalaz.-\/]].
    */
-  def failure[Value](description: String): DescribedComputation[Value] = failure(description, Tree.leaf(DescribedLogTreeLabel(description, false)))
+  def failure[Value](description: String): DescribedComputation[Value] = failure(description, TreeNode(DescribedLogTreeLabel(description, false)))
 
   /**
    * Create a <code>DescribedComputation</code> representing a success with the given <code>value</code> (lifted into a [[scalaz.\/-]]) and the given
    * <code>description</code> in the log tree.
    */
   def success[Value](value: Value, description: String): DescribedComputation[Value] =
-    eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
-  //success(value, Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
+    success(value, TreeNode(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
    * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
@@ -192,8 +189,8 @@ trait LogTreeSyntax[Annotation] {
     def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
         case NilTree ⇒ NilTree
-        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
-        case Tree.Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
+        case TreeNode(l: DescribedLogTreeLabel[Annotation], c) ⇒ TreeNode(l.copy(annotations = l.annotations ++ annotations), c)
+        case TreeNode(l: UndescribedLogTreeLabel[Annotation], c) ⇒ TreeNode(l.copy(annotations = l.annotations ++ annotations), c)
       }
 
       w.run.value match {
@@ -223,8 +220,8 @@ trait LogTreeSyntax[Annotation] {
     def allAnnotations: Set[Annotation] = {
       def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
         tree match {
-          case NilTree                           ⇒ accumulator
-          case t: Tree[LogTreeLabel[Annotation]] ⇒ t.subForest.foldLeft(accumulator ++ t.rootLabel.annotations)((acc, child) ⇒ recurse(child, acc))
+          case NilTree                               ⇒ accumulator
+          case t: TreeNode[LogTreeLabel[Annotation]] ⇒ t.children.foldLeft(accumulator ++ t.label.annotations)((acc, child) ⇒ recurse(child, acc))
         }
       }
       recurse(w.run.written, Set())
@@ -361,12 +358,12 @@ trait LogTreeSyntax[Annotation] {
       val parts = monad.map(describedComputations)(m ⇒ (m.run.value, m.run.written))
 
       val children = monad.map(parts)(_._2).toList
-      val branch = Tree.node(
+      val branch = TreeNode(
         DescribedLogTreeLabel(
           description,
           allSuccessful(children),
           Set[Annotation]()),
-        children.toStream)
+        children)
 
       describedComputations.sequence.run.value match {
         case -\/(_) ⇒ failure(description, branch)
@@ -386,16 +383,16 @@ trait LogTreeSyntax[Annotation] {
       }
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
-      case NilTree ⇒ Tree.leaf(DescribedLogTreeLabel(description, true))
-      case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children)), children)
-      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
+      case NilTree ⇒ TreeNode(DescribedLogTreeLabel(description, true))
+      case TreeNode(l: UndescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, allSuccessful(children)), children)
+      case TreeNode(l: DescribedLogTreeLabel[Annotation], children) ⇒ TreeNode(DescribedLogTreeLabel(description, allSuccessful(List(tree))), List(tree))
     }
 
     private def allSuccessful(trees: Iterable[LogTree]) =
       trees.forall {
         _ match {
-          case NilTree         ⇒ true
-          case Tree.Node(l, _) ⇒ l.success
+          case NilTree        ⇒ true
+          case TreeNode(l, _) ⇒ l.success
         }
       }
   }
@@ -425,8 +422,8 @@ trait LogTreeSyntax[Annotation] {
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       tree match {
-        case NilTree                    ⇒ List((depth, "NilTree"))
-        case Tree.Node(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1)).toList
+        case NilTree                   ⇒ List((depth, "NilTree"))
+        case TreeNode(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1))
       }
 
     private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success, showDescription(label))))
