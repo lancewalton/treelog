@@ -1,20 +1,24 @@
 package treelog
 
 import org.scalatest._
-import scalaz.{ -\/, \/- }
-import scalaz.std.list._
+import scalaz._
+import Scalaz._
 
 class LogTreeSyntaxSpec extends Spec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
 
+  // we need this for tests. If you just use -\/("Fail") you end up with a \/[Nothing, String]
+  // which upsets compiler when it cannot find an appropriate scalaz.Equal typeclass
+  val aFailure: \/[String, String] = -\/("Fail")
+
   object `success must` {
     def `produce a value with the given value on the right` { success(1, "Yay").run.value must be === \/-(1) }
-    def `produce a written with a success leaf node and the given desscription` { success(1, "Yay").run.written must be === node("Yay", true) }
+    def `produce a written with a success leaf node and the given desscription` { assert(success(1, "Yay").run.written ≟ node("Yay", true)) }
   }
 
   object `failure must` {
     def `produce a value with the given message on the left` { failure("Boo").run.value must be === -\/("Boo") }
-    def `produce a written with a failure leaf node and the given desscription` { failure("Boo").run.written must be === node("Boo", false) }
+    def `produce a written with a failure leaf node and the given desscription` { assert(failure("Boo").run.written ≟ node("Boo", false)) }
   }
 
   object `~~ must` {
@@ -23,8 +27,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
       import s._
 
       val node = success(1, "Yay") ~~ 1 ~~ 2
-      node.run.value must be === \/-(1)
-      node.run.written must be === TreeNode(DescribedLogTreeLabel("Yay", true, Set(1, 2)))
+      assert(node.run.value ≟ \/-(1))
+      assert(node.run.written ≟ Tree.leaf(DescribedLogTreeLabel("Yay", true, Set(1, 2))))
     }
   }
 
@@ -40,77 +44,77 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         } yield 3
       } ~~ 3
 
-      computation.allAnnotations must be === Set(1, 2, 3)
+      assert(computation.allAnnotations == Set(1, 2, 3))
     }
   }
 
   object `leaf creation with ~> and a string must` {
-    def `do the same as 'success'` { (1 ~> "Foo").run.run must be === success(1, "Foo").run.run }
+    def `do the same as 'success'` { assert((1 ~> "Foo").run.run ≟ success(1, "Foo").run.run) }
   }
 
   object `leaf creation with ~> and a function must` {
-    def `do the same as 'success' after applying the function to the value` { (1 ~> (x ⇒ s"Foo: $x")).run.run must be === success(1, "Foo: 1").run.run }
+    def `do the same as 'success' after applying the function to the value` { assert((1 ~> (x ⇒ s"Foo: $x")).run.run ≟ success(1, "Foo: 1").run.run) }
   }
 
   object `leaf creation with ~>! and a string must` {
-    def `do the same as 'failure'` { (1 ~>! "Foo").run.run must be === failure("Foo").run.run }
+    def `do the same as 'failure'` { assert((1 ~>! "Foo").run.run ≟ failure("Foo").run.run) }
   }
 
   object `leaf creation with ~>! and a function must` {
-    def `do the same as 'failure' after applying the function to the value` { (1 ~>! (x ⇒ s"Foo: $x")).run.run must be === failure("Foo: 1").run.run }
+    def `do the same as 'failure' after applying the function to the value` { assert((1 ~>! (x ⇒ s"Foo: $x")).run.run ≟ failure("Foo: 1").run.run) }
   }
 
   object `boolean ~>? with a description must` {
-    def `do the same as 'success' when the boolean is true` { (true ~>? "Foo").run.run must be === success(true, "Foo").run.run }
-    def `do the same as 'failure' when the boolean is false` { (false ~>? "Foo").run.run must be === failure("Foo").run.run }
+    def `do the same as 'success' when the boolean is true` { assert((true ~>? "Foo").run.run ≟ success(true, "Foo").run.run) }
+    def `do the same as 'failure' when the boolean is false` { assert((false ~>? "Foo").run.run ≟ failure("Foo").run.run) }
   }
 
   object `boolean ~>? with a failureDescription and a successDescription must` {
-    def `do the same as 'success' with the successDescription when the boolean is true` { (true ~>? ("Foo", "Bar")).run.run must be === success(true, "Bar").run.run }
-    def `do the same as 'failure' with the failureDescription when the boolean is false` { (false ~>? ("Foo", "Bar")).run.run must be === failure("Foo").run.run }
+    def `do the same as 'success' with the successDescription when the boolean is true` { assert((true ~>? ("Foo", "Bar")).run.run ≟ success(true, "Bar").run.run) }
+    def `do the same as 'failure' with the failureDescription when the boolean is false` { assert((false ~>? ("Foo", "Bar")).run.run ≟ failure("Foo").run.run) }
   }
 
   object `Option ~>? with a description must` {
-    def `do the same as 'success' when the Option is Some` { (Some(2) ~>? "Foo").run.run must be === success(2, "Foo").run.run }
-    def `do the same as 'failure' when the Option is None` { (None ~>? "Foo").run.run must be === failure("Foo").run.run }
+    def `do the same as 'success' when the Option is Some` { assert((Some(2) ~>? "Foo").run.run ≟ success(2, "Foo").run.run) }
+    def `do the same as 'failure' when the Option is None` { assert((none[Int] ~>? "Foo").run.run ≟ failure("Foo").run.run) }
   }
 
   object `Option ~>? with a noneDescription and a someDescription must` {
-    def `do the same as 'success' when the Option is Some` { (Some(2) ~>? ("Foo", "Bar")).run.run must be === success(2, "Bar").run.run }
-    def `do the same as 'failure' when the Option is None` { (None ~>? ("Foo", "Bar")).run.run must be === failure("Foo").run.run }
+    def `do the same as 'success' when the Option is Some` { assert((Some(2) ~>? ("Foo", "Bar")).run.run ≟ success(2, "Bar").run.run) }
+    def `do the same as 'failure' when the Option is None` { assert((none[Int] ~>? ("Foo", "Bar")).run.run ≟ failure("Foo").run.run) }
   }
 
   object `Option ~>? with a noneDescription and a function for someDescription must` {
-    def `do the same as 'success' when the Option is Some` { (Some(2) ~>? ("Foo", x ⇒ "Bar: " + x)).run.run must be === success(2, "Bar: 2").run.run }
-    def `do the same as 'failure' when the Option is None` { (None ~>? ("Foo", x ⇒ "Bar: " + x)).run.run must be === failure("Foo").run.run }
+    def `do the same as 'success' when the Option is Some` { assert((Some(2) ~>? ("Foo", x ⇒ "Bar: " + x)).run.run ≟ success(2, "Bar: 2").run.run) }
+    def `do the same as 'failure' when the Option is None` { assert((none[Int] ~>? ("Foo", x ⇒ "Bar: " + x)).run.run ≟ failure("Foo").run.run) }
   }
 
   object `\\/ ~>? with a description must` {
-    def `do the same as 'success' with right` { (\/-(2) ~>? "Foo").run.run must be === success(2, "Foo").run.run }
-    def `do the same as 'failure' with left` { (-\/("Fail") ~>? "Foo").run.run must be === failure("Foo - Fail").run.run }
+    def `do the same as 'success' with right` { assert((\/-(2) ~>? "Foo").run.run ≟ success(2, "Foo").run.run) }
+    def `do the same as 'failure' with left` { assert((aFailure ~>? "Foo").run.run ≟ failure("Foo - Fail").run.run) }
   }
 
   object `\\/ ~>? with a leftDescription function and a rightDescription must` {
-    def `do the same as 'success' with right` { (\/-(2) ~>? (x ⇒ "Foo: " + x, "Bar")).run.run must be === success(2, "Bar").run.run }
-    def `do the same as 'failure' with left` { (-\/("Fail") ~>? (x ⇒ "Foo: " + x, "Bar")).run.run must be === failure("Foo: Fail").run.run }
+    def `do the same as 'success' with right` { assert((\/-(2) ~>? (x ⇒ "Foo: " + x, "Bar")).run.run ≟ success(2, "Bar").run.run) }
+    def `do the same as 'failure' with left` { assert((aFailure ~>? (x ⇒ "Foo: " + x, "Bar")).run.run ≟ failure("Foo: Fail").run.run) }
   }
 
   object `\\/ ~>? with a leftDescription function and a rightDescription function must` {
-    def `do the same as 'success' with right` { (\/-(2) ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run must be === success(2, "Bar: 2").run.run }
-    def `do the same as 'failure' with left` { (-\/("Fail") ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run must be === failure("Foo: Fail").run.run }
+    def `do the same as 'success' with right` { assert((\/-(2) ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ success(2, "Bar: 2").run.run) }
+    def `do the same as 'failure' with left` { assert((aFailure ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ failure("Foo: Fail").run.run) }
   }
 
   object `~>* must` {
     def `return a success when all children are successes` {
       val result = List(1, 2) ~>* ("Parent", x ⇒ success(3 * x, "Child: " + x))
-      result.run.written must be === node("Parent", true, node("Child: 1", true), node("Child: 2", true))
-      result.run.value must be === \/-(List(3, 6))
+      assert(result.run.written ≟ node("Parent", true, node("Child: 1", true), node("Child: 2", true)))
+      assert(result.run.value ≟ \/-(List(3, 6)))
     }
 
     def `return a failure when one or more children is a failure` {
-      val result = List(1, 2) ~>* ("Parent", x ⇒ (x == 1) ~>? s"Child: $x")
-      result.run.written must be === node("Parent", false, node("Child: 1", true), node("Child: 2", false))
-      result.run.value must be === -\/("Parent")
+      val result = List(1, 2) ~>* ("Parent", x ⇒ (x ≟ 1) ~>? s"Child: $x")
+      assert(result.run.written ≟ node("Parent", false, node("Child: 1", true), node("Child: 2", false)))
+      assert(result.run.value ≟ -\/("Parent"))
     }
   }
 
@@ -120,17 +124,17 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         "Parent" ~< {
           for (x ← 1 ~> "Child") yield x
         }
-      result.run.written must be === node("Parent", true, node("Child", true))
-      result.run.value must be === \/-(1)
+      assert(result.run.written ≟ node("Parent", true, node("Child", true)))
+      assert(result.run.value ≟ \/-(1))
     }
 
     def `when the leaf is a failure, create a failure root node with the description with a single child which is the leaf` {
-      val result =
+      val result: DescribedComputation[\/[String, String]] =
         "Parent" ~< {
           for (x ← failure("Child")) yield x
         }
-      result.run.written must be === node("Parent", false, node("Child", false))
-      result.run.value must be === -\/("Parent")
+      assert(result.run.written ≟ node("Parent", false, node("Child", false)))
+      assert(result.run.value ≟ -\/("Parent"))
     }
   }
 
@@ -140,8 +144,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         x ← 1 ~> "One"
         y ← 2 ~> "Two"
       } yield x + y
-      result.run.value must be === \/-(3)
-      result.run.written must be === node(true, node("One", true), node("Two", true))
+      assert(result.run.value ≟ \/-(3))
+      assert(result.run.written ≟ node(true, node("One", true), node("Two", true)))
     }
 
     def `create a branch with the description of the first failed leaf on the left, without a description and with success equal to false when at least one of the leaves has success = false` {
@@ -149,8 +153,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         x ← 1 ~> "One"
         y ← 2 ~>! "Two"
       } yield x + y
-      result.run.value must be === -\/("Two")
-      result.run.written must be === node(false, node("One", true), node("Two", false))
+      assert(result.run.value ≟ -\/("Two"))
+      assert(result.run.written ≟ node(false, node("One", true), node("Two", false)))
     }
   }
 
@@ -162,8 +166,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
           y ← 2 ~> "Two"
         } yield x + y
       }
-      result.run.value must be === \/-(3)
-      result.run.written must be === node("Parent", true, node("One", true), node("Two", true))
+      assert(result.run.value ≟ \/-(3))
+      assert(result.run.written ≟ node("Parent", true, node("One", true), node("Two", true)))
     }
 
     def `create a new parent above the existing branch and give it the description when the hoisted branch has a description` {
@@ -175,14 +179,14 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
           } yield x + y
         }
       }
-      result.run.value must be === \/-(3)
-      result.run.written must be === node("Grandparent", true, node("Parent", true, node("One", true), node("Two", true)))
+      assert(result.run.value ≟ \/-(3))
+      assert(result.run.written ≟ node("Grandparent", true, node("Parent", true, node("One", true), node("Two", true))))
     }
   }
 
-  private def node(description: String, success: Boolean, children: TreeNode[LogTreeLabel[Nothing]]*) =
-    TreeNode(DescribedLogTreeLabel(description, success), children.toList)
+  private def node(description: String, success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
+    Tree.node(DescribedLogTreeLabel(description, success), children.toStream)
 
-  private def node(success: Boolean, children: TreeNode[LogTreeLabel[Nothing]]*) =
-    TreeNode(UndescribedLogTreeLabel(success), children.toList)
+  private def node(success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
+    Tree.node(UndescribedLogTreeLabel(success), children.toStream)
 }
