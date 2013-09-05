@@ -21,7 +21,7 @@ trait LogTreeSyntax[Annotation] {
   type LogTreeWriter[+Value] = Writer[LogTree, Value]
   type DescribedComputation[+Value] = EitherT[LogTreeWriter, String, Value]
 
-  val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
+  private val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
 
   implicit val logTreeMonoid = new Monoid[LogTree] {
     val zero = NilTree
@@ -58,7 +58,6 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] = {
     val logTree = dc.run.written match {
-      case NilTree                                      ⇒ NilTree
       case Tree.Node(UndescribedLogTreeLabel(s, a), c)  ⇒ Tree.node(UndescribedLogTreeLabel(false, a), c)
       case Tree.Node(DescribedLogTreeLabel(d, s, a), c) ⇒ Tree.node(DescribedLogTreeLabel(d, false, a), c)
     }
@@ -191,8 +190,7 @@ trait LogTreeSyntax[Annotation] {
   implicit class AnnotationsSyntax[Value](w: DescribedComputation[Value]) {
     def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
-        case NilTree ⇒ NilTree
-        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
+        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c)   ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
         case Tree.Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
       }
 
@@ -221,12 +219,7 @@ trait LogTreeSyntax[Annotation] {
      * Get the union of all annotations in the log tree of the DescribedComputation
      */
     def allAnnotations: Set[Annotation] = {
-      def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = {
-        tree match {
-          case NilTree                           ⇒ accumulator
-          case t: Tree[LogTreeLabel[Annotation]] ⇒ t.subForest.foldLeft(accumulator ++ t.rootLabel.annotations)((acc, child) ⇒ recurse(child, acc))
-        }
-      }
+      def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = tree.subForest.foldLeft(accumulator ++ tree.rootLabel.annotations)((acc, child) ⇒ recurse(child, acc))
       recurse(w.run.written, Set())
     }
   }
@@ -386,18 +379,11 @@ trait LogTreeSyntax[Annotation] {
       }
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
-      case NilTree ⇒ Tree.leaf(DescribedLogTreeLabel(description, true))
       case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children)), children)
-      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
+      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children)   ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
     }
 
-    private def allSuccessful(trees: Iterable[LogTree]) =
-      trees.forall {
-        _ match {
-          case NilTree         ⇒ true
-          case Tree.Node(l, _) ⇒ l.success
-        }
-      }
+    private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
   }
 
   /**
@@ -424,10 +410,7 @@ trait LogTreeSyntax[Annotation] {
     override def shows(t: LogTree) = toList(t).map(line ⇒ "  " * line._1 + line._2).mkString(System.getProperty("line.separator"))
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
-      tree match {
-        case NilTree                    ⇒ List((depth, "NilTree"))
-        case Tree.Node(label, children) ⇒ line(depth, label) :: children.flatMap(toList(_, depth + 1)).toList
-      }
+      line(depth, tree.rootLabel) :: tree.subForest.flatMap(toList(_, depth + 1)).toList
 
     private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success, showDescription(label))))
 
