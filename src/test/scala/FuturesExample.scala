@@ -30,7 +30,8 @@ object FuturesExample extends App {
    * of some operation on the values containined, in this case we are just going to sum them.
    * Have a look at the Scaladoc for treelog.LogTreeSyntax.BranchLabelingSyntax.~<+
    */
-  def doSum(computations: List[DescribedComputation[Int]]): DescribedComputation[Int] = "Summed up" ~<+ (computations, (_: List[Int]).sum)
+  def doSum(computations: List[DescribedComputation[Int]]): DescribedComputation[Int] =
+    "Summed up" ~<+ (computations, (bits: List[Int]) ⇒ bits.sum)
 
   summedFuture.foreach(l ⇒ {
     val log = l.run.written
