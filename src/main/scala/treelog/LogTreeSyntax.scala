@@ -354,7 +354,7 @@ trait LogTreeSyntax[Annotation] {
       ~<+(describedComputations, (x: F[Value]) ⇒ x)
 
     /**
-     * As ~< but with folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
+     * As ~< but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
      *
      * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
      * <code>"Sum" ~&lt;&lt;(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.

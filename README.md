@@ -33,6 +33,8 @@ Detailed docs are available in the [scaladoc](http://lancewalton.github.io/treel
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and
 [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala)
 in the test package is the simplest way to see how to use TreeLog.
+[FuturesExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/FuturesExample.scala) demonstrates how
+you can combine the results of several parallel computations.
 
 The quadratic example does the extremely important job of logging the computation of roots of a quadratic equation. This:
 

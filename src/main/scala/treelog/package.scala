@@ -279,6 +279,23 @@
  * <code>~&gt;*</code> works not only for <code>List</code>, but for all kinds that have a <code>scalaz.Monad</code> and a <code>scalaz.Traverse</code>
  * defined and available in implicit scope. See [[treelog.LogTreeSyntax.TraversableMonadSyntax TraversableMonadSyntax]].
  *
+ * Another common thing you might want to do with a collection of DescribedComputations is retain their logs as children of a parent whose value
+ * is some function of the child values. Here is an example of summing the result of several computations:
+ *
+ * {{{
+ * val parts = List(1 ~> "One", 2 ~> "Two")
+ * val summed = "Sum" ~<+ (parts, (bits: List[Int]) => bits.sum)
+ *
+ * println(summed.run.written.shows)
+ * // Will print:
+ * Sum
+ *   One
+ *   Two
+ *
+ * println(summed.run.value)
+ * // Will print \/-(3)
+ * }}}
+ *
  * == Annotations ==
  *
  * Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
