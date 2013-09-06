@@ -11,19 +11,15 @@ object FuturesExample extends App {
 
   val future1: Future[DescribedComputation[Int]] = Future(1 ~> "Got 1")
   val future2: Future[DescribedComputation[Int]] = Future(failure("Couldn't get a 2"))
+  //val future2: Future[DescribedComputation[Int]] = Future(2 ~> "Got 2")
   val future3: Future[DescribedComputation[Int]] = Future(3 ~> "Got 3")
 
   val lf: Future[List[DescribedComputation[Int]]] = Future.sequence(future1 :: future2 :: future3 :: Nil)
 
-  val summedFuture: Future[DescribedComputation[Int]] = lf.map(doSum)
+  val summedFuture: Future[DescribedComputation[Int]] = lf map doSum
 
-  def doSum(l: List[DescribedComputation[Int]]) =
-    "Summing" ~< {
-      for {
-        values ← l ~>* ("Extracting list of values", identity)
-        sum = values.sum
-      } yield sum
-    }
+  def doSum(l: List[DescribedComputation[Int]]): DescribedComputation[Int] =
+    "Summed up" ~<+ (l, (_: List[Int]).sum)
 
   summedFuture.foreach(l ⇒ {
     val log = l.run.written

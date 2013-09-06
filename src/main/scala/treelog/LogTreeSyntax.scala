@@ -350,7 +350,16 @@ trait LogTreeSyntax[Annotation] {
      * The 'success' status of the returned <code>DescribedComputations</code> log tree is <code>true</code> if all of the children
      * are successful. It is <code>false</code> otherwise.
      */
-    def ~<[F[_], Value](describedComputations: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] = {
+    def ~<[F[_], Value](describedComputations: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] =
+      ~<+(describedComputations, (x: F[Value]) ⇒ x)
+
+    /**
+     * As ~< but with folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
+     *
+     * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
+     * <code>"Sum" ~&lt;&lt;(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
+     */
+    def ~<+[F[_], Value, R](describedComputations: F[DescribedComputation[Value]], f: F[Value] ⇒ R)(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[R] = {
       val parts = monad.map(describedComputations)(m ⇒ (m.run.value, m.run.written))
 
       val children = monad.map(parts)(_._2).toList
@@ -363,7 +372,7 @@ trait LogTreeSyntax[Annotation] {
 
       describedComputations.sequence.run.value match {
         case -\/(_) ⇒ failure(description, branch)
-        case \/-(v) ⇒ success(v, branch)
+        case \/-(v) ⇒ success(f(v), branch)
       }
     }
 
@@ -417,7 +426,7 @@ trait LogTreeSyntax[Annotation] {
     private def showAnnotations(annotations: Set[Annotation], line: String) =
       if (annotations.isEmpty) line else (line + " - [" + annotations.map(annotationShow.show(_)).mkString(", ") + "]")
 
-    private def showDescription(label: LogTreeLabel[Annotation]) = label.fold(l ⇒ l.description, l ⇒ "No Description")
+    private def showDescription(label: LogTreeLabel[Annotation]) = label.fold(_.description, _ ⇒ "No Description")
 
     private def showSuccess(success: Boolean, s: String) = if (success) s else "Failed: " + s
   }

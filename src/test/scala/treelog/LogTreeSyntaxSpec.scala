@@ -170,6 +170,12 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
       assert(result.run.written ≟ node("Parent", true, node("One", true), node("Two", true)))
     }
 
+    def `folding a result under a parent` {
+      val result = "Parent" ~<+ (List(1 ~> "One", 2 ~> "Two"), (_: List[Int]).sum)
+      assert(result.run.value ≟ \/-(3))
+      assert(result.run.written ≟ node("Parent", true, node("One", true), node("Two", true)))
+    }
+
     def `create a new parent above the existing branch and give it the description when the hoisted branch has a description` {
       val result = "Grandparent" ~< {
         "Parent" ~< {
