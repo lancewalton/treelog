@@ -197,7 +197,18 @@ println(result.run.written.shows)
 <span class="cmt">//   Failed: Testing if 1 is even</span>
 <span class="cmt">//   Testing if 2 is even</span>
 <span class="cmt">//   Failed: Testing if 3 is even</span></pre><p><code>~&gt;*</code> works not only for <code>List</code>, but for all kinds that have a <code>scalaz.Monad</code> and a <code>scalaz.Traverse</code>
-defined and available in implicit scope. See <a href="LogTreeSyntax$TraversableMonadSyntax.html" class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax">TraversableMonadSyntax</a>.</p><h4> Annotations </h4><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+defined and available in implicit scope. See <a href="LogTreeSyntax$TraversableMonadSyntax.html" class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax">TraversableMonadSyntax</a>.</p><p>Another common thing you might want to do with a collection of DescribedComputations is retain their logs as children of a parent whose value
+is some function of the child values. Here is an example of summing the result of several computations:</p><pre><span class="kw">val</span> parts = <span class="std">List</span>(<span class="num">1</span> ~&gt; <span class="lit">"One"</span>, <span class="num">2</span> ~&gt; <span class="lit">"Two"</span>)
+<span class="kw">val</span> summed = <span class="lit">"Sum"</span> ~&lt;+ (parts, (bits: <span class="std">List</span>[<span class="std">Int</span>]) <span class="kw">=&gt;</span> bits.sum)
+
+println(summed.run.written.shows)
+<span class="cmt">// Will print:</span>
+Sum
+  One
+  Two
+
+println(summed.run.value)
+<span class="cmt">// Will print \/-(3)</span></pre><h4> Annotations </h4><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
 a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
 the annotation facility to carry the key (or something richer) for each modified entity.</p><p>The <code>~~</code> (see <a href="LogTreeSyntax$AnnotationsSyntax.html" class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax">AnnotationsSyntax</a>) is provided for this purpose. It can be applied to
 any <code>DescribedComputation</code> and it will add the given annotation to the set of annotations at the current root node of the log
