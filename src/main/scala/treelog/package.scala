@@ -17,7 +17,7 @@
  * =DescribedComputation=
  *
  * All of this works by 'lifting' the intermediate and final results of computations and the description of the steps into a type called <code>DescribedComputation</code>
- * (declared in [[treelog.LogTreeSyntax LogTreeSyntax]].
+ * (declared in [[treelog.LogTreeSyntax LogTreeSyntax]]).
  *
  * ==Some Simple Lifting==
  *
@@ -82,7 +82,7 @@
  * }}}
  *
  * It may seem strange that both the <code>value</code> and the log tree provide indications of success and failure (the <code>value</code>
- * through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the [[treelog.TreeNode TreeNode]] label.
+ * through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the [[treelog.TreeNode TreeNode]] label).
  * The reason for this is that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy
  * is tried which succeeds leading to a successful overall result.
  *
@@ -302,7 +302,7 @@
  * a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
  * the annotation facility to carry the key (or something richer) for each modified entity.
  *
- * The <code>~~</code> (see [[treelog.LogTreeSyntax.AnnotationsSyntax AnnotationsSyntax]]) is provided for this purpose. It can be applied to
+ * The <code>~~</code> operator (see [[treelog.LogTreeSyntax.AnnotationsSyntax AnnotationsSyntax]]) is provided for this purpose. It can be applied to
  * any <code>DescribedComputation</code> and it will add the given annotation to the set of annotations at the current root node of the log
  * tree. Annotations can be of any type, but must all be of the same type for a particular log tree. You choose the type of annotations by instantiating
  * the 'Annotation' type parameter of [[treelog.LogTreeSyntax LogTreeSyntax]]
