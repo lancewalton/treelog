@@ -45,7 +45,7 @@ computations that led to the result. The tree could be logged as text or stored 
 a detailed audit trail of the processing that has occurred for particular entities.</p><p>Note that in the remainder of this document, results of producing log trees will be shown by rendering
 the tree textually, but that is only one possible way.</p><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
 a process that affects multiple entities, and you want to ensure that the audit trail is associated with each of the modified entities.</p><h3>DescribedComputation</h3><p>All of this works by 'lifting' the intermediate and final results of computations and the description of the steps into a type called <code>DescribedComputation</code>
-(declared in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>.</p><h4>Some Simple Lifting</h4><p>You can produce a <code>DescribedComputation</code> very simply with many of the methods in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>. The simplest few are:</p><pre><span class="cmt">// This is a concrete implementation of LogTreeSyntax that is provided for you</span>
+(declared in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>).</p><h4>Some Simple Lifting</h4><p>You can produce a <code>DescribedComputation</code> very simply with many of the methods in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>. The simplest few are:</p><pre><span class="cmt">// This is a concrete implementation of LogTreeSyntax that is provided for you</span>
 <span class="cmt">// to use if you don't need to use annotations (see later)</span>
 <span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
 
@@ -78,7 +78,7 @@ in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">
 <span class="cmt">//   - "Here's one" is the description provided in the declaration of foo</span>
 <span class="cmt">//   - true indicates that the computation represented by the node was successful</span>
 <span class="cmt">//   - the empty set represents the annotations specified for this node</span></pre><p>It may seem strange that both the <code>value</code> and the log tree provide indications of success and failure (the <code>value</code>
-through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the <span class="extype" name="treelog.TreeNode">TreeNode</span> label.
+through the use of <code>scalaz.\/</code>, and the log tree with a <code>boolean</code> property in the <span class="extype" name="treelog.TreeNode">TreeNode</span> label).
 The reason for this is that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy
 is tried which succeeds leading to a successful overall result.</p><h4> More Comprehensive Computations </h4><p>(An extended example of this kind of thing is the
 <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example on GitHub</a>)</p><p>Generally, once a value has been lifted, it is a good idea to keep working with it in that form for as long
@@ -210,7 +210,7 @@ Sum
 println(summed.run.value)
 <span class="cmt">// Will print \/-(3)</span></pre><h4> Annotations </h4><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
 a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
-the annotation facility to carry the key (or something richer) for each modified entity.</p><p>The <code>~~</code> (see <a href="LogTreeSyntax$AnnotationsSyntax.html" class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax">AnnotationsSyntax</a>) is provided for this purpose. It can be applied to
+the annotation facility to carry the key (or something richer) for each modified entity.</p><p>The <code>~~</code> operator (see <a href="LogTreeSyntax$AnnotationsSyntax.html" class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax">AnnotationsSyntax</a>) is provided for this purpose. It can be applied to
 any <code>DescribedComputation</code> and it will add the given annotation to the set of annotations at the current root node of the log
 tree. Annotations can be of any type, but must all be of the same type for a particular log tree. You choose the type of annotations by instantiating
 the 'Annotation' type parameter of <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p><p>Here is a simple example using <code>Strings</code> as the annotations type:</p><pre><span class="kw">val</span> stringAnnotateableLogTreeSyntax = <span class="kw">new</span> treelog.LogTreeSyntax[<span class="std">String</span>] {}
