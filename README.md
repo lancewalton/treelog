@@ -6,9 +6,9 @@ treelog
 It is often necessary to understand exactly what happened in a computation. What went right, what went wrong,
  what was done with what, and how a result was derived.
 
-Computations are functions built on functions, and so computations are tree-like, and hence the description will mirror that structure.
+Computations are trees, and so the description will be trees.
 
-TreeLog makes use of a Writer monad in the form of a Tree structure that can be used to produce a hierarchical log of a computation.
+TreeLog makes use of a Writer monad in the form of a tree structure that can be used to produce a hierarchical log of a computation.
 
 Getting TreeLog
 ---------------
