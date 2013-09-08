@@ -32,12 +32,12 @@ object FuturesExample extends App {
   def doSum(computations: List[DescribedComputation[Int]]): DescribedComputation[Int] =
     "Summed up" ~<+ (computations, (bits: List[Int]) ⇒ bits.sum)
 
-  summedFuture.foreach(l ⇒ {
-    val log = l.run.written
-    val sum = l.run.value
-    println(log.shows)
-    println(sum.shows)
-  })
+  val ans = Await.result(summedFuture, 1.second)
+  val log = ans.run.written
+  val sum = ans.run.value
+  println(log.shows)
+  println(sum.shows)
+
   /*
    * Output is
    * Summed up
@@ -45,7 +45,7 @@ object FuturesExample extends App {
    *   Got 2
    *   Got 3
    * \/-(6)
-   * 
+   *
    * For the failure case the output is
    * Failed: Summed up
    *   Got 1
@@ -53,6 +53,4 @@ object FuturesExample extends App {
    *   Got 3
    * -\/("Summed up")
    */
-
-  Thread.sleep(1000)
 }
