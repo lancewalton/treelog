@@ -28,8 +28,6 @@ Using TreeLog - Examples
 
 Detailed docs are available in the [scaladoc](http://lancewalton.github.io/treelog/api/master/#treelog.package).
 
-### Quadratic Roots ###
-
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and
 [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala)
 in the test package is the simplest way to see how to use TreeLog.
