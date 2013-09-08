@@ -3,8 +3,8 @@ treelog
 
 [![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
 
-It is often necessary to understand exactly what happened in a computation. What went right, what went wrong
-and what was done with what and how was a result arrived at.
+It is often necessary to understand exactly what happened in a computation. What went right, what went wrong,
+ what was done with what, and how a result was derived.
 
 Computations are functions built on functions, and so computations are tree-like, and hence the description will mirror that structure.
 
