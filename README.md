@@ -3,12 +3,14 @@ treelog
 
 [![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
 
-It is often necessary to understand exactly what happened in a computation. What went right, what went wrong,
- what was done with what, and how a result was derived.
+It is often necessary to understand exactly what happened in a computation: what went right, what went wrong,
+ what was done with what, why it was, and how a result was derived.
 
-Computations are trees, and so the description will be trees.
+Such complex computations are trees, and so attempting to describe whats going on in a linear fashion is difficult to follow after the fact. 
+What treelog offers is a means of writing a log together with a computation, with values computed on the way and other information relevant to
+the computation.
 
-TreeLog makes use of a Writer monad in the form of a tree structure that can be used to produce a hierarchical log of a computation.
+TreeLog achieves this by making use of a Writer monad writing to a Tree representing the hierarchical log of computation.
 
 Getting TreeLog
 ---------------
@@ -23,10 +25,48 @@ libraryDependencies ++= Seq(
     "org.scalaz" %% "scalaz-core" % "7.0.2")
 ```
 
-Using TreeLog - Examples
-----------
+Quick Start TL;DR
+-----------
 
-Detailed docs are available in the [scaladoc](http://lancewalton.github.io/treelog/api/master/#treelog.package).
+```scala
+import treelog.LogTreeSyntaxWithoutAnnotations._
+import scalaz._, Scalaz._
+
+// syntax for logging something
+val one: DescribedComputation[Int] = 1 ~> "The number one"
+
+// syntax for logging something and include the value in the log
+val oneA: DescribedComputation[Int] = 1 ~> (v => s"The value is $v")
+
+// Extract the result ( a scalaz.\/ ) and log (a LogTree which is a type alias for scalaz.Tree[LogTreeLabel[A]])
+val v: \/[String, Int] = one.run.value
+val logtree: LogTree = one.run.written
+
+// turn the LogTree into a String
+val logTreeString = logtree.shows
+
+// In for comprehensions with a top level description
+val result: DescribedComputation[Int] = 
+ "Adding up" ~< { 
+  for {
+   foo <- 1 ~> ("foo = " + _)
+   bar <- 2 ~> ("bar = " + _)
+   foobar <- (foo + bar) ~> ("foobar = " + _)
+  } yield foobar 
+ }
+
+println(result.run.written.shows)
+// prints:
+// Adding up
+//   foo = 1
+//   bar = 2
+//   foobar = 3
+```
+
+Now don't be lazy and read the [scaladoc](http://lancewalton.github.io/treelog/api/master/#treelog.package).
+
+TreeLog Examples
+----------
 
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala) and
 [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/master/src/test/scala/OptionsAndEithersExample.scala)
@@ -96,4 +136,3 @@ Extracting root: Failed
 with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities, and you
 want to make sure that the audit trail is associated with each of the modified entities. You can use the annotation facility to carry the key (or something richer) for each
 modified entity.
-
