@@ -12,3 +12,7 @@
 	  Click the Close button (next to the Refresh button)
 	  Wait ...
       Keep checking the Activity tab to see if any rules failed.
+    If that succeeds, select the release again and click 'Release'
+    Wait ...
+      Keep checking the Activity tab to see if there are any problems
+    Look for the release in https://oss.sonatype.org/content/repositories/releases/com/casualmiracles/treelog_2.10
