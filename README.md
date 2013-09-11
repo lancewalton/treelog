@@ -18,7 +18,6 @@ Getting TreeLog
 In SBT do this:
 
 ```scala
-resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/releases")
 
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.1.0",
