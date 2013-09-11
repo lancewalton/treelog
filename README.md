@@ -4,13 +4,15 @@ treelog
 [![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
 
 It is often necessary to understand exactly what happened in a computation: what went right, what went wrong,
- what was done with what, why it was, and how a result was derived.
+ what was done with what, why it was done, and how a result was derived.
 
 Such complex computations are trees, and so attempting to describe whats going on in a linear fashion is difficult to follow after the fact. 
-What treelog offers is a means of writing a log together with a computation, with values computed on the way and other information relevant to
-the computation.
+What treelog offers is a means of writing a log together with a computation, with values computed on the way with all information relevant to
+the computation. 
 
-TreeLog achieves this by making use of a Writer monad writing to a Tree representing the hierarchical log of computation.
+Logtree is a veritable complect of computation and description in perfect harmony.
+
+TreeLog achieves this remarkable feat with a Writer monad writing to a Tree representing the hierarchical log of computation.
 
 Getting TreeLog
 ---------------
