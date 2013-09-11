@@ -21,8 +21,8 @@ In SBT do this:
 resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/releases")
 
 libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.0.0",
-    "org.scalaz" %% "scalaz-core" % "7.0.2")
+    "com.casualmiracles" %% "treelog" % "1.1.0",
+    "org.scalaz" %% "scalaz-core" % "7.0.3")
 ```
 
 Quick Start TL;DR
