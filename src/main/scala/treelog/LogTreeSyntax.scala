@@ -79,7 +79,6 @@ trait LogTreeSyntax[Annotation] {
    */
   def success[Value](value: Value, description: String): DescribedComputation[Value] =
     eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
-  //success(value, Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
    * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
