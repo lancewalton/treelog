@@ -100,8 +100,8 @@ die() {
 
 make_url () {
   version="$1"
-
-  echo "http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$version/sbt-launch.jar"
+  
+  echo "$sbt_launch_repo/org.scala-sbt/sbt-launch/$version/sbt-launch.jar"
 }
 
 readarr () {
@@ -128,8 +128,8 @@ declare -r default_jvm_opts="-Dfile.encoding=UTF8 -XX:MaxPermSize=384m -Xms512m 
 declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory=project/.boot -Dsbt.ivy.home=project/.ivy"
 declare -r latest_28="2.8.2"
 declare -r latest_29="2.9.3"
-declare -r latest_210="2.10.3-RC1"
-declare -r latest_211="2.11.0-M4"
+declare -r latest_210="2.10.3"
+declare -r latest_211="2.11.0-M5"
 
 declare -r script_path=$(get_script_path "$BASH_SOURCE")
 declare -r script_dir="$(dirname $script_path)"
@@ -139,6 +139,7 @@ declare -r script_name="$(basename $script_path)"
 declare java_cmd=java
 declare sbt_opts_file=$(init_default_option_file SBT_OPTS .sbtopts)
 declare jvm_opts_file=$(init_default_option_file JVM_OPTS .jvmopts)
+declare sbt_launch_repo="http://typesafe.artifactoryonline.com/typesafe/ivy-releases"
 
 # pull -J and -D options to give to java.
 declare -a residual_args
@@ -256,11 +257,13 @@ Usage: $script_name [options]
   -sbt-version  <version>   use the specified version of sbt (default: $sbt_release_version)
   -sbt-jar      <path>      use the specified jar as the sbt launcher
   -sbt-launch-dir <path>    directory to hold sbt launchers (default: $sbt_launch_dir)
+  -sbt-launch-repo <url>    repo url for downloading sbt launcher jar (default: $sbt_launch_repo)
 
   # scala version (default: as chosen by sbt)
   -28                       use $latest_28
   -29                       use $latest_29
   -210                      use $latest_210
+  -211                      use $latest_211
   -scala-home <path>        use the scala build at the specified directory
   -scala-version <version>  use the specified version of scala
   -binary-version <version> use the specified scala version when searching for dependencies
@@ -349,6 +352,7 @@ process_args ()
        -sbt-jar) require_arg path "$1" "$2" && sbt_jar="$2" && shift 2 ;;
    -sbt-version) require_arg version "$1" "$2" && sbt_explicit_version="$2" && shift 2 ;;
 -sbt-launch-dir) require_arg path "$1" "$2" && sbt_launch_dir="$2" && shift 2 ;;
+-sbt-launch-repo) require_arg path "$1" "$2" && sbt_launch_repo="$2" && shift 2 ;;
  -scala-version) require_arg version "$1" "$2" && setScalaVersion "$2" && shift 2 ;;
 -binary-version) require_arg version "$1" "$2" && addSbt "set scalaBinaryVersion in ThisBuild := \"$2\"" && shift 2 ;;
     -scala-home) require_arg path "$1" "$2" && addSbt "set every scalaHome := Some(file(\"$2\"))" && shift 2 ;;

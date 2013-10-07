@@ -42,7 +42,7 @@ trait LogTreeSyntax[Annotation] {
           Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftNode #:: rightChildren)
 
         case (leftNode: Tree[LogTreeLabel[Annotation]], rightNode: Tree[LogTreeLabel[Annotation]]) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(augend, addend))
+          Tree.node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(leftNode, rightNode))
       }
   }
 
