@@ -5,6 +5,7 @@ import scalaz.syntax.foldable
 import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
 import scala.annotation.tailrec
+import scalaz.Foldable
 
 /**
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,
@@ -58,12 +59,12 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] = {
     val logTree = dc.run.written match {
-      case Tree.Node(UndescribedLogTreeLabel(s, a), c)  ⇒ Tree.node(UndescribedLogTreeLabel(false, a), c)
+      case Tree.Node(UndescribedLogTreeLabel(s, a), c) ⇒ Tree.node(UndescribedLogTreeLabel(false, a), c)
       case Tree.Node(DescribedLogTreeLabel(d, s, a), c) ⇒ Tree.node(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
-      case \/-(a)   ⇒ success(a, logTree)
+      case \/-(a) ⇒ success(a, logTree)
     }
   }
 
@@ -189,7 +190,7 @@ trait LogTreeSyntax[Annotation] {
   implicit class AnnotationsSyntax[Value](w: DescribedComputation[Value]) {
     def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
-        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c)   ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
+        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
         case Tree.Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
       }
 
@@ -382,16 +383,31 @@ trait LogTreeSyntax[Annotation] {
      */
     def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
       dc.run.value match {
-        case -\/(_)     ⇒ failure(description, branchHoister(dc.run.written, description))
+        case -\/(_) ⇒ failure(description, branchHoister(dc.run.written, description))
         case \/-(value) ⇒ success(value, branchHoister(dc.run.written, description))
       }
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
       case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children)), children)
-      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children)   ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
+      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
     }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
+  }
+
+  implicit class FoldSyntax[Value](values: Iterable[Value]) {
+    def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
+      def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
+        remainingValues match {
+          case Nil ⇒ partialResult
+          case head :: tail ⇒ for {
+            p ← partialResult
+            result ← recurse(tail, f(p, head))
+          } yield result
+        }
+
+      description ~< recurse(values, initial)
+    }
   }
 
   /**

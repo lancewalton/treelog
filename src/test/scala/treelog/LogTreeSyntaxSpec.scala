@@ -118,6 +118,30 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
   }
 
+  object `~>/ must` {
+    def `return success with the folded value  and a log tree describing the fold when all parts are successes` {
+      val result = List(1, 2, 3) ~>/ ("Parent", 0 ~> "Initial Value", (acc: Int, x: Int) ⇒ (acc + x) ~> (t ⇒ s"x=$x, result=$t"))
+      assert(result.run.written ≟
+        node("Parent", true,
+          node("Initial Value", true),
+          node("x=1, result=1", true),
+          node("x=2, result=3", true),
+          node("x=3, result=6", true)))
+      result.run.value must equal(\/-(6))
+    }
+
+    def `return failure and a log tree describing the fold as far as it got` {
+      val result = List(1, 2, 3) ~>/ ("Parent", 0 ~> "Initial Value", (acc: Int, x: Int) ⇒ if (x == 3) failure("No") else (acc + x) ~> (t ⇒ s"x=$x, result=$t"))
+      assert(result.run.written ≟
+        node("Parent", false,
+          node("Initial Value", true),
+          node("x=1, result=1", true),
+          node("x=2, result=3", true),
+          node("No", false)))
+      result.run.value must equal(-\/("Parent"))
+    }
+  }
+
   object `Hoisting a leaf into a branch must` {
     def `when the leaf is a success, create a success root node with the description with a single child which is the leaf` {
       val result =
