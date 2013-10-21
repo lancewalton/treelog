@@ -396,15 +396,19 @@ trait LogTreeSyntax[Annotation] {
   }
 
   implicit class FoldSyntax[Value](values: Iterable[Value]) {
+    /**
+     * As ~< but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
+     *
+     * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
+     * <code>"Sum" ~&lt;+(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
+     */
     def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
       def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
-        remainingValues match {
-          case Nil ⇒ partialResult
-          case head :: tail ⇒ for {
-            p ← partialResult
-            result ← recurse(tail, f(p, head))
-          } yield result
-        }
+        if (remainingValues.isEmpty) partialResult
+        else for {
+          p ← partialResult
+          result ← recurse(remainingValues.tail, f(p, remainingValues.head))
+        } yield result
 
       description ~< recurse(values, initial)
     }
