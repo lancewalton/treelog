@@ -399,7 +399,7 @@ trait LogTreeSyntax[Annotation] {
     /**
      * Starting with a given value and description, foldleft over an Iterable of values and 'add' them, describing each 'addition'.
      */
-    def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
+    def ~>/[R](initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
       @tailrec
       def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
         if (remainingValues.isEmpty) partialResult
@@ -409,7 +409,7 @@ trait LogTreeSyntax[Annotation] {
             case \/-(_) ⇒ recurse(remainingValues.tail, partialResult.flatMap(p ⇒ f(p, remainingValues.head)))
           }
 
-      description ~< recurse(values, initial)
+      recurse(values, initial)
     }
   }
 
