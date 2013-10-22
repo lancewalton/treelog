@@ -397,18 +397,17 @@ trait LogTreeSyntax[Annotation] {
 
   implicit class FoldSyntax[Value](values: Iterable[Value]) {
     /**
-     * Starting with a given value and description, fold over a set of values and 'add' them, describing each 'addition'.
-     *
-     * Warning: this method is not tail recursive and may blow the stack. If someone can figure out how to make it tail-recursive,
-     * we'd love to know how.
+     * Starting with a given value and description, foldleft over a set of values and 'add' them, describing each 'addition'.
      */
     def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
+      @tailrec
       def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
         if (remainingValues.isEmpty) partialResult
-        else for {
-          p ← partialResult
-          result ← recurse(remainingValues.tail, f(p, remainingValues.head))
-        } yield result
+        else
+          partialResult.run.value match {
+            case -\/(m) ⇒ partialResult
+            case \/-(_) ⇒ recurse(remainingValues.tail, partialResult.flatMap(p ⇒ f(p, remainingValues.head)))
+          }
 
       description ~< recurse(values, initial)
     }
