@@ -397,10 +397,10 @@ trait LogTreeSyntax[Annotation] {
 
   implicit class FoldSyntax[Value](values: Iterable[Value]) {
     /**
-     * As ~< but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
+     * Starting with a given value and description, fold over a set of values and 'add' them, describing each 'addition'.
      *
-     * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
-     * <code>"Sum" ~&lt;+(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
+     * Warning: this method is not tail recursive and may blow the stack. If someone can figure out how to make it tail-recursive,
+     * we'd love to know how.
      */
     def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
       def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
