@@ -5,7 +5,6 @@ import scalaz.syntax.foldable
 import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
 import scala.annotation.tailrec
-import scalaz.Foldable
 
 /**
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,
@@ -447,5 +446,18 @@ trait LogTreeSyntax[Annotation] {
     private def showDescription(label: LogTreeLabel[Annotation]) = label.fold(_.description, _ ⇒ "No Description")
 
     private def showSuccess(success: Boolean, s: String) = if (success) s else "Failed: " + s
+  }
+
+  case class SerializableTree(label: LogTreeLabel[Annotation], children: List[SerializableTree])
+  type SerializableDescribedComputation[Value] = Pair[\/[String, Value], SerializableTree]
+
+  def toSerializableForm[Value](dc: DescribedComputation[Value]): SerializableDescribedComputation[Value] = {
+    def transform(tree: LogTree): SerializableTree = SerializableTree(tree.rootLabel, tree.subForest.map(transform _).toList)
+    Pair(dc.run.value, transform(dc.run.written))
+  }
+
+  def fromSerializableForm[Value](sdc: SerializableDescribedComputation[Value]): DescribedComputation[Value] = {
+    def transform(tree: SerializableTree): LogTree = Tree.node(tree.label, tree.children.map(transform _).toStream)
+    sdc._1.fold(m ⇒ failure(m, transform(sdc._2)), v ⇒ success(v, transform(sdc._2)))
   }
 }

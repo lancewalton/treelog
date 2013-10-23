@@ -121,7 +121,6 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
   object `~>/ must` {
     def `return success with the folded value  and a log tree describing the fold when all parts are successes` {
       val result = List(1, 2, 3) ~>/ ("Foo", 0 ~> "Initial Value", (acc: Int, x: Int) ⇒ (acc + x) ~> (t ⇒ s"x=$x, result=$t"))
-      println(result.run.written.show)
       assert(result.run.written ≟
         node("Foo", true,
           node("Initial Value", true),
