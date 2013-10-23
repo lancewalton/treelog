@@ -139,7 +139,7 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
           node("x=1, result=1", true),
           node("x=2, result=3", true),
           node("No", false)))
-      result.run.value must equal(-\/("Parent"))
+      result.run.value must equal(-\/("Bar"))
     }
   }
 
