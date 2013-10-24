@@ -448,16 +448,15 @@ trait LogTreeSyntax[Annotation] {
     private def showSuccess(success: Boolean, s: String) = if (success) s else "Failed: " + s
   }
 
-  case class SerializableTree(label: LogTreeLabel[Annotation], children: List[SerializableTree])
-  type SerializableDescribedComputation[Value] = Pair[\/[String, Value], SerializableTree]
+  type SerializableDescribedComputation[Value] = Pair[\/[String, Value], SerializableTree[Annotation]]
 
   def toSerializableForm[Value](dc: DescribedComputation[Value]): SerializableDescribedComputation[Value] = {
-    def transform(tree: LogTree): SerializableTree = SerializableTree(tree.rootLabel, tree.subForest.map(transform _).toList)
+    def transform(tree: LogTree): SerializableTree[Annotation] = SerializableTree(tree.rootLabel, tree.subForest.map(transform _).toList)
     Pair(dc.run.value, transform(dc.run.written))
   }
 
   def fromSerializableForm[Value](sdc: SerializableDescribedComputation[Value]): DescribedComputation[Value] = {
-    def transform(tree: SerializableTree): LogTree = Tree.node(tree.label, tree.children.map(transform _).toStream)
+    def transform(tree: SerializableTree[Annotation]): LogTree = Tree.node(tree.label, tree.children.map(transform _).toStream)
     sdc._1.fold(m ⇒ failure(m, transform(sdc._2)), v ⇒ success(v, transform(sdc._2)))
   }
 }
