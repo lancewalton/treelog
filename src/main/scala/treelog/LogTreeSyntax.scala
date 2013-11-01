@@ -397,7 +397,7 @@ trait LogTreeSyntax[Annotation] {
      * Starting with a given value and description, foldleft over an Iterable of values and 'add' them, describing each 'addition'.
      */
     def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, Value) ⇒ DescribedComputation[R]): DescribedComputation[R] = {
-      @tailrec
+      @scala.annotation.tailrec
       def recurse(remainingValues: Iterable[Value], partialResult: DescribedComputation[R]): DescribedComputation[R] =
         if (remainingValues.isEmpty) partialResult
         else
