@@ -1,10 +1,8 @@
 package treelog
 
-import scalaz.{ -\/, \/-, \/, EitherT, Functor, Traverse, Monad, Monoid, Show, Writer, Tree, idInstance }
-import scalaz.syntax.foldable
+import scalaz.{ -\/, \/-, \/, EitherT, Traverse, Monad, Monoid, Show, Writer, Tree, idInstance }
 import scalaz.syntax.traverse._
 import scalaz.syntax.monadListen._
-import scala.annotation.tailrec
 
 /**
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,

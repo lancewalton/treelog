@@ -5,9 +5,9 @@ import Scalaz._
 object OptionsAndEithersExample extends App {
   val simple = "Calculating sum" ~< {
     for {
-      x ← 11 ~> (v ⇒ s"x = $v")
-      y ← 2 ~> (v ⇒ s"y = $v")
-      sum ← (x + y) ~> (v ⇒ "Sum is " + v)
+      x ← 11 ~> ("x = " + _)
+      y ← 2 ~> ("y = " + _)
+      sum ← (x + y) ~> ("Sum is " + _)
     } yield sum
   }
   println(simple.run.written.shows)
@@ -40,7 +40,7 @@ object OptionsAndEithersExample extends App {
 
   println(eithers.run.written.shows)
 
-  val leftEithers = "Calculating left either sum" ~< {
+  val leftEithers: DescribedComputation[Int] = "Calculating left either sum" ~< {
     for {
       x ← 11.right[String] ~>? ("x = " + _)
       y ← "fubar".left[Int] ~>? ("y = " + _)
@@ -48,6 +48,12 @@ object OptionsAndEithersExample extends App {
     } yield sum
   }
 
-  println(leftEithers.run.written.shows)
+  val leftEitherWriter: LogTreeWriter[\/[String, Int]] = leftEithers.run
+  println(leftEitherWriter.written.shows)
+
+  leftEitherWriter.value match {
+    case \/-(sucessValue) => println(s"Success: $sucessValue")
+    case -\/(failureValue) => println(s"Failure: $failureValue")
+  }
 
 }

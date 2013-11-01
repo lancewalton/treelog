@@ -7,3 +7,4 @@ target/
 .ensime
 .ensime_lucene
 .settings
+.idea*
