@@ -141,3 +141,8 @@ Extracting root: Failed
 with important information for your program to use later. This is useful, for example, when you want to audit a process that affects multiple entities, and you
 want to make sure that the audit trail is associated with each of the modified entities. You can use the annotation facility to carry the key (or something richer) for each
 modified entity.
+
+Resources
+---------
+
+Channing's [blog](http://typelevel.org/blog/2013/10/18/treelog.html) at typelevel.
