@@ -8,7 +8,7 @@ import scalaz.syntax.monadListen._
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,
  * [[https://github.com/lancewalton/treelog#using-treelog---examples examples on GitHub]] to get started.
  *
- * This trait provides syntax for manipulating <code>DescribedComputations</code>. Either:
+ * This trait provides syntax for manipulating `DescribedComputations`. Either:
  * <ul>
  *   <li>extend this trait, or</li>
  *   <li>define an object with the appropriate Annotation type and import on demand</li>
@@ -67,27 +67,27 @@ trait LogTreeSyntax[Annotation] {
   }
 
   /**
-   * Create a <code>DescribedComputation</code> representing a failure using the given <code>description</code> for both the log tree label and as
-   * the content of the <code>value</code>, which will be a [[scalaz.-\/]].
+   * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a failure using the given `description` for both the log tree label and as
+   * the content of the `value`, which will be a [[scalaz.-\/]].
    */
   def failure[Value](description: String): DescribedComputation[Value] = failure(description, Tree.leaf(DescribedLogTreeLabel(description, false)))
 
   /**
-   * Create a <code>DescribedComputation</code> representing a success with the given <code>value</code> (lifted into a [[scalaz.\/-]]) and the given
-   * <code>description</code> in the log tree.
+   * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[scalaz.\/-]]) and the given
+   * `description` in the log tree.
    */
   def success[Value](value: Value, description: String): DescribedComputation[Value] =
     eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
-   * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
+   * Syntax for lifting values into `DescribedComputations` and creating leaf nodes in the log tree.
    */
 
   implicit class LeafSyntax[Value](value: Value) {
 
     /**
-     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)</code> as the value and
-     * a success [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     * Create a ''success'' [[treelog.LogTreeSyntax.DescribedComputation]] with `\/-(value)` as the value and
+     * a success [[treelog.LogTreeLabel TreeNode]] with the given `description`.
      *
      * {{{
      * import treelog.LogTreeSyntaxWithoutAnnotations._
@@ -95,7 +95,7 @@ trait LogTreeSyntax[Annotation] {
      *
      * val leaf = 1 ~> "One"
      * println(result.run.value)
-     * // Will print: \/-(1) - note that the 'right' means 'success'
+     * // Will print: \/-(1) - note that the 'right' means ''success''
      *
      * println(result.run.written.shows)
      * // Will print:
@@ -105,8 +105,8 @@ trait LogTreeSyntax[Annotation] {
     def ~>(description: String): DescribedComputation[Value] = success(value, description)
 
     /**
-     * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)</code> as the value and
-     * a success [[treelog.TreeNode TreeNode]] using the given <code>description</code> function to generate
+     * Create a ''success'' [[treelog.LogTreeSyntax.DescribedComputation]] with `\/-(value)` as the value and
+     * a success [[treelog.LogTreeSyntax.DescribedComputation]] using the given `description` function to generate
      * a description for the tree node's label.
      *
      * {{{
@@ -115,7 +115,7 @@ trait LogTreeSyntax[Annotation] {
      *
      * val leaf = 1 ~> (x => s"One: $x")
      * println(result.run.value)
-     * // Will print: \/-(1) - note that the 'right' means 'success'
+     * // Will print: \/-(1) - note that the 'right' means ''success''
      *
      * println(result.run.written.shows)
      * // Will print:
@@ -125,8 +125,8 @@ trait LogTreeSyntax[Annotation] {
     def ~>(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
 
     /**
-     * Create a 'failure' <code>DescribedComputation</code> with <code>-\/(description)</code> as the value and
-     * a failure [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
+     * Create a ''failure'' [[treelog.LogTreeSyntax.DescribedComputation]] with `-\/(description)` as the value and
+     * a failure [[treelog.LogTreeSyntax.DescribedComputation]] with the given `description`.
      *
      * {{{
      * import treelog.LogTreeSyntaxWithoutAnnotations._
@@ -134,7 +134,7 @@ trait LogTreeSyntax[Annotation] {
      *
      * val leaf = 1 ~>! "One"
      * println(result.run.value)
-     * // Will print: -\/("One") - note that the 'left' means 'failure', and the contained value is the description, not the 1.
+     * // Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.
      *
      * println(result.run.written.shows)
      * // Will print:
@@ -144,9 +144,9 @@ trait LogTreeSyntax[Annotation] {
     def ~>!(description: String): DescribedComputation[Value] = failure(description)
 
     /**
-     * Create a 'failure' <code>DescribedComputation</code> using the given <code>description</code> function to
-     * generate a description for the tree node's label and for the <code>DescribedComputations</code> value (i.e.
-     * the value will be <code>\/-(description(value))</code>.
+     * Create a ''failure'' [[treelog.LogTreeSyntax.DescribedComputation]] using the given `description` function to
+     * generate a description for the tree node's label and for the `DescribedComputations` value (i.e.
+     * the value will be `\/-(description(value))`.
      *
      * {{{
      * import treelog.LogTreeSyntaxWithoutAnnotations._
@@ -154,7 +154,7 @@ trait LogTreeSyntax[Annotation] {
      *
      * val leaf = 1 ~>! (x => s"One - $x")
      * println(result.run.value)
-     * // Will print: -\/("One") - note that the 'left' means 'failure', and the contained value is the description, not the 1.
+     * // Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.
      *
      * println(result.run.written.shows)
      * // Will print:
@@ -180,7 +180,7 @@ trait LogTreeSyntax[Annotation] {
    *
    * val result = 1 ~> "One" ~~ Set("Annotating with a string", "And another")
    * println(result.run.value)
-   * // Will print: \/-(1) - note that the 'right' means 'success'
+   * // Will print: \/-(1) - note that the 'right' means ''success''
    *
    * println(result.run.written.shows)
    * // Will print:
@@ -202,17 +202,17 @@ trait LogTreeSyntax[Annotation] {
     }
 
     /**
-     * Syntactic sugar equivalent to <code>~~ Set(annotation)</code>
+     * Syntactic sugar equivalent to `~~ Set(annotation)`
      */
     def ~~(annotation: Annotation): DescribedComputation[Value] = ~~(Set(annotation))
 
     /**
-     * Equivalent to <code>~~ annotations</code>
+     * Equivalent to `~~ annotations`
      */
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[Value] = ~~(annotations)
 
     /**
-     * Equivalent to <code>~~ annotation</code>
+     * Equivalent to `~~ annotation`
      */
     def annotateWith(annotation: Annotation): DescribedComputation[Value] = ~~(annotation)
 
@@ -228,108 +228,108 @@ trait LogTreeSyntax[Annotation] {
   /**
    * Syntax for treating booleans as signifiers of success or failure in a computation.
    *
-   * The simplest usage is something like: <code>myBoolean ~>? "Is my boolean true?"</code>. The 'value'
-   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
-   * depending on the value of <code>myBoolean</code>.
+   * The simplest usage is something like: `myBoolean ~>? "Is my boolean true?"`. The 'value'
+   * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
+   * depending on the value of `myBoolean`.
    */
   implicit class BooleanSyntax(b: Boolean) {
 
     /**
-     * Use the same description whether the boolean is <code>true</code> or <code>false</code>.
-     * Equivalent to <code>~>?(description, description)</code>
+     * Use the same description whether the boolean is `true` or `false`.
+     * Equivalent to `~>?(description, description)`
      */
     def ~>?(description: String): DescribedComputation[Boolean] =
       ~>?(description, description)
 
     /**
-     * Use different descriptions for the <code>true</code> and <code>false</code> cases. Note that unlike <code>'if'</code>
-     * the <code>false</code> / failure description is the first parameter and the <code>true</code> / success
+     * Use different descriptions for the `true` and `false` cases. Note that unlike `'if'`
+     * the `false` / failure description is the first parameter and the `true` / success
      * description is the second parameter. This is to maintain consistency with [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]]
      * and [[treelog.LogTreeSyntax.EitherSyntax EitherSyntax]].
      *
-     * If the boolean is <code>true</code> the 'value' of the returned DescribedComputation will be <code>\/-(true)</code>,
-     * otherwise, the 'value' will be <code>-\/(description)</code>.
+     * If the boolean is `true` the 'value' of the returned DescribedComputation will be `\/-(true)`,
+     * otherwise, the 'value' will be `-\/(description)`.
      */
     def ~>?(failureDescription: ⇒ String, successDescription: ⇒ String): DescribedComputation[Boolean] =
       if (b) success(true, successDescription) else failure(failureDescription)
   }
 
   /**
-   * Syntax for treating <code>Options</code> as signifiers of success or failure in a computation.
+   * Syntax for treating `Options` as signifiers of success or failure in a computation.
    *
-   * The simplest usage is something like: <code>myOption ~>? "Do I have Some?"</code>. The 'value'
-   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
-   * depending on the value of <code>myOption</code>.
+   * The simplest usage is something like: `myOption ~>? "Do I have Some?"`. The 'value'
+   * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
+   * depending on the value of `myOption`.
    */
   implicit class OptionSyntax[Value](option: Option[Value]) {
 
     /**
-     * Use the same description whether the Option is <code>Some</code> or <code>None</code>.
-     * Equivalent to <code>~>?(description, description)</code>
+     * Use the same description whether the Option is `Some` or `None`.
+     * Equivalent to `~>?(description, description)`
      */
     def ~>?(description: String): DescribedComputation[Value] = ~>?(description, description)
 
     /**
-     * Use different descriptions for the <code>Some</code> and <code>None</code> cases.
+     * Use different descriptions for the `Some` and `None` cases.
      *
-     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
-     * otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+     * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
+     * otherwise, the 'value' will be `-\/(noneDescription)`.
      */
     def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] = ~>?(noneDescription, _ ⇒ someDescription)
 
     /**
-     * Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
-     * value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
+     * Use different descriptions for the `Some` and `None` cases, providing the boxed `Some`
+     * value to the function used to produce the description for the `Some` case, so that it can be included in the
      * description if you wish.
      *
-     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
-     * otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+     * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
+     * otherwise, the 'value' will be `-\/(noneDescription)`.
      */
     def ~>?(noneDescription: ⇒ String, someDescription: Value ⇒ String): DescribedComputation[Value] =
       option map { a ⇒ success(a, someDescription(a)) } getOrElse failure(noneDescription)
 
     /**
-     * Return a default <code>DescribedComputation</code> if <code>option</code> is a <code>None</code>.
+     * Return a default [[treelog.LogTreeSyntax.DescribedComputation]] if `option` is a `None`.
      *
-     * If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(Some(x))</code>,
-     * otherwise, the returned <code>DescribedComputation</code> will be <code>dflt</code>.
+     * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(Some(x))`,
+     * otherwise, the returned [[treelog.LogTreeSyntax.DescribedComputation]] will be `dflt`.
      */
     def ~>|[B](f: Value ⇒ DescribedComputation[B], dflt: ⇒ DescribedComputation[Option[B]]): DescribedComputation[Option[B]] =
       option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Some(w))) getOrElse dflt
   }
 
   /**
-   * Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.
+   * Syntax for treating `scalaz.\/` as signifiers of success or failure in a computation.
    *
-   * The simplest usage is something like: <code>myEither ~>? "Do I have the right?"</code>. The 'value'
-   * and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
-   * depending on the value of <code>myEither</code>.
+   * The simplest usage is something like: `myEither ~>? "Do I have the right?"`. The 'value'
+   * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
+   * depending on the value of `myEither`.
    */
   implicit class EitherSyntax[Value](either: \/[String, Value]) {
 
     /**
-     * Use different descriptions depending on whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.
+     * Use different descriptions depending on whether `either` is a `\/-` or a `-\/`.
      */
     def ~>?(leftDescription: String ⇒ String, rightDescription: ⇒ String): DescribedComputation[Value] =
       ~>?(leftDescription, _ ⇒ rightDescription)
 
     /**
-     * Use the same description regardless of whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.
-     * Equivalent to: <code>~>?((error: String) ⇒ s"$description - $error", description)</code>
+     * Use the same description regardless of whether `either` is a `\/-` or a `-\/`.
+     * Equivalent to: `~>?((error: String) ⇒ s"$description - $error", description)`
      */
     def ~>?(description: String): DescribedComputation[Value] =
       ~>?((error: String) ⇒ s"$description - $error", description)
 
     /**
-     * Use the given description if <code>either</code> is a <code>\/-</code>. If <code>either</code> is
-     * <code>-\/(message)</code>, use <code>message</code> as the description.
+     * Use the given description if `either` is a `\/-`. If `either` is
+     * `-\/(message)`, use `message` as the description.
      */
     def ~>?(description: Value ⇒ String): DescribedComputation[Value] =
       ~>?((error: String) ⇒ error, description)
 
     /**
-     * Use the given functions to provide descriptions depending on whether <code>either</code> is a
-     * <code>\/-</code> or <code>-\/</code>
+     * Use the given functions to provide descriptions depending on whether `either` is a
+     * `\/-` or `-\/`
      */
     def ~>?(leftDescription: String ⇒ String, rightDescription: Value ⇒ String): DescribedComputation[Value] =
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
@@ -341,19 +341,19 @@ trait LogTreeSyntax[Annotation] {
   implicit class BranchLabelingSyntax(description: String) {
 
     /**
-     * Create a new branch given a monadic, traversable 'container' <code>F[DescribedComputation[Value]]</code>, 'sequence' it
-     * to create a <code>DescribedComputation[F[Value]]</code>, and give the new <code>DescribedComputation's</code> log tree a
-     * new root node, with the given <code>description</code> and whose children are the trees in the
-     * <code>F[DescribedComputation[Value]]</code>.
+     * Create a new branch given a monadic, traversable 'container' `F[DescribedComputation[Value]]`, 'sequence' it
+     * to create a `DescribedComputation[F[Value]]`, and give the new `DescribedComputation's` log tree a
+     * new root node, with the given `description` and whose children are the trees in the
+     * `F[DescribedComputation[Value]]`.
      *
-     * For example, if we evaluate this method with <code>F</code> instantiated as <code>List</code>, we would turn a
-     * <code>List[DescribedComputation[Value]]</code> into a <code>DescribedComputation[List[Value]]</code>, such that the
-     * <code>List[Value]</code> which is the result's 'value' is obtained by extracting the 'value' from each
-     * <code>DescribedComputation</code> in the <code>describedComputations</code> parameter. Likewise, the child nodes
-     * of the returned log tree root node are obtained by extracting the log tree from each of the <code>describedComputations</code>.
+     * For example, if we evaluate this method with `F` instantiated as `List`, we would turn a
+     * `List[DescribedComputation[Value]]` into a `DescribedComputation[List[Value]]`, such that the
+     * `List[Value]` which is the result's 'value' is obtained by extracting the 'value' from each
+     * [[treelog.LogTreeSyntax.DescribedComputation]] in the `describedComputations` parameter. Likewise, the child nodes
+     * of the returned log tree root node are obtained by extracting the log tree from each of the `describedComputations`.
      *
-     * The 'success' status of the returned <code>DescribedComputations</code> log tree is <code>true</code> if all of the children
-     * are successful. It is <code>false</code> otherwise.
+     * The ''success'' status of the returned `DescribedComputations` log tree is `true` if all of the children
+     * are successful. It is `false` otherwise.
      */
     def ~<[F[_] : Monad : Traverse, Value](describedComputations: F[DescribedComputation[Value]]): DescribedComputation[F[Value]] =
       ~<+(describedComputations, (x: F[Value]) ⇒ x)
@@ -362,7 +362,7 @@ trait LogTreeSyntax[Annotation] {
      * As ~< but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
      *
      * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
-     * <code>"Sum" ~&lt;+(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
+     * `"Sum" ~&lt;+(l, f)` would return a DescribedComputation containing the sum of the elements of the list.
      */
     def ~<+[F[_] : Monad : Traverse, Value, R](describedComputations: F[DescribedComputation[Value]], f: F[Value] ⇒ R): DescribedComputation[R] = {
       val monad = implicitly[Monad[F]]
@@ -383,9 +383,9 @@ trait LogTreeSyntax[Annotation] {
     }
 
     /**
-     * If <code>dc</code> has a log tree with an undescribed root node, give the root node the <code>description</code> but otherwise
+     * If `dc` has a log tree with an undescribed root node, give the root node the `description` but otherwise
      * leave it unchanged. If the log tree has a described root node, create a new root node above the existing one and give the
-     * new root node the <code>description</code>. In both cases preserve the <code>value</code> and success/failure status.
+     * new root node the `description`. In both cases preserve the `value` and success/failure status.
      */
     def ~<[Value](dc: DescribedComputation[Value]): DescribedComputation[Value] =
       dc.run.value match {
@@ -426,18 +426,18 @@ trait LogTreeSyntax[Annotation] {
   implicit class TraversableMonadSyntax[F[_]: Monad: Traverse, Value](values: F[Value]) {
 
     /**
-     * This method is syntactic sugar for <code>description ~< monad.map(values)(f)</code>
+     * This method is syntactic sugar for `description ~< monad.map(values)(f)`
      */
     def ~>*[B](description: String, f: Value ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< implicitly[Monad[F]].map(values)(f)
   }
 
   /**
-   * Syntax for labeling root nodes of trees in <code>DescribedComputions</code>
+   * Syntax for labeling root nodes of trees in `DescribedComputions`
    */
   implicit class LabellingSyntax[Value](w: DescribedComputation[Value]) {
 
     /**
-     * This method is syntactic sugar for <code>description ~< w</code>
+     * This method is syntactic sugar for `description ~< w`
      */
     def ~>(description: String) = description ~< w
   }
