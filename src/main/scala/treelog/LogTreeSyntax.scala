@@ -22,6 +22,7 @@ trait LogTreeSyntax[Annotation] {
   private val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
 
   implicit val logTreeMonoid = new Monoid[LogTree] {
+
     val zero = NilTree
 
     def append(augend: LogTree, addend: ⇒ LogTree): LogTree =
@@ -81,7 +82,9 @@ trait LogTreeSyntax[Annotation] {
   /**
    * Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
    */
+
   implicit class LeafSyntax[Value](value: Value) {
+
     /**
      * Create a 'success' <code>DescribedComputation</code> with <code>\/-(value)</code> as the value and
      * a success [[treelog.TreeNode TreeNode]] with the given <code>description</code>.
@@ -185,6 +188,7 @@ trait LogTreeSyntax[Annotation] {
    * }}}
    */
   implicit class AnnotationsSyntax[Value](w: DescribedComputation[Value]) {
+
     def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
         case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
@@ -229,6 +233,7 @@ trait LogTreeSyntax[Annotation] {
    * depending on the value of <code>myBoolean</code>.
    */
   implicit class BooleanSyntax(b: Boolean) {
+
     /**
      * Use the same description whether the boolean is <code>true</code> or <code>false</code>.
      * Equivalent to <code>~>?(description, description)</code>
@@ -257,6 +262,7 @@ trait LogTreeSyntax[Annotation] {
    * depending on the value of <code>myOption</code>.
    */
   implicit class OptionSyntax[Value](option: Option[Value]) {
+
     /**
      * Use the same description whether the Option is <code>Some</code> or <code>None</code>.
      * Equivalent to <code>~>?(description, description)</code>
@@ -300,6 +306,7 @@ trait LogTreeSyntax[Annotation] {
    * depending on the value of <code>myEither</code>.
    */
   implicit class EitherSyntax[Value](either: \/[String, Value]) {
+
     /**
      * Use different descriptions depending on whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.
      */
@@ -332,6 +339,7 @@ trait LogTreeSyntax[Annotation] {
    * Syntax for labeling or creating new branches in a log tree given a description.
    */
   implicit class BranchLabelingSyntax(description: String) {
+
     /**
      * Create a new branch given a monadic, traversable 'container' <code>F[DescribedComputation[Value]]</code>, 'sequence' it
      * to create a <code>DescribedComputation[F[Value]]</code>, and give the new <code>DescribedComputation's</code> log tree a
@@ -347,7 +355,7 @@ trait LogTreeSyntax[Annotation] {
      * The 'success' status of the returned <code>DescribedComputations</code> log tree is <code>true</code> if all of the children
      * are successful. It is <code>false</code> otherwise.
      */
-    def ~<[F[_], Value](describedComputations: F[DescribedComputation[Value]])(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[F[Value]] =
+    def ~<[F[_] : Monad : Traverse, Value](describedComputations: F[DescribedComputation[Value]]): DescribedComputation[F[Value]] =
       ~<+(describedComputations, (x: F[Value]) ⇒ x)
 
     /**
@@ -356,7 +364,8 @@ trait LogTreeSyntax[Annotation] {
      * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
      * <code>"Sum" ~&lt;+(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
      */
-    def ~<+[F[_], Value, R](describedComputations: F[DescribedComputation[Value]], f: F[Value] ⇒ R)(implicit monad: Monad[F], traverse: Traverse[F]): DescribedComputation[R] = {
+    def ~<+[F[_] : Monad : Traverse, Value, R](describedComputations: F[DescribedComputation[Value]], f: F[Value] ⇒ R): DescribedComputation[R] = {
+      val monad = implicitly[Monad[F]]
       val parts = monad.map(describedComputations)(m ⇒ (m.run.value, m.run.written))
 
       val children = monad.map(parts)(_._2).toList
@@ -393,6 +402,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   implicit class FoldSyntax[Value](values: Iterable[Value]) {
+
     /**
      * Starting with a given value and description, foldleft over an Iterable of values and 'add' them, describing each 'addition'.
      */
@@ -413,17 +423,19 @@ trait LogTreeSyntax[Annotation] {
   /**
    * Syntax for dealing with traversable monads
    */
-  implicit class TraversableMonadSyntax[F[_], Value](values: F[Value])(implicit monad: Monad[F], traverse: Traverse[F]) {
+  implicit class TraversableMonadSyntax[F[_]: Monad: Traverse, Value](values: F[Value]) {
+
     /**
      * This method is syntactic sugar for <code>description ~< monad.map(values)(f)</code>
      */
-    def ~>*[B](description: String, f: Value ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< monad.map(values)(f)
+    def ~>*[B](description: String, f: Value ⇒ DescribedComputation[B]): DescribedComputation[F[B]] = description ~< implicitly[Monad[F]].map(values)(f)
   }
 
   /**
    * Syntax for labeling root nodes of trees in <code>DescribedComputions</code>
    */
   implicit class LabellingSyntax[Value](w: DescribedComputation[Value]) {
+
     /**
      * This method is syntactic sugar for <code>description ~< w</code>
      */
@@ -431,6 +443,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   implicit def logTreeShow(implicit annotationShow: Show[Annotation]) = new Show[LogTree] {
+
     override def shows(t: LogTree) = toList(t).map(line ⇒ "  " * line._1 + line._2).mkString(System.getProperty("line.separator"))
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
