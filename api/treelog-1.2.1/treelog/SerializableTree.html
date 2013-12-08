@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>TraversableMonadSyntax - treelog.LogTreeSyntax.TraversableMonadSyntax</title>
-          <meta name="description" content="TraversableMonadSyntax - treelog.LogTreeSyntax.TraversableMonadSyntax" />
-          <meta name="keywords" content="TraversableMonadSyntax treelog.LogTreeSyntax.TraversableMonadSyntax" />
+          <title>SerializableTree - treelog.SerializableTree</title>
+          <meta name="description" content="SerializableTree - treelog.SerializableTree" />
+          <meta name="keywords" content="SerializableTree treelog.SerializableTree" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'treelog.LogTreeSyntax$TraversableMonadSyntax';
+            var hash = 'treelog.SerializableTree';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -25,24 +25,23 @@
         <body class="type">
       <div id="definition">
         <img src="../lib/class_big.png" />
-        <p id="owner"><a href="package.html" class="extype" name="treelog">treelog</a>.<a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p>
-        <h1>TraversableMonadSyntax</h1>
+        <p id="owner"><a href="package.html" class="extype" name="treelog">treelog</a></p>
+        <h1>SerializableTree</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">TraversableMonadSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">SerializableTree</span><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="params">(<span name="label">label: <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]</span>, <span name="children">children: <span class="extype" name="scala.List">List</span>[<a href="" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for dealing with traversable monads
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +59,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="treelog.LogTreeSyntax.TraversableMonadSyntax"><span>TraversableMonadSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="treelog.SerializableTree"><span>SerializableTree</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,16 +79,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="treelog.LogTreeSyntax.TraversableMonadSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(values:F[Value])(implicitmonad:scalaz.Monad[F],implicittraverse:scalaz.Traverse[F]):LogTreeSyntax.this.TraversableMonadSyntax[F,Value]"></a>
-      <a id="&lt;init&gt;:TraversableMonadSyntax[F,Value]"></a>
+              <ol><li name="treelog.SerializableTree#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(label:treelog.LogTreeLabel[Annotation],children:List[treelog.SerializableTree[Annotation]]):treelog.SerializableTree[Annotation]"></a>
+      <a id="&lt;init&gt;:SerializableTree[Annotation]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TraversableMonadSyntax</span><span class="params">(<span name="values">values: <span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.Value">Value</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>]</span>, <span name="traverse">traverse: <span class="extype" name="scalaz.Traverse">Traverse</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>]</span>)</span>
+        <span class="name">SerializableTree</span><span class="params">(<span name="label">label: <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]</span>, <span name="children">children: <span class="extype" name="scala.List">List</span>[<a href="" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]]</span>)</span>
       </span>
       </h4>
       
@@ -180,6 +179,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="treelog.SerializableTree#children" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="children:List[treelog.SerializableTree[Annotation]]"></a>
+      <a id="children:List[SerializableTree[Annotation]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">children</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -212,19 +224,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -257,19 +256,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -283,6 +269,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="treelog.SerializableTree#label" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="label:treelog.LogTreeLabel[Annotation]"></a>
+      <a id="label:LogTreeLabel[Annotation]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">label</span><span class="result">: <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -335,19 +334,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -405,21 +391,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="treelog.LogTreeSyntax.TraversableMonadSyntax#~&gt;*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&gt;*[B](description:String,f:Value=&gt;LogTreeSyntax.this.DescribedComputation[B]):LogTreeSyntax.this.DescribedComputation[F[B]]"></a>
-      <a id="~&gt;*[B](String,(Value)⇒DescribedComputation[B]):DescribedComputation[F[B]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $tilde$greater$times" class="name">~&gt;*</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="f">f: (<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.Value">Value</span>) ⇒ <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.~&gt;*.B">B</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.~&gt;*.B">B</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">This method is syntactic sugar for <code>description ~< monad.map(values)(f)</code>
-</code></p><div class="fullcomment"><div class="comment cmt"><p>This method is syntactic sugar for <code>description ~< monad.map(values)(f)</code>
-</p></div></div>
     </li></ol>
             </div>
 
@@ -429,7 +400,15 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

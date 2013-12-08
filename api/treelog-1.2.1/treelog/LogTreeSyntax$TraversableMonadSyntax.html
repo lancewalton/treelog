@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>BranchLabelingSyntax - treelog.LogTreeSyntax.BranchLabelingSyntax</title>
-          <meta name="description" content="BranchLabelingSyntax - treelog.LogTreeSyntax.BranchLabelingSyntax" />
-          <meta name="keywords" content="BranchLabelingSyntax treelog.LogTreeSyntax.BranchLabelingSyntax" />
+          <title>TraversableMonadSyntax - treelog.LogTreeSyntax.TraversableMonadSyntax</title>
+          <meta name="description" content="TraversableMonadSyntax - treelog.LogTreeSyntax.TraversableMonadSyntax" />
+          <meta name="keywords" content="TraversableMonadSyntax treelog.LogTreeSyntax.TraversableMonadSyntax" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'treelog.LogTreeSyntax$BranchLabelingSyntax';
+            var hash = 'treelog.LogTreeSyntax$TraversableMonadSyntax';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../lib/class_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="treelog">treelog</a>.<a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p>
-        <h1>BranchLabelingSyntax</h1>
+        <h1>TraversableMonadSyntax</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,11 +35,11 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">BranchLabelingSyntax</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">TraversableMonadSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for labeling or creating new branches in a log tree given a description.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for dealing with traversable monads
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="treelog.LogTreeSyntax.BranchLabelingSyntax"><span>BranchLabelingSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="treelog.LogTreeSyntax.TraversableMonadSyntax"><span>TraversableMonadSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,16 +80,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="treelog.LogTreeSyntax.BranchLabelingSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(description:String):LogTreeSyntax.this.BranchLabelingSyntax"></a>
-      <a id="&lt;init&gt;:BranchLabelingSyntax"></a>
+              <ol><li name="treelog.LogTreeSyntax.TraversableMonadSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(values:F[Value])(implicitevidence$5:scalaz.Monad[F],implicitevidence$6:scalaz.Traverse[F]):LogTreeSyntax.this.TraversableMonadSyntax[F,Value]"></a>
+      <a id="&lt;init&gt;:TraversableMonadSyntax[F,Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">BranchLabelingSyntax</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">TraversableMonadSyntax</span><span class="params">(<span name="values">values: <span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.Value">Value</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scalaz.Traverse">Traverse</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>]</span>)</span>
       </span>
       </h4>
       
@@ -405,63 +405,20 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="treelog.LogTreeSyntax.BranchLabelingSyntax#~&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&lt;[Value](dc:LogTreeSyntax.this.DescribedComputation[Value]):LogTreeSyntax.this.DescribedComputation[Value]"></a>
-      <a id="~&lt;[Value](DescribedComputation[Value]):DescribedComputation[Value]"></a>
+    </li><li name="treelog.LogTreeSyntax.TraversableMonadSyntax#~&gt;*" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="~&gt;*[B](description:String,f:Value=&gt;LogTreeSyntax.this.DescribedComputation[B]):LogTreeSyntax.this.DescribedComputation[F[B]]"></a>
+      <a id="~&gt;*[B](String,(Value)⇒DescribedComputation[B]):DescribedComputation[F[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $tilde$less" class="name">~&lt;</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="params">(<span name="dc">dc: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.Value">Value</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.Value">Value</span>]</span>
+        <span title="gt4s: $tilde$greater$times" class="name">~&gt;*</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="f">f: (<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.Value">Value</span>) ⇒ <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.~&gt;*.B">B</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax.~&gt;*.B">B</span>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">If <code>dc</code> has a log tree with an undescribed root node, give the root node the <code>description</code> but otherwise
-leave it unchanged.</code></code></p><div class="fullcomment"><div class="comment cmt"><p>If <code>dc</code> has a log tree with an undescribed root node, give the root node the <code>description</code> but otherwise
-leave it unchanged. If the log tree has a described root node, create a new root node above the existing one and give the
-new root node the <code>description</code>. In both cases preserve the <code>value</code> and success/failure status.
-</p></div></div>
-    </li><li name="treelog.LogTreeSyntax.BranchLabelingSyntax#~&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&lt;[F[_],Value](describedComputations:F[LogTreeSyntax.this.DescribedComputation[Value]])(implicitmonad:scalaz.Monad[F],implicittraverse:scalaz.Traverse[F]):LogTreeSyntax.this.DescribedComputation[F[Value]]"></a>
-      <a id="~&lt;[F[_],Value](F[DescribedComputation[Value]])(Monad[F],Traverse[F]):DescribedComputation[F[Value]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $tilde$less" class="name">~&lt;</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="Value">Value</span>]</span><span class="params">(<span name="describedComputations">describedComputations: <span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.F">F</span>[<a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.Value">Value</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.F">F</span>]</span>, <span name="traverse">traverse: <span class="extype" name="scalaz.Traverse">Traverse</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.F">F</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;.Value">Value</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Create a new branch given a monadic, traversable 'container' <code>F[DescribedComputation[Value]]</code>, 'sequence' it
-to create a <code>DescribedComputation[F[Value]]</code>, and give the new <code>DescribedComputation's</code> log tree a
-new root node, with the given <code>description</code> and whose children are the trees in the
-<code>F[DescribedComputation[Value]]</code>.</code></code></code></code></code></p><div class="fullcomment"><div class="comment cmt"><p>Create a new branch given a monadic, traversable 'container' <code>F[DescribedComputation[Value]]</code>, 'sequence' it
-to create a <code>DescribedComputation[F[Value]]</code>, and give the new <code>DescribedComputation's</code> log tree a
-new root node, with the given <code>description</code> and whose children are the trees in the
-<code>F[DescribedComputation[Value]]</code>.</p><p>For example, if we evaluate this method with <code>F</code> instantiated as <code>List</code>, we would turn a
-<code>List[DescribedComputation[Value]]</code> into a <code>DescribedComputation[List[Value]]</code>, such that the
-<code>List[Value]</code> which is the result's 'value' is obtained by extracting the 'value' from each
-<code>DescribedComputation</code> in the <code>describedComputations</code> parameter. Likewise, the child nodes
-of the returned log tree root node are obtained by extracting the log tree from each of the <code>describedComputations</code>.</p><p>The 'success' status of the returned <code>DescribedComputations</code> log tree is <code>true</code> if all of the children
-are successful. It is <code>false</code> otherwise.
-</p></div></div>
-    </li><li name="treelog.LogTreeSyntax.BranchLabelingSyntax#~&lt;+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&lt;+[F[_],Value,R](describedComputations:F[LogTreeSyntax.this.DescribedComputation[Value]],f:F[Value]=&gt;R)(implicitmonad:scalaz.Monad[F],implicittraverse:scalaz.Traverse[F]):LogTreeSyntax.this.DescribedComputation[R]"></a>
-      <a id="~&lt;+[F[_],Value,R](F[DescribedComputation[Value]],(F[Value])⇒R)(Monad[F],Traverse[F]):DescribedComputation[R]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $tilde$less$plus" class="name">~&lt;+</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="Value">Value</span>, <span name="R">R</span>]</span><span class="params">(<span name="describedComputations">describedComputations: <span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.F">F</span>[<a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.Value">Value</span>]]</span>, <span name="f">f: (<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.F">F</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.Value">Value</span>]) ⇒ <span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.R">R</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="monad">monad: <span class="extype" name="scalaz.Monad">Monad</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.F">F</span>]</span>, <span name="traverse">traverse: <span class="extype" name="scalaz.Traverse">Traverse</span>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.F">F</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax.~&lt;+.R">R</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">As ~&lt; but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.</p><div class="fullcomment"><div class="comment cmt"><p>As ~&lt; but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.</p><p>For example, given l = List[DescribedComputation[Int]], and f = List[Int] =&gt; Int (say summing the list), then
-<code>"Sum" ~&lt;+(l, f)</code> would return a DescribedComputation containing the sum of the elements of the list.
-</p></div></div>
+      <p class="shortcomment cmt">This method is syntactic sugar for <code>description ~&lt; monad.map(values)(f)</code>
+</p>
     </li></ol>
             </div>
 

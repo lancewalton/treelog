@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>BooleanSyntax - treelog.LogTreeSyntax.BooleanSyntax</title>
-          <meta name="description" content="BooleanSyntax - treelog.LogTreeSyntax.BooleanSyntax" />
-          <meta name="keywords" content="BooleanSyntax treelog.LogTreeSyntax.BooleanSyntax" />
+          <title>AnnotationsSyntax - treelog.LogTreeSyntax.AnnotationsSyntax</title>
+          <meta name="description" content="AnnotationsSyntax - treelog.LogTreeSyntax.AnnotationsSyntax" />
+          <meta name="keywords" content="AnnotationsSyntax treelog.LogTreeSyntax.AnnotationsSyntax" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'treelog.LogTreeSyntax$BooleanSyntax';
+            var hash = 'treelog.LogTreeSyntax$AnnotationsSyntax';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../lib/class_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="treelog">treelog</a>.<a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p>
-        <h1>BooleanSyntax</h1>
+        <h1>AnnotationsSyntax</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,14 +35,23 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">BooleanSyntax</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">AnnotationsSyntax</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for treating booleans as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myBoolean ~>? "Is my boolean true?"</code>. The 'value'
-and log tree of the returned <code>DescribedComputation</code> will indicate success or failure
-depending on the value of <code>myBoolean</code>.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for allowing annotations to be added to log tree nodes.</p><p>The best way to see how this syntax works is to take a look at the
+<a href="https://github.com/lancewalton/treelog#annotations" target="_blank">annotations example</a> on GitHub.</p><p>Here is a short example:</p><pre><span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> syntax = <span class="kw">new</span> LogTreeSyntax[<span class="std">String</span>] {}
+<span class="kw">import</span> syntax._
+
+<span class="kw">val</span> result = <span class="num">1</span> ~&gt; <span class="lit">"One"</span> ~~ <span class="std">Set</span>(<span class="lit">"Annotating with a string"</span>, <span class="lit">"And another"</span>)
+println(result.run.value)
+<span class="cmt">// Will print: \/-(1) - note that the 'right' means ''success''</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// One - [Annotating with a string, And another]</span></pre></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -62,7 +71,7 @@ depending on the value of <code>myBoolean</code>.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="treelog.LogTreeSyntax.BooleanSyntax"><span>BooleanSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="treelog.LogTreeSyntax.AnnotationsSyntax"><span>AnnotationsSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,16 +91,16 @@ depending on the value of <code>myBoolean</code>.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="treelog.LogTreeSyntax.BooleanSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(b:Boolean):LogTreeSyntax.this.BooleanSyntax"></a>
-      <a id="&lt;init&gt;:BooleanSyntax"></a>
+              <ol><li name="treelog.LogTreeSyntax.AnnotationsSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(w:LogTreeSyntax.this.DescribedComputation[Value]):LogTreeSyntax.this.AnnotationsSyntax[Value]"></a>
+      <a id="&lt;init&gt;:AnnotationsSyntax[Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">BooleanSyntax</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span>
+        <span class="name">AnnotationsSyntax</span><span class="params">(<span name="w">w: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax.Value">Value</span>]</span>)</span>
       </span>
       </h4>
       
@@ -169,6 +178,48 @@ depending on the value of <code>myBoolean</code>.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="treelog.LogTreeSyntax.AnnotationsSyntax#allAnnotations" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allAnnotations:Set[Annotation]"></a>
+      <a id="allAnnotations:Set[Annotation]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allAnnotations</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Get the union of all annotations in the log tree of the DescribedComputation
+</p>
+    </li><li name="treelog.LogTreeSyntax.AnnotationsSyntax#annotateWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="annotateWith(annotation:Annotation):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="annotateWith(Annotation):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">annotateWith</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Equivalent to <code>~~ annotation</code>
+</p>
+    </li><li name="treelog.LogTreeSyntax.AnnotationsSyntax#annotateWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="annotateWith(annotations:Set[Annotation]):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="annotateWith(Set[Annotation]):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">annotateWith</span><span class="params">(<span name="annotations">annotations: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Equivalent to <code>~~ annotations</code>
+</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -407,39 +458,33 @@ depending on the value of <code>myBoolean</code>.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="treelog.LogTreeSyntax.BooleanSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&gt;?(failureDescription:=&gt;String,successDescription:=&gt;String):LogTreeSyntax.this.DescribedComputation[Boolean]"></a>
-      <a id="~&gt;?(⇒String,⇒String):DescribedComputation[Boolean]"></a>
+    </li><li name="treelog.LogTreeSyntax.AnnotationsSyntax#~~" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="~~(annotation:Annotation):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="~~(Annotation):DescribedComputation[Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="failureDescription">failureDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="successDescription">successDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+        <span title="gt4s: $tilde$tilde" class="name">~~</span><span class="params">(<span name="annotation">annotation: <span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Use different descriptions for the <code>true</code> and <code>false</code> cases.</code></code></p><div class="fullcomment"><div class="comment cmt"><p>Use different descriptions for the <code>true</code> and <code>false</code> cases. Note that unlike <code>'if'</code>
-the <code>false</code> / failure description is the first parameter and the <code>true</code> / success
-description is the second parameter. This is to maintain consistency with <a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>
-and <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>If the boolean is <code>true</code> the 'value' of the returned DescribedComputation will be <code>\/-(true)</code>,
-otherwise, the 'value' will be <code>-\/(description)</code>.
-</p></div></div>
-    </li><li name="treelog.LogTreeSyntax.BooleanSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="~&gt;?(description:String):LogTreeSyntax.this.DescribedComputation[Boolean]"></a>
-      <a id="~&gt;?(String):DescribedComputation[Boolean]"></a>
+      <p class="shortcomment cmt">Syntactic sugar equivalent to <code>~~ Set(annotation)</code>
+</p>
+    </li><li name="treelog.LogTreeSyntax.AnnotationsSyntax#~~" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="~~(annotations:Set[Annotation]):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="~~(Set[Annotation]):DescribedComputation[Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>
+        <span title="gt4s: $tilde$tilde" class="name">~~</span><span class="params">(<span name="annotations">annotations: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="treelog.LogTreeSyntax.Annotation">Annotation</span>]</span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Use the same description whether the boolean is <code>true</code> or <code>false</code>.</code></code></p><div class="fullcomment"><div class="comment cmt"><p>Use the same description whether the boolean is <code>true</code> or <code>false</code>.
-Equivalent to <code>~>?(description, description)</code>
-</p></div></div>
+      
     </li></ol>
             </div>
 

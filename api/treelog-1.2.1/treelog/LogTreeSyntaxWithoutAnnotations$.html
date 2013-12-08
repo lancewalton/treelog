@@ -145,7 +145,20 @@
         <a href="LogTreeSyntax$EitherSyntax.html"><span class="name">EitherSyntax</span></a><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</code></p>
+      <p class="comment cmt">Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p>
+    </li><li name="treelog.LogTreeSyntax.FoldSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FoldSyntax[Value]extendsAnyRef"></a>
+      <a id="FoldSyntax[Value]:FoldSyntax[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LogTreeSyntax$FoldSyntax.html"><span class="name">FoldSyntax</span></a><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="treelog.LogTreeSyntax.LabellingSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LabellingSyntax[Value]extendsAnyRef"></a>
       <a id="LabellingSyntax[Value]:LabellingSyntax[Value]"></a>
@@ -159,7 +172,7 @@
       </span>
       </h4>
       <p class="comment cmt">Syntax for labeling root nodes of trees in <code>DescribedComputions</code>
-</code></p>
+</p>
     </li><li name="treelog.LogTreeSyntax.LeafSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LeafSyntax[Value]extendsAnyRef"></a>
       <a id="LeafSyntax[Value]:LeafSyntax[Value]"></a>
@@ -172,7 +185,7 @@
         <a href="LogTreeSyntax$LeafSyntax.html"><span class="name">LeafSyntax</span></a><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.</code></p>
+      <p class="comment cmt">Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.</p>
     </li><li name="treelog.LogTreeSyntax.LogTree" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]"></a>
       <a id="LogTree:LogTree"></a>
@@ -211,7 +224,20 @@
         <a href="LogTreeSyntax$OptionSyntax.html"><span class="name">OptionSyntax</span></a><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Syntax for treating <code>Options</code> as signifiers of success or failure in a computation.</code></p>
+      <p class="comment cmt">Syntax for treating <code>Options</code> as signifiers of success or failure in a computation.</p>
+    </li><li name="treelog.LogTreeSyntax.SerializableDescribedComputation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SerializableDescribedComputation[Value]=(scalaz.\/[String,Value],treelog.SerializableTree[Annotation])"></a>
+      <a id="SerializableDescribedComputation[Value]:(\/[String,Value],SerializableTree[Nothing])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SerializableDescribedComputation</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> = (<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="treelog.LogTreeSyntax.SerializableDescribedComputation.Value">Value</span>], <a href="SerializableTree.html" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="scala.Nothing">Nothing</span>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="treelog.LogTreeSyntax.TraversableMonadSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TraversableMonadSyntax[F[_],Value]extendsAnyRef"></a>
       <a id="TraversableMonadSyntax[F[_],Value]:TraversableMonadSyntax[F,Value]"></a>
@@ -381,8 +407,8 @@
         <span class="name">failure</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntaxWithoutAnnotations.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.failure.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Create a <code>DescribedComputation</code> representing a failure using the given <code>description</code> for both the log tree label and as
-the content of the <code>value</code>, which will be a <span class="extype" name="scalaz.-\/">scalaz.-\/</span>.</code></code></code></p><div class="fullcomment"><div class="comment cmt"><p>Create a <code>DescribedComputation</code> representing a failure using the given <code>description</code> for both the log tree label and as
+      <p class="shortcomment cmt">Create a <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> representing a failure using the given <code>description</code> for both the log tree label and as
+the content of the <code>value</code>, which will be a <span class="extype" name="scalaz.-\/">scalaz.-\/</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> representing a failure using the given <code>description</code> for both the log tree label and as
 the content of the <code>value</code>, which will be a <span class="extype" name="scalaz.-\/">scalaz.-\/</span>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="treelog.LogTreeSyntax#failureLog" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -417,6 +443,19 @@ the content of the <code>value</code>, which will be a <span class="extype" name
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="treelog.LogTreeSyntax#fromSerializableForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromSerializableForm[Value](sdc:(scalaz.\/[String,Value],treelog.SerializableTree[Annotation])):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="fromSerializableForm[Value]((\/[String,Value],SerializableTree[Nothing])):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromSerializableForm</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="params">(<span name="sdc">sdc: (<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="treelog.LogTreeSyntax.fromSerializableForm.Value">Value</span>], <a href="SerializableTree.html" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="scala.Nothing">Nothing</span>])</span>)</span><span class="result">: <a href="#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntaxWithoutAnnotations.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.fromSerializableForm.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -533,8 +572,8 @@ the content of the <code>value</code>, which will be a <span class="extype" name
         <span class="name">success</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="treelog.LogTreeSyntax.success.Value">Value</span></span>, <span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntaxWithoutAnnotations.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.success.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Create a <code>DescribedComputation</code> representing a success with the given <code>value</code> (lifted into a <span class="extype" name="scalaz.\/-">scalaz.\/-</span>) and the given
-<code>description</code> in the log tree.</code></code></code></p><div class="fullcomment"><div class="comment cmt"><p>Create a <code>DescribedComputation</code> representing a success with the given <code>value</code> (lifted into a <span class="extype" name="scalaz.\/-">scalaz.\/-</span>) and the given
+      <p class="shortcomment cmt">Create a <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> representing a success with the given <code>value</code> (lifted into a <span class="extype" name="scalaz.\/-">scalaz.\/-</span>) and the given
+<code>description</code> in the log tree.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> representing a success with the given <code>value</code> (lifted into a <span class="extype" name="scalaz.\/-">scalaz.\/-</span>) and the given
 <code>description</code> in the log tree.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -550,6 +589,19 @@ the content of the <code>value</code>, which will be a <span class="extype" name
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="treelog.LogTreeSyntax#toSerializableForm" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toSerializableForm[Value](dc:LogTreeSyntax.this.DescribedComputation[Value]):(scalaz.\/[String,Value],treelog.SerializableTree[Annotation])"></a>
+      <a id="toSerializableForm[Value](DescribedComputation[Value]):(\/[String,Value],SerializableTree[Nothing])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSerializableForm</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="params">(<span name="dc">dc: <a href="#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntaxWithoutAnnotations.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.toSerializableForm.Value">Value</span>]</span>)</span><span class="result">: (<span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="treelog.LogTreeSyntax.toSerializableForm.Value">Value</span>], <a href="SerializableTree.html" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="scala.Nothing">Nothing</span>])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>LabellingSyntax - treelog.LogTreeSyntax.LabellingSyntax</title>
-          <meta name="description" content="LabellingSyntax - treelog.LogTreeSyntax.LabellingSyntax" />
-          <meta name="keywords" content="LabellingSyntax treelog.LogTreeSyntax.LabellingSyntax" />
+          <title>LeafSyntax - treelog.LogTreeSyntax.LeafSyntax</title>
+          <meta name="description" content="LeafSyntax - treelog.LogTreeSyntax.LeafSyntax" />
+          <meta name="keywords" content="LeafSyntax treelog.LogTreeSyntax.LeafSyntax" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'treelog.LogTreeSyntax$LabellingSyntax';
+            var hash = 'treelog.LogTreeSyntax$LeafSyntax';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../lib/class_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="treelog">treelog</a>.<a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p>
-        <h1>LabellingSyntax</h1>
+        <h1>LeafSyntax</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,11 +35,11 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">LabellingSyntax</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">LeafSyntax</span><span class="tparams">[<span name="Value">Value</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for labeling root nodes of trees in <code>DescribedComputions</code>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="treelog.LogTreeSyntax.LabellingSyntax"><span>LabellingSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="treelog.LogTreeSyntax.LeafSyntax"><span>LeafSyntax</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,16 +80,16 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="treelog.LogTreeSyntax.LabellingSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(w:LogTreeSyntax.this.DescribedComputation[Value]):LogTreeSyntax.this.LabellingSyntax[Value]"></a>
-      <a id="&lt;init&gt;:LabellingSyntax[Value]"></a>
+              <ol><li name="treelog.LogTreeSyntax.LeafSyntax#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(value:Value):LogTreeSyntax.this.LeafSyntax[Value]"></a>
+      <a id="&lt;init&gt;:LeafSyntax[Value]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LabellingSyntax</span><span class="params">(<span name="w">w: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LabellingSyntax.Value">Value</span>]</span>)</span>
+        <span class="name">LeafSyntax</span><span class="params">(<span name="value">value: <span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span></span>)</span>
       </span>
       </h4>
       
@@ -405,7 +405,33 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="treelog.LogTreeSyntax.LabellingSyntax#~&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="treelog.LogTreeSyntax.LeafSyntax#~&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~&gt;(description:Value=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="~&gt;((Value)⇒String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde$greater" class="name">~&gt;</span><span class="params">(<span name="description">description: (<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Create a <i>success</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>\/-(value)</code> as the value and
+a success <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> using the given <code>description</code> function to generate
+a description for the tree node's label.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <i>success</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>\/-(value)</code> as the value and
+a success <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> using the given <code>description</code> function to generate
+a description for the tree node's label.</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> leaf = <span class="num">1</span> ~&gt; (x <span class="kw">=&gt;</span> s<span class="lit">"One: $x"</span>)
+println(result.run.value)
+<span class="cmt">// Will print: \/-(1) - note that the 'right' means ''success''</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// One: 1</span></pre></div></div>
+    </li><li name="treelog.LogTreeSyntax.LeafSyntax#~&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="~&gt;(description:String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
       <a id="~&gt;(String):DescribedComputation[Value]"></a>
       <h4 class="signature">
@@ -414,12 +440,70 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $tilde$greater" class="name">~&gt;</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LabellingSyntax.Value">Value</span>]</span>
+        <span title="gt4s: $tilde$greater" class="name">~&gt;</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">This method is syntactic sugar for <code>description ~< w</code>
-</code></p><div class="fullcomment"><div class="comment cmt"><p>This method is syntactic sugar for <code>description ~< w</code>
-</p></div></div>
+      <p class="shortcomment cmt">Create a <i>success</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>\/-(value)</code> as the value and
+a success <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">TreeNode</a> with the given <code>description</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <i>success</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>\/-(value)</code> as the value and
+a success <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">TreeNode</a> with the given <code>description</code>.</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> leaf = <span class="num">1</span> ~&gt; <span class="lit">"One"</span>
+println(result.run.value)
+<span class="cmt">// Will print: \/-(1) - note that the 'right' means ''success''</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// One</span></pre></div></div>
+    </li><li name="treelog.LogTreeSyntax.LeafSyntax#~&gt;!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~&gt;!(description:Value=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="~&gt;!((Value)⇒String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde$greater$bang" class="name">~&gt;!</span><span class="params">(<span name="description">description: (<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Create a <i>failure</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> using the given <code>description</code> function to
+generate a description for the tree node's label and for the <code>DescribedComputations</code> value (i.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <i>failure</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> using the given <code>description</code> function to
+generate a description for the tree node's label and for the <code>DescribedComputations</code> value (i.e.
+the value will be <code>\/-(description(value))</code>.</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> leaf = <span class="num">1</span> ~&gt;! (x <span class="kw">=&gt;</span> s<span class="lit">"One - $x"</span>)
+println(result.run.value)
+<span class="cmt">// Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: One - 1</span></pre></div></div>
+    </li><li name="treelog.LogTreeSyntax.LeafSyntax#~&gt;!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~&gt;!(description:String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="~&gt;!(String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde$greater$bang" class="name">~&gt;!</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.LeafSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Create a <i>failure</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>-\/(description)</code> as the value and
+a failure <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with the given <code>description</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <i>failure</i> <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with <code>-\/(description)</code> as the value and
+a failure <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> with the given <code>description</code>.</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> leaf = <span class="num">1</span> ~&gt;! <span class="lit">"One"</span>
+println(result.run.value)
+<span class="cmt">// Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: One</span></pre></div></div>
     </li></ol>
             </div>
 
