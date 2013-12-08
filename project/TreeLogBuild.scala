@@ -33,7 +33,7 @@ object WebsiteSettings {
 }
 
 object Dependencies {
-  val allDependencies = Seq("org.scalaz" %% "scalaz-core" % "7.0.3", "org.scalatest" %% "scalatest" % "2.0.M5b")
+  val allDependencies = Seq("org.scalaz" %% "scalaz-core" % "7.0.4", "org.scalatest" %% "scalatest" % "2.0")
 }
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
@@ -97,9 +97,9 @@ object TreeLogBuild extends Build {
   lazy val treeLog = Project(
     "treeLog",
     file("."),
-    settings =  buildSettings ++ 
-                publishSettings ++ 
-                websiteSettings ++ 
-                Seq(resolvers := Seq(Classpaths.typesafeResolver), 
+    settings =  buildSettings ++
+                publishSettings ++
+                websiteSettings ++
+                Seq(resolvers := Seq(Classpaths.typesafeResolver),
                     libraryDependencies ++= allDependencies))
 }
