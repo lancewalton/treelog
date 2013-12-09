@@ -26,7 +26,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.1.0",
+    "com.casualmiracles" %% "treelog" % "1.2.1",
     "org.scalaz" %% "scalaz-core" % "7.0.3")
 ```
 

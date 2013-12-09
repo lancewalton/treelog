@@ -1,4 +1,6 @@
 1. Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
+   SNAPSHOT versions have docs generated under /api/master, but release versions are under /api/treelog-x.y.z
+
 2. Publish to sonatype:
   For snapshots make sure the version number has a -SNAPHOT suffix. To release to staging, remove the suffix.
   In both cases use 'sbt publish-signed'
