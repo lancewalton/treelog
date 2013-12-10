@@ -2,7 +2,7 @@ import treelog.LogTreeSyntaxWithoutAnnotations._
 import scalaz._
 import Scalaz._
 
-object LoggingTreeMain extends App {
+object QuadraticRootsExample extends App {
 
   case class Parameters(a: Double, b: Double, c: Double)
 
@@ -73,7 +73,7 @@ Extracting root: Failed
   private def sqrtDeterminant(det: Double) =
     "Calculating sqrt(determinant)" ~< {
       for {
-        _ ← if (det >= 0) (det ~> (d ⇒ s"Determinant ($d) is >= 0")) else (det ~>! (d ⇒ s"Determinant ($d) is < 0"))
+        _ ← if (det >= 0) det ~> (d ⇒ s"Determinant ($d) is >= 0") else det ~>! (d ⇒ s"Determinant ($d) is < 0")
         sqrtDet ← Math.sqrt(det) ~> ("Got sqrt(determinant): " + _)
       } yield sqrtDet
     }

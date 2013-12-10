@@ -27,7 +27,7 @@ object WebsiteSettings {
   val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
     git.remoteRepo := "git@github.com:lancewalton/treelog.git",
     siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/treelog-"+v+"/"+d))
+      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) "api/master/" + d else "api/treelog-" + v + "/" + d)
     }
   )
 }
@@ -58,14 +58,13 @@ object Publishing {
         Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
 
-    pomExtra := (
-      <licenses>
-        <license>
-          <name>MIT License</name>
-          <url>http://www.opensource.org/licenses/mit-license/</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
+    pomExtra := <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license/</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
       <scm>
         <url>https://github.com/lancewalton/treelog.git</url>
         <connection>scm:https://github.com/lancewalton/treelog.git</connection>
@@ -84,7 +83,7 @@ object Publishing {
           <email>channing [dot] walton [at] casualmiracles [dot] com</email>
           <organization>Casual Miracles Ltd</organization>
         </developer>
-      </developers>))
+      </developers>)
 }
 
 object TreeLogBuild extends Build {
@@ -100,6 +99,6 @@ object TreeLogBuild extends Build {
     settings =  buildSettings ++
                 publishSettings ++
                 websiteSettings ++
-                Seq(resolvers := Seq(Classpaths.typesafeResolver),
+                Seq(resolvers := Seq(Classpaths.typesafeReleases),
                     libraryDependencies ++= allDependencies))
 }

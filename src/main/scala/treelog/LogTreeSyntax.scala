@@ -398,7 +398,7 @@ trait LogTreeSyntax[Annotation] {
       case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
     }
 
-    private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
+    private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success())
   }
 
   implicit class FoldSyntax[Value](values: Iterable[Value]) {
@@ -449,10 +449,10 @@ trait LogTreeSyntax[Annotation] {
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       line(depth, tree.rootLabel) :: tree.subForest.flatMap(toList(_, depth + 1)).toList
 
-    private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success, showDescription(label))))
+    private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success(), showDescription(label))))
 
     private def showAnnotations(annotations: Set[Annotation], line: String) =
-      if (annotations.isEmpty) line else (line + " - [" + annotations.map(annotationShow.show(_)).mkString(", ") + "]")
+      if (annotations.isEmpty) line else line + " - [" + annotations.map(annotationShow.show).mkString(", ") + "]"
 
     private def showDescription(label: LogTreeLabel[Annotation]) = label.fold(_.description, _ ⇒ "No Description")
 
@@ -462,12 +462,12 @@ trait LogTreeSyntax[Annotation] {
   type SerializableDescribedComputation[Value] = Pair[\/[String, Value], SerializableTree[Annotation]]
 
   def toSerializableForm[Value](dc: DescribedComputation[Value]): SerializableDescribedComputation[Value] = {
-    def transform(tree: LogTree): SerializableTree[Annotation] = SerializableTree(tree.rootLabel, tree.subForest.map(transform _).toList)
+    def transform(tree: LogTree): SerializableTree[Annotation] = SerializableTree(tree.rootLabel, tree.subForest.map(transform).toList)
     Pair(dc.run.value, transform(dc.run.written))
   }
 
   def fromSerializableForm[Value](sdc: SerializableDescribedComputation[Value]): DescribedComputation[Value] = {
-    def transform(tree: SerializableTree[Annotation]): LogTree = Tree.node(tree.label, tree.children.map(transform _).toStream)
+    def transform(tree: SerializableTree[Annotation]): LogTree = Tree.node(tree.label, tree.children.map(transform).toStream)
     sdc._1.fold(m ⇒ failure(m, transform(sdc._2)), v ⇒ success(v, transform(sdc._2)))
   }
 }
