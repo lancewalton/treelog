@@ -226,7 +226,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   /**
-   * Syntax for treating booleans as signifiers of success or failure in a computation.
+   * Syntax for treating booleans as indicators of success or failure in a computation.
    *
    * The simplest usage is something like: `myBoolean ~>? "Is my boolean true?"`. The 'value'
    * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
@@ -238,8 +238,7 @@ trait LogTreeSyntax[Annotation] {
      * Use the same description whether the boolean is `true` or `false`.
      * Equivalent to `~>?(description, description)`
      */
-    def ~>?(description: String): DescribedComputation[Boolean] =
-      ~>?(description, description)
+    def ~>?(description: String): DescribedComputation[Boolean] = ~>?(description, description)
 
     /**
      * Use different descriptions for the `true` and `false` cases. Note that unlike `'if'`
@@ -317,15 +316,13 @@ trait LogTreeSyntax[Annotation] {
      * Use the same description regardless of whether `either` is a `\/-` or a `-\/`.
      * Equivalent to: `~>?((error: String) ⇒ s"$description - $error", description)`
      */
-    def ~>?(description: String): DescribedComputation[Value] =
-      ~>?((error: String) ⇒ s"$description - $error", description)
+    def ~>?(description: String): DescribedComputation[Value] = ~>?((error: String) ⇒ s"$description - $error", description)
 
     /**
      * Use the given description if `either` is a `\/-`. If `either` is
      * `-\/(message)`, use `message` as the description.
      */
-    def ~>?(description: Value ⇒ String): DescribedComputation[Value] =
-      ~>?((error: String) ⇒ error, description)
+    def ~>?(description: Value ⇒ String): DescribedComputation[Value] = ~>?((error: String) ⇒ error, description)
 
     /**
      * Use the given functions to provide descriptions depending on whether `either` is a
