@@ -93,7 +93,7 @@ trait LogTreeSyntax[Annotation] {
      * import treelog.LogTreeSyntaxWithoutAnnotations._
      * import scalaz.syntax.show._
      *
-     * val leaf = 1 ~> "One"
+     * val leaf = 1 logSuccess "One"
      * println(result.run.value)
      * // Will print: \/-(1) - note that the 'right' means ''success''
      *
@@ -102,7 +102,12 @@ trait LogTreeSyntax[Annotation] {
      * // One
      * }}}
      */
-    def ~>(description: String): DescribedComputation[Value] = success(value, description)
+    def logSuccess(description: String): DescribedComputation[Value] = success(value, description)
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logSuccess(String) logSuccess]]
+     */
+    def ~>(description: String): DescribedComputation[Value] = logSuccess(description)
 
     /**
      * Create a ''success'' [[treelog.LogTreeSyntax.DescribedComputation]] with `\/-(value)` as the value and
@@ -113,7 +118,7 @@ trait LogTreeSyntax[Annotation] {
      * import treelog.LogTreeSyntaxWithoutAnnotations._
      * import scalaz.syntax.show._
      *
-     * val leaf = 1 ~> (x => s"One: $x")
+     * val leaf = 1 logSuccess (x => s"One: $x")
      * println(result.run.value)
      * // Will print: \/-(1) - note that the 'right' means ''success''
      *
@@ -122,7 +127,12 @@ trait LogTreeSyntax[Annotation] {
      * // One: 1
      * }}}
      */
-    def ~>(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
+    def logSuccess(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logSuccess(Value => String) logSuccess]]
+     */
+    def ~>(description: Value ⇒ String): DescribedComputation[Value] = logSuccess(description(value))
 
     /**
      * Create a ''failure'' [[treelog.LogTreeSyntax.DescribedComputation]] with `-\/(description)` as the value and
@@ -141,7 +151,12 @@ trait LogTreeSyntax[Annotation] {
      * // Failed: One
      * }}}
      */
-    def ~>!(description: String): DescribedComputation[Value] = failure(description)
+    def logFailure(description: String): DescribedComputation[Value] = failure(description)
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logFailure(String) logFailure]]
+     */
+    def ~>!(description: String): DescribedComputation[Value] = logFailure(description)
 
     /**
      * Create a ''failure'' [[treelog.LogTreeSyntax.DescribedComputation]] using the given `description` function to
@@ -152,7 +167,7 @@ trait LogTreeSyntax[Annotation] {
      * import treelog.LogTreeSyntaxWithoutAnnotations._
      * import scalaz.syntax.show._
      *
-     * val leaf = 1 ~>! (x => s"One - $x")
+     * val leaf = 1 logFailure (x => s"One - $x")
      * println(result.run.value)
      * // Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.
      *
@@ -161,7 +176,12 @@ trait LogTreeSyntax[Annotation] {
      * // Failed: One - 1
      * }}}
      */
-    def ~>!(description: Value ⇒ String): DescribedComputation[Value] = ~>!(description(value))
+    def logFailure(description: Value ⇒ String): DescribedComputation[Value] = logFailure(description(value))
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logFailure(Value => String) logFailure]]
+     */
+    def ~>!(description: Value ⇒ String): DescribedComputation[Value] = logFailure(description)
   }
 
   /**
@@ -189,7 +209,10 @@ trait LogTreeSyntax[Annotation] {
    */
   implicit class AnnotationsSyntax[Value](w: DescribedComputation[Value]) {
 
-    def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = {
+    /**
+     * Annotate a [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]].
+     */
+    def annotateWith(annotations: Set[Annotation]): DescribedComputation[Value] = {
       val newTree = w.run.written match {
         case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
         case Tree.Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
@@ -202,22 +225,23 @@ trait LogTreeSyntax[Annotation] {
     }
 
     /**
-     * Syntactic sugar equivalent to `~~ Set(annotation)`
+     * Sugar for [[treelog.LogTreeSyntax.AnnotationsSyntax.annotateWith(Set[Annotation]) annotateWith(annotations)]]
      */
-    def ~~(annotation: Annotation): DescribedComputation[Value] = ~~(Set(annotation))
-
-    /**
-     * Equivalent to `~~ annotations`
-     */
-    def annotateWith(annotations: Set[Annotation]): DescribedComputation[Value] = ~~(annotations)
+    def ~~(annotations: Set[Annotation]): DescribedComputation[Value] = annotateWith(annotations)
 
     /**
      * Equivalent to `~~ annotation`
      */
-    def annotateWith(annotation: Annotation): DescribedComputation[Value] = ~~(annotation)
+    def annotateWith(annotation: Annotation): DescribedComputation[Value] = ~~(Set(annotation))
 
     /**
-     * Get the union of all annotations in the log tree of the DescribedComputation
+     * Syntactic sugar equivalent to [[treelog.LogTreeSyntax.AnnotationsSyntax.annotateWith(Annotation) annotateWith(annotation)]]
+     */
+    def ~~(annotation: Annotation): DescribedComputation[Value] = annotateWith(annotation)
+
+
+    /**
+     * Get the union of all annotations in the log tree of the [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]].
      */
     def allAnnotations: Set[Annotation] = {
       def recurse(tree: LogTree, accumulator: Set[Annotation]): Set[Annotation] = tree.subForest.foldLeft(accumulator ++ tree.rootLabel.annotations)((acc, child) ⇒ recurse(child, acc))
