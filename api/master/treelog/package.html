@@ -61,7 +61,7 @@ a process that affects multiple entities, and you want to ensure that the audit 
 <span class="kw">val</span> result3 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; <span class="lit">"Calculated product"</span>
 <span class="cmt">// The same as result1</span>
 
- <span class="kw">val</span> result4 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; (p <span class="kw">=&gt;</span> <span class="lit">"Calculated product: "</span> + p)
+ <span class="kw">val</span> result4 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; (p ￢ﾇﾒ <span class="lit">"Calculated product: "</span> + p)
 <span class="cmt">// The same as result1, except the description in the tree node will be "Calculated product: 6"</span></pre><p><i>result3</i> and <i>result4</i> above introduce the first pieces of syntax related to producing
 <i>DescribedComputations</i>. In this case it lifts the value into the <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>
 and creates a leaf node in the associated log tree. See <a href="LogTreeSyntax$LeafSyntax.html" class="extype" name="treelog.LogTreeSyntax.LeafSyntax">LeafSyntax</a> for
@@ -88,9 +88,9 @@ for-comprehensions come into play:</p><pre><span class="kw">import</span> treelo
 <span class="kw">import</span> scalaz.syntax.show._
 
 <span class="kw">val</span> result = <span class="kw">for</span> {
-   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
-   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
-   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+   foo ￢ﾆﾐ <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar ￢ﾆﾐ <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar ￢ﾆﾐ (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
   } <span class="kw">yield</span> foobar
 
 println(result.run.value)
@@ -114,9 +114,9 @@ can't describe the non-leaf elements. We can provide a description in two ways (
 <span class="kw">import</span> scalaz.syntax.show._
 
 <span class="kw">val</span> result = <span class="kw">for</span> {
-   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
-   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
-   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+   foo ￢ﾆﾐ <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar ￢ﾆﾐ <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar ￢ﾆﾐ (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
   } <span class="kw">yield</span> foobar
 
 
@@ -136,16 +136,16 @@ println(resultWithDescription2.run.written.shows)
 <span class="cmt">//   bar = 2</span>
 <span class="cmt">//   foobar = 3</span></pre><p>The first approach (<i>resultWithDescription1</i> using <i>~gt;</i>) will generally be used when a method/function used to provide an intermediate result
 in the middle of a for-comprehension returns an undescribed root node. Then the code flows quite nicely thus:</p><pre><span class="kw">val</span> result = <span class="kw">for</span> {
- something <span class="kw">&lt;-</span> doSomething() ~&gt; <span class="lit">"Something has been done"</span>
- more <span class="kw">&lt;-</span> doMore(something) ~&gt; <span class="lit">"More has been done"</span>
+ something ￢ﾆﾐ doSomething() ~&gt; <span class="lit">"Something has been done"</span>
+ more ￢ﾆﾐ doMore(something) ~&gt; <span class="lit">"More has been done"</span>
 } <span class="kw">yield</span> more</pre><p>Here, <i>doSomething()</i> and <i>doMore(...)</i> return DescribedComputations carrying a log tree with an undescribed root node.
 They have been given descriptions in the above for-comprehension.</p><p>The second approach (<i>resultWithDescription2</i> using <i>~&lt;</i>) will generally be used when a for-comprehension yields a
 <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> (which will always have a log tree with an undescribed root node if the for-comprehension has more than
 one generator), and you want to immediately give the root node a description. In this case, it is more natural to write:</p><pre><span class="kw">val</span> result = <span class="lit">"Adding up"</span> ~&lt; {
 <span class="kw">for</span> {
-  foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _)
-  bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _)
-  foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  foo ￢ﾆﾐ <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _)
+  bar ￢ﾆﾐ <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _)
+  foobar ￢ﾆﾐ (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
 } <span class="kw">yield</span> foobar
 }</pre><p>Both of these approaches are demonstrated in the
 <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example</a>. There is no good
@@ -164,7 +164,7 @@ or for different descriptions to be given in the success versus failure case. Al
 overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
 <a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
 <i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
-means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
+means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A ⇒ DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
 to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
 to take all of the 'values' (<i>vs</i>) contained in the list of <i>DescribedComputations</i> thus produced, and create a new
 <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> whose value is <i>vs</i> and whose log tree is a branch with a description and whose children
@@ -172,7 +172,7 @@ are the log trees resulting from each application of <i>f(.)</i>.</p><p>We neede
 <span class="kw">import</span> scalaz.syntax.show._
 <span class="kw">import</span> scalaz.std.list._
 
-<span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x <span class="kw">=&gt;</span> (x * <span class="num">2</span>) ~&gt; (y <span class="kw">=&gt;</span> s<span class="lit">"Double $x = $y"</span>))
+<span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x ￢ﾇﾒ (x * <span class="num">2</span>) ~&gt; (y ￢ﾇﾒ s<span class="lit">"Double $x = $y"</span>))
 
 println(result.run.value)
 <span class="cmt">// Will print \/-(List(2, 4, 6))</span>
@@ -184,7 +184,7 @@ println(result.run.written.shows)
 <span class="cmt">//   Double 2 = 4</span>
 <span class="cmt">//   Double 3 = 6</span></pre><p>This is particularly useful if there is a possibility that <i>f(.)</i> can produce <i>DescribedComputations</i> that represent failures,
 because hoisting children into a branch of a log tree gives the branch a successful status only if all of the children are successful (this is true
-of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x <span class="kw">=&gt;</span> (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>)
+of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x ￢ﾇﾒ (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>)
 
 println(result.run.value)
 <span class="cmt">// Will print -\/(All even) - Notice that it's a 'left', meaning failure</span>
@@ -197,7 +197,7 @@ println(result.run.written.shows)
 <span class="cmt">//   Failed: Testing if 3 is even</span></pre><p><i>~&gt;*</i> works not only for <i>List</i>, but for all kinds that have a <i>scalaz.Monad</i> and a <i>scalaz.Traverse</i>
 defined and available in implicit scope. See <a href="LogTreeSyntax$TraversableMonadSyntax.html" class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax">TraversableMonadSyntax</a>.</p><p>Another common thing you might want to do with a collection of DescribedComputations is retain their logs as children of a parent whose value
 is some function of the child values. Here is an example of summing the result of several computations:</p><pre><span class="kw">val</span> parts = <span class="std">List</span>(<span class="num">1</span> ~&gt; <span class="lit">"One"</span>, <span class="num">2</span> ~&gt; <span class="lit">"Two"</span>)
-<span class="kw">val</span> summed = <span class="lit">"Sum"</span> ~&lt;+ (parts, (bits: <span class="std">List</span>[<span class="std">Int</span>]) <span class="kw">=&gt;</span> bits.sum)
+<span class="kw">val</span> summed = <span class="lit">"Sum"</span> ~&lt;+ (parts, (bits: <span class="std">List</span>[<span class="std">Int</span>]) ￢ﾇﾒ bits.sum)
 
 println(summed.run.written.shows)
 <span class="cmt">// Will print:</span>

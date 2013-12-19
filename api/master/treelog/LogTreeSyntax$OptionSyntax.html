@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for treating <code>Options</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myOption ~&gt;? &quot;Do I have Some?&quot;</code>. The 'value'
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for treating <code>Options</code> as indicators of success or failure in a computation.</p><p>The simplest usage is something like: <code>myOption ~&gt;? &quot;Do I have Some?&quot;</code>. The 'value'
 and log tree of the returned <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> will indicate success or failure
 depending on the value of <code>myOption</code>.
 </p></div><div class="toggleContainer block">
@@ -285,6 +285,55 @@ depending on the value of <code>myOption</code>.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log(noneDescription:=&gt;String,someDescription:Value=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="log(⇒String,(Value)⇒String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="params">(<span name="noneDescription">noneDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="someDescription">someDescription: (<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
+value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
+description if you wish.</p><div class="fullcomment"><div class="comment cmt"><p>Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
+value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
+description if you wish.</p><p>If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
+otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+</p></div></div>
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log(noneDescription:=&gt;String,someDescription:=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="log(⇒String,⇒String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="params">(<span name="noneDescription">noneDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="someDescription">someDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Use different descriptions for the <code>Some</code> and <code>None</code> cases.</p><div class="fullcomment"><div class="comment cmt"><p>Use different descriptions for the <code>Some</code> and <code>None</code> cases.</p><p>If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
+otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
+</p></div></div>
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log(description:String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
+      <a id="log(String):DescribedComputation[Value]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Use the same description whether the Option is <code>Some</code> or <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Use the same description whether the Option is <code>Some</code> or <code>None</code>.
+Equivalent to <code>log(description, description)</code>
+</p></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -407,7 +456,7 @@ depending on the value of <code>myOption</code>.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="~&gt;?(noneDescription:=&gt;String,someDescription:Value=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
       <a id="~&gt;?(⇒String,(Value)⇒String):DescribedComputation[Value]"></a>
       <h4 class="signature">
@@ -419,14 +468,9 @@ depending on the value of <code>myOption</code>.
         <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="noneDescription">noneDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="someDescription">someDescription: (<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
-value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
-description if you wish.</p><div class="fullcomment"><div class="comment cmt"><p>Use different descriptions for the <code>Some</code> and <code>None</code> cases, providing the boxed <code>Some</code>
-value to the function used to produce the description for the <code>Some</code> case, so that it can be included in the
-description if you wish.</p><p>If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
-otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
-</p></div></div>
-    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Sugar for <span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.log()">log(String, String)</span>
+</p>
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="~&gt;?(noneDescription:=&gt;String,someDescription:=&gt;String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
       <a id="~&gt;?(⇒String,⇒String):DescribedComputation[Value]"></a>
       <h4 class="signature">
@@ -438,10 +482,9 @@ otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
         <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="noneDescription">noneDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="someDescription">someDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Use different descriptions for the <code>Some</code> and <code>None</code> cases.</p><div class="fullcomment"><div class="comment cmt"><p>Use different descriptions for the <code>Some</code> and <code>None</code> cases.</p><p>If the option is <code>Some(x)</code> the 'value' of the returned DescribedComputation will be <code>\/-(x)</code>,
-otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
-</p></div></div>
-    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">Sugar for <span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.log(String,">String) log(String, String)</span>
+</p>
+    </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;?" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="~&gt;?(description:String):LogTreeSyntax.this.DescribedComputation[Value]"></a>
       <a id="~&gt;?(String):DescribedComputation[Value]"></a>
       <h4 class="signature">
@@ -453,9 +496,8 @@ otherwise, the 'value' will be <code>-\/(noneDescription)</code>.
         <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[+Value]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,Value]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.Value">Value</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Use the same description whether the Option is <code>Some</code> or <code>None</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Use the same description whether the Option is <code>Some</code> or <code>None</code>.
-Equivalent to <code>~&gt;?(description, description)</code>
-</p></div></div>
+      <p class="shortcomment cmt">Sugar for <span class="extype" name="treelog.LogTreeSyntax.OptionSyntax.log(String)">log(String)</span>
+</p>
     </li><li name="treelog.LogTreeSyntax.OptionSyntax#~&gt;|" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="~&gt;|[B](f:Value=&gt;LogTreeSyntax.this.DescribedComputation[B],dflt:=&gt;LogTreeSyntax.this.DescribedComputation[Option[B]]):LogTreeSyntax.this.DescribedComputation[Option[B]]"></a>
       <a id="~&gt;|[B]((Value)⇒DescribedComputation[B],⇒DescribedComputation[Option[B]]):DescribedComputation[Option[B]]"></a>
