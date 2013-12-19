@@ -8,3 +8,4 @@ target/
 .ensime_lucene
 .settings
 .idea*
+pmip

@@ -118,7 +118,7 @@ trait LogTreeSyntax[Annotation] {
      * import treelog.LogTreeSyntaxWithoutAnnotations._
      * import scalaz.syntax.show._
      *
-     * val leaf = 1 logSuccess (x => s"One: $x")
+     * val leaf = 1 logSuccess (x ⇒ s"One: $x")
      * println(result.run.value)
      * // Will print: \/-(1) - note that the 'right' means ''success''
      *
@@ -130,7 +130,7 @@ trait LogTreeSyntax[Annotation] {
     def logSuccess(description: Value ⇒ String): DescribedComputation[Value] = ~>(description(value))
 
     /**
-     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logSuccess(Value => String) logSuccess]]
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logSuccess(Value ⇒ String) logSuccess]]
      */
     def ~>(description: Value ⇒ String): DescribedComputation[Value] = logSuccess(description(value))
 
@@ -167,7 +167,7 @@ trait LogTreeSyntax[Annotation] {
      * import treelog.LogTreeSyntaxWithoutAnnotations._
      * import scalaz.syntax.show._
      *
-     * val leaf = 1 logFailure (x => s"One - $x")
+     * val leaf = 1 logFailure (x ⇒ s"One - $x")
      * println(result.run.value)
      * // Will print: -\/("One") - note that the 'left' means ''failure'', and the contained value is the description, not the 1.
      *
@@ -179,7 +179,7 @@ trait LogTreeSyntax[Annotation] {
     def logFailure(description: Value ⇒ String): DescribedComputation[Value] = logFailure(description(value))
 
     /**
-     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logFailure(Value => String) logFailure]]
+     * Sugar for [[treelog.LogTreeSyntax.LeafSyntax.logFailure(Value ⇒ String) logFailure]]
      */
     def ~>!(description: Value ⇒ String): DescribedComputation[Value] = logFailure(description)
   }
@@ -278,7 +278,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   /**
-   * Syntax for treating `Options` as signifiers of success or failure in a computation.
+   * Syntax for treating `Options` as indicators of success or failure in a computation.
    *
    * The simplest usage is something like: `myOption ~>? "Do I have Some?"`. The 'value'
    * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
@@ -288,9 +288,14 @@ trait LogTreeSyntax[Annotation] {
 
     /**
      * Use the same description whether the Option is `Some` or `None`.
-     * Equivalent to `~>?(description, description)`
+     * Equivalent to `log(description, description)`
      */
-    def ~>?(description: String): DescribedComputation[Value] = ~>?(description, description)
+    def log(description: String): DescribedComputation[Value] = log(description, description)
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.OptionSyntax.log(String) log(String)]]
+     */
+    def ~>?(description: String): DescribedComputation[Value] = log(description)
 
     /**
      * Use different descriptions for the `Some` and `None` cases.
@@ -298,7 +303,12 @@ trait LogTreeSyntax[Annotation] {
      * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
      * otherwise, the 'value' will be `-\/(noneDescription)`.
      */
-    def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] = ~>?(noneDescription, _ ⇒ someDescription)
+    def log(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] = ~>?(noneDescription, _ ⇒ someDescription)
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.OptionSyntax.log(String, String) log(String, String)]]
+     */
+    def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[Value] = log(noneDescription, someDescription)
 
     /**
      * Use different descriptions for the `Some` and `None` cases, providing the boxed `Some`
@@ -308,8 +318,13 @@ trait LogTreeSyntax[Annotation] {
      * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
      * otherwise, the 'value' will be `-\/(noneDescription)`.
      */
-    def ~>?(noneDescription: ⇒ String, someDescription: Value ⇒ String): DescribedComputation[Value] =
+    def log(noneDescription: ⇒ String, someDescription: Value ⇒ String): DescribedComputation[Value] =
       option map { a ⇒ success(a, someDescription(a)) } getOrElse failure(noneDescription)
+
+    /**
+     * Sugar for [[treelog.LogTreeSyntax.OptionSyntax.log() log(String, String)]]
+     */
+    def ~>?(noneDescription: ⇒ String, someDescription: Value ⇒ String): DescribedComputation[Value] = log(noneDescription, someDescription)
 
     /**
      * Return a default [[treelog.LogTreeSyntax.DescribedComputation]] if `option` is a `None`.
@@ -382,7 +397,7 @@ trait LogTreeSyntax[Annotation] {
     /**
      * As ~< but folding over the resulting F[Value] to yield R and return a DescribedComputation[R] with all the logs.
      *
-     * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
+     * For example, given l = List[DescribedComputation[Int]], and f = List[Int] ⇒ Int (say summing the list), then
      * `"Sum" ~&lt;+(l, f)` would return a DescribedComputation containing the sum of the elements of the list.
      */
     def ~<+[F[_] : Monad : Traverse, Value, R](describedComputations: F[DescribedComputation[Value]], f: F[Value] ⇒ R): DescribedComputation[R] = {

@@ -26,14 +26,14 @@ object WebsiteSettings {
   site.includeScaladoc()
   val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
     git.remoteRepo := "git@github.com:lancewalton/treelog.git",
-    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) "api/master/" + d else "api/treelog-" + v + "/" + d)
+    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) ⇒
+      for((f, d) ← m) yield (f, if (v.trim.endsWith("SNAPSHOT")) "api/master/" + d else "api/treelog-" + v + "/" + d)
     }
   )
 }
 
 object Dependencies {
-  val allDependencies = Seq("org.scalaz" %% "scalaz-core" % "7.0.4", "org.scalatest" %% "scalatest" % "2.0")
+  val allDependencies = Seq("org.scalaz" %% "scalaz-core" % "7.0.5", "org.scalatest" %% "scalatest" % "2.0" % "test")
 }
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/

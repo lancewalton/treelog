@@ -52,8 +52,8 @@ object OptionsAndEithersExample extends App {
   println(leftEitherWriter.written.shows)
 
   leftEitherWriter.value match {
-    case \/-(sucessValue) => println(s"Success: $sucessValue")
-    case -\/(failureValue) => println(s"Failure: $failureValue")
+    case \/-(sucessValue) ⇒ println(s"Success: $sucessValue")
+    case -\/(failureValue) ⇒ println(s"Failure: $failureValue")
   }
 
 }
