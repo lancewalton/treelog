@@ -3,4 +3,4 @@
    - "2.10.3"
  jdk:
    - oraclejdk7
- script: "./sbt -sbt-version 0.13.0 test"
+ script: "./sbt -v test"
