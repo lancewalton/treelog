@@ -13,9 +13,9 @@ object BuildSettings {
   val buildSettings: Seq[Setting[_]] = Defaults.defaultSettings ++ Seq[Setting[_]](
     organization := "com.casualmiracles",
     name := "treelog",
-    version := "1.2.3-SNAPSHOT",
-    scalaVersion := "2.10.3",
-    scalaBinaryVersion := "2.10",
+    version := "1.2.4-SNAPSHOT",
+    scalaVersion := "2.11.0",
+    scalaBinaryVersion := "2.11",
     scalacOptions := Seq("-language:_")
   )
 }
@@ -32,8 +32,8 @@ object WebsiteSettings {
 
 object Dependencies {
   val allDependencies = Seq(
-    "org.scalaz" %% "scalaz-core" % "7.0.5",
-    "org.scalatest" %% "scalatest" % "2.0" % "test")
+    "org.scalaz" %% "scalaz-core" % "7.0.6",
+    "org.scalatest" %% "scalatest" % "2.1.3" % "test")
 }
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
