@@ -16,7 +16,8 @@ object BuildSettings {
     version := "1.2.4-SNAPSHOT",
     scalaVersion := "2.11.0",
     scalaBinaryVersion := "2.11",
-    scalacOptions := Seq("-language:_")
+    scalacOptions := Seq("-language:_"),
+    incOptions := incOptions.value.withNameHashing(true)
   )
 }
 
