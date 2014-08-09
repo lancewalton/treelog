@@ -1,6 +1,6 @@
  language: scala
  scala:
-   - "2.10.3"
+   - "2.10.4"
  jdk:
-   - oraclejdk7
- script: "./sbt test"
+   - oraclejdk8
+ script: "./sbt scoverage:test"
