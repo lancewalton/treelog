@@ -1,8 +1,8 @@
 package treelog
 
-import scalaz.{ -\/, \/-, \/, EitherT, Traverse, Monad, Monoid, Show, Writer, Tree, idInstance }
+import scalaz._
 import scalaz.syntax.traverse._
-import scalaz.syntax.monadListen._
+import scalaz.syntax.monadTell._
 
 /**
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,

@@ -7,6 +7,7 @@ import com.typesafe.sbt.SbtGhPages._
 import com.typesafe.sbt.SbtGit._
 import com.typesafe.sbt.SbtSite._
 import SiteKeys._
+import scoverage.ScoverageSbtPlugin._
 
 object BuildSettings {
 
@@ -14,7 +15,7 @@ object BuildSettings {
     organization := "com.casualmiracles",
     name := "treelog",
     version := "1.2.4-SNAPSHOT",
-    scalaVersion := "2.11.0",
+    scalaVersion := "2.11.1",
     scalaBinaryVersion := "2.11",
     scalacOptions := Seq("-language:_"),
     incOptions := incOptions.value.withNameHashing(true)
@@ -34,7 +35,7 @@ object WebsiteSettings {
 object Dependencies {
   val allDependencies = Seq(
     "org.scalaz" %% "scalaz-core" % "7.0.6",
-    "org.scalatest" %% "scalatest" % "2.1.3" % "test")
+    "org.scalatest" %% "scalatest" % "2.2.1" % "test")
 }
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
@@ -100,6 +101,7 @@ object TreeLogBuild extends Build {
     settings =  buildSettings ++
                 publishSettings ++
                 websiteSettings ++
+                instrumentSettings ++
                 Seq(resolvers := Seq(Classpaths.typesafeReleases),
                     libraryDependencies ++= allDependencies))
 }
