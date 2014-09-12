@@ -13,7 +13,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
 
   object `success must` {
     def `produce a value with the given value on the right`() = { success(1, "Yay").run.value mustBe \/-(1) }
-    def `produce a written with a success leaf node and the given desscription`() = { assert(success(1, "Yay").run.written ≟ node("Yay", true)) }
+    def `produce a written with a success leaf node and the given description`() = { assert(success(1, "Yay").run.written ≟ node("Yay", true)) }
+    def `produce a written with a success leaf node and no description`() = { assert(success(1).run.written ≟ node(true)) }
   }
 
   object `failure must` {
