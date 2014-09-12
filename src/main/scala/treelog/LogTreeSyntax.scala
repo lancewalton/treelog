@@ -140,11 +140,10 @@ trait LogTreeSyntax[Annotation] {
     eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
 
   /**
-   * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[scalaz.\/-]]) and the given
-   * `description` in the log tree.
+   * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[scalaz.\/-]]) and no
+   * description.
    */
-  def success[Value](value: Value): DescribedComputation[Value] =
-    eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(UndescribedLogTreeLabel(true, Set[Annotation]())))
+  def success[Value](value: Value): DescribedComputation[Value] = eitherWriter.right(value)
 
   /**
    * Syntax for lifting values into `DescribedComputations` and creating leaf nodes in the log tree.
