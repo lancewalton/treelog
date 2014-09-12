@@ -15,7 +15,7 @@ object BuildSettings {
     organization := "com.casualmiracles",
     name := "treelog",
     version := "1.2.4-SNAPSHOT",
-    scalaVersion := "2.11.1",
+    scalaVersion := "2.11.2",
     scalaBinaryVersion := "2.11",
     scalacOptions := Seq("-language:_"),
     incOptions := incOptions.value.withNameHashing(true)
@@ -34,7 +34,7 @@ object WebsiteSettings {
 
 object Dependencies {
   val allDependencies = Seq(
-    "org.scalaz" %% "scalaz-core" % "7.0.6",
+    "org.scalaz" %% "scalaz-core" % "7.1.0",
     "org.scalatest" %% "scalatest" % "2.2.1" % "test")
 }
 

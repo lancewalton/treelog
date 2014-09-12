@@ -16,8 +16,8 @@ import scalaz.syntax.monadTell._
  */
 trait LogTreeSyntax[Annotation] {
   type LogTree = Tree[LogTreeLabel[Annotation]]
-  type LogTreeWriter[+Value] = Writer[LogTree, Value]
-  type DescribedComputation[+Value] = EitherT[LogTreeWriter, String, Value]
+  type LogTreeWriter[Value] = Writer[LogTree, Value]
+  type DescribedComputation[Value] = EitherT[LogTreeWriter, String, Value]
 
   private val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
 
@@ -45,12 +45,76 @@ trait LogTreeSyntax[Annotation] {
       }
   }
 
-  private implicit val eitherWriter = EitherT.monadListen[Writer, LogTree, String]
+  private[treelog] trait EitherTFunctor[F[_], E] extends Functor[({type λ[α]=EitherT[F, E, α]})#λ] {
+    implicit def F: Functor[F]
+
+    override def map[A, B](fa: EitherT[F, E, A])(f: A => B): EitherT[F, E, B] = fa map f
+  }
+
+  private[treelog] trait EitherTMonad[F[_], E] extends Monad[({type λ[α]=EitherT[F, E, α]})#λ] with EitherTFunctor[F, E] {
+    implicit def F: Monad[F]
+
+    def point[A](a: => A): EitherT[F, E, A] = EitherT(F.point(\/-(a)))
+
+    def bind[A, B](fa: EitherT[F, E, A])(f: A => EitherT[F, E, B]): EitherT[F, E, B] = fa flatMap f
+  }
+
+  private[treelog] trait EitherTHoist[A] extends Hoist[({type λ[α[_], β] = EitherT[α, A, β]})#λ] {
+    def hoist[M[_], N[_]](f: M ~> N)(implicit M: Monad[M]) = new (({type λ[α] = EitherT[M, A, α]})#λ ~> ({type λ[α] = EitherT[N, A, α]})#λ) {
+      def apply[B](mb: EitherT[M, A, B]): EitherT[N, A, B] = EitherT(f.apply(mb.run))
+    }
+
+    def liftM[M[_], B](mb: M[B])(implicit M: Monad[M]): EitherT[M, A, B] = EitherT(M.map(mb)(\/-(_)))
+
+    implicit def apply[M[_] : Monad]: Monad[({type λ[α] = EitherT[M, A, α]})#λ] = EitherT.eitherTMonad
+  }
+
+  private[treelog] trait EitherTMonadTell[F[_, _], W, A] extends MonadTell[({type λ[α, β] = EitherT[({type f[x] = F[α, x]})#f, A, β]})#λ, W] with EitherTMonad[({type λ[α] = F[W, α]})#λ, A] with EitherTHoist[A] {
+    def MT: MonadTell[F, W]
+
+    implicit def F = MT
+
+    def writer[B](w: W, v: B): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
+      liftM[({type λ[α] = F[W, α]})#λ, B](MT.writer(w, v))
+
+    def left[B](v: => A): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
+      EitherT.left[({type λ[α] = F[W, α]})#λ, A, B](MT.point(v))
+
+    def right[B](v: => B): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
+      EitherT.right[({type λ[α] = F[W, α]})#λ, A, B](MT.point(v))
+  }
+
+  private[treelog] trait EitherTMonadListen[F[_, _], W, A] extends MonadListen[({type λ[α, β] = EitherT[({type f[x] = F[α, x]})#f, A, β]})#λ, W] with EitherTMonadTell[F, W, A] {
+    implicit def MT: MonadListen[F, W]
+
+    def listen[B](ma: EitherT[({type λ[α] = F[W, α]})#λ, A, B]): EitherT[({type λ[α] = F[W, α]})#λ, A, (B, W)] = {
+      val tmp = MT.bind[(A \/ B, W), A \/ (B, W)](MT.listen(ma.run)){
+        case (-\/(a), _) => MT.point(-\/(a))
+        case (\/-(b), w) => MT.point(\/-((b, w)))
+      }
+
+      EitherT[({type λ[α] = F[W, α]})#λ, A, (B, W)](tmp)
+    }
+  }
+
+  object MyEitherTFunctions {
+    def eitherT[F[_], A, B](a: F[A \/ B]): EitherT[F, A, B] = EitherT[F, A, B](a)
+
+    def monadTell[F[_, _], W, A](implicit MT0: MonadTell[F, W]): EitherTMonadTell[F, W, A] = new EitherTMonadTell[F, W, A]{
+      def MT = MT0
+    }
+
+    def monadListen[F[_, _], W, A](implicit ML0: MonadListen[F, W]): EitherTMonadListen[F, W, A] = new EitherTMonadListen[F, W, A]{
+      def MT = ML0
+    }
+  }
+
+  private implicit val eitherWriter: EitherTMonadListen[Writer, LogTree, String] = MyEitherTFunctions.monadListen[Writer, LogTree, String]
 
   private def failure[Value](description: String, tree: LogTree): DescribedComputation[Value] =
     for {
       _ ← eitherWriter.tell(tree)
-      err ← eitherWriter.left(description)
+      err ← eitherWriter.left[Value](description)
     } yield err
 
   private def success[Value](value: Value, tree: LogTree): DescribedComputation[Value] = eitherWriter.right(value) :++>> (_ ⇒ tree)
@@ -333,7 +397,7 @@ trait LogTreeSyntax[Annotation] {
      * otherwise, the returned [[treelog.LogTreeSyntax.DescribedComputation]] will be `dflt`.
      */
     def ~>|[B](f: Value ⇒ DescribedComputation[B], dflt: ⇒ DescribedComputation[Option[B]]): DescribedComputation[Option[B]] =
-      option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Some(w))) getOrElse dflt
+      option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Option(w))) getOrElse dflt
   }
 
   /**

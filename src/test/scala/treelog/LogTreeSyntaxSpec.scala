@@ -131,7 +131,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
 
     def `return failure and a log tree describing the fold as far as it got` {
-      val result = List(1, 2, 3) ~>/ ("Bar", 0 ~> "Initial Value", (acc: Int, x: Int) ⇒ if (x == 3) failure("No") else (acc + x) ~> (t ⇒ s"x=$x, result=$t"))
+      def thing(acc: Int, x: Int) = if (x == 3) failure[Int]("No") else (acc + x) ~> (t ⇒ s"x=$x, result=$t")
+      val result = List(1, 2, 3) ~>/ ("Bar", 0 ~> "Initial Value", thing)
       assert(result.run.written ≟
         node("Bar", false,
           node("Initial Value", true),
@@ -153,9 +154,9 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
     }
 
     def `when the leaf is a failure, create a failure root node with the description with a single child which is the leaf` {
-      val result: DescribedComputation[\/[String, String]] =
+      val result: DescribedComputation[String] =
         "Parent" ~< {
-          for (x ← failure("Child")) yield x
+          for (x ← failure[String]("Child")) yield x
         }
       assert(result.run.written ≟ node("Parent", false, node("Child", false)))
       assert(result.run.value ≟ -\/("Parent"))
