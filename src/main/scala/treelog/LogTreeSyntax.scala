@@ -45,6 +45,8 @@ trait LogTreeSyntax[Annotation] {
       }
   }
 
+  // TODO Remove this copy from scalaz, added to work around a 7.1.0 problem, remove when 7.2.0 is released
+
   private[treelog] trait EitherTFunctor[F[_], E] extends Functor[({type λ[α]=EitherT[F, E, α]})#λ] {
     implicit def F: Functor[F]
 
@@ -97,19 +99,13 @@ trait LogTreeSyntax[Annotation] {
     }
   }
 
-  object MyEitherTFunctions {
-    def eitherT[F[_], A, B](a: F[A \/ B]): EitherT[F, A, B] = EitherT[F, A, B](a)
-
-    def monadTell[F[_, _], W, A](implicit MT0: MonadTell[F, W]): EitherTMonadTell[F, W, A] = new EitherTMonadTell[F, W, A]{
-      def MT = MT0
+  private implicit val eitherWriter: EitherTMonadListen[Writer, LogTree, String] =
+  // TODO on scalaz 7.2.0 revert to EitherTFunctions.monadListen[Writer, LogTree, String]
+    new EitherTMonadListen[Writer, LogTree, String]{
+      def MT = implicitly[MonadListen[Writer, LogTree]]
     }
 
-    def monadListen[F[_, _], W, A](implicit ML0: MonadListen[F, W]): EitherTMonadListen[F, W, A] = new EitherTMonadListen[F, W, A]{
-      def MT = ML0
-    }
-  }
-
-  private implicit val eitherWriter: EitherTMonadListen[Writer, LogTree, String] = MyEitherTFunctions.monadListen[Writer, LogTree, String]
+  // TODO END HACK
 
   private def failure[Value](description: String, tree: LogTree): DescribedComputation[Value] =
     for {
