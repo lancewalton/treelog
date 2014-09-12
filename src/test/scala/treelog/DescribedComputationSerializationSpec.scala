@@ -7,7 +7,7 @@ import Scalaz._
 class DescribedComputationSerializationSpec extends Spec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
 
-  def `toSerializableForm and fromSerializableForm are inverses` {
+  def `toSerializableForm and fromSerializableForm are inverses`() = {
     val dc =
       for {
         _ ← 1 ~> "Hello"

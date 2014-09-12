@@ -12,12 +12,12 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
   val aFailure: \/[String, String] = -\/("Fail")
 
   object `success must` {
-    def `produce a value with the given value on the right`() = { success(1, "Yay").run.value must be === \/-(1) }
+    def `produce a value with the given value on the right`() = { success(1, "Yay").run.value mustBe \/-(1) }
     def `produce a written with a success leaf node and the given desscription`() = { assert(success(1, "Yay").run.written ≟ node("Yay", true)) }
   }
 
   object `failure must` {
-    def `produce a value with the given message on the left`() = { failure("Boo").run.value must be === -\/("Boo") }
+    def `produce a value with the given message on the left`() = { failure("Boo").run.value mustBe -\/("Boo") }
     def `produce a written with a failure leaf node and the given desscription`() = { assert(failure("Boo").run.written ≟ node("Boo", false)) }
   }
 
