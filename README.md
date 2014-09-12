@@ -30,6 +30,20 @@ libraryDependencies ++= Seq(
     "org.scalaz" %% "scalaz-core" % "7.0.6")
 ```
 
+For Scalaz 7.1.0:
+
+```scala
+resolvers ++= Seq(
+  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
+  "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+)
+
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.2.4-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.1.0")
+```
+
+
 Quick Start TL;DR
 -----------
 

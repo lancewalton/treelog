@@ -7,6 +7,7 @@ object QuadraticRootsExample extends App {
   case class Parameters(a: Double, b: Double, c: Double)
 
   // Roots are real
+  println("Success case:")
   println(root(Parameters(2, 5, 3)).run.written.shows)
 
   /*
@@ -34,6 +35,7 @@ Extracting root
 */
 
   // Roots are complex
+  println("Failure case:")
   println(root(Parameters(2, 5, 10)).run.written.shows)
   /*
 Extracting root: Failed
