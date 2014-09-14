@@ -14,7 +14,7 @@ object BuildSettings {
   val buildSettings: Seq[Setting[_]] = Defaults.defaultSettings ++ Seq[Setting[_]](
     organization := "com.casualmiracles",
     name := "treelog",
-    version := "1.2.4-SNAPSHOT",
+    version := "1.2.4",
     scalaVersion := "2.11.2",
     scalaBinaryVersion := "2.11",
     scalacOptions := Seq("-language:_"),

@@ -17,30 +17,28 @@ TreeLog achieves this remarkable feat with a Writer monad writing to a Tree repr
 Getting TreeLog
 ---------------
 
-In SBT do this:
+In SBT do this for Scala 2.11.x:
 
 ```scala
 resolvers ++= Seq(
   "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-  "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+)
+
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.2.4",
+    "org.scalaz" %% "scalaz-core" % "7.1.0")
+```
+
+For Scala 2.10.x
+
+```scala
+resolvers ++= Seq(
+  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
 )
 
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.2.3",
     "org.scalaz" %% "scalaz-core" % "7.0.6")
-```
-
-For Scalaz 7.1.0:
-
-```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-  "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
-)
-
-libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.2.4-SNAPSHOT",
-    "org.scalaz" %% "scalaz-core" % "7.1.0")
 ```
 
 
