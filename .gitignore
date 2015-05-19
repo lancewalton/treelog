@@ -9,3 +9,5 @@ target/
 .settings
 .idea*
 pmip
+/.cache-main
+/.cache-tests
