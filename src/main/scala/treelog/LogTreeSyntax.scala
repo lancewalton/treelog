@@ -561,11 +561,11 @@ trait LogTreeSyntax[Annotation] {
     private def showSuccess(success: Boolean, s: String) = if (success) s else "Failed: " + s
   }
 
-  type SerializableDescribedComputation[Value] = Pair[\/[String, Value], SerializableTree[Annotation]]
+  type SerializableDescribedComputation[Value] = Tuple2[\/[String, Value], SerializableTree[Annotation]]
 
   def toSerializableForm[Value](dc: DescribedComputation[Value]): SerializableDescribedComputation[Value] = {
     def transform(tree: LogTree): SerializableTree[Annotation] = SerializableTree(tree.rootLabel, tree.subForest.map(transform).toList)
-    Pair(dc.run.value, transform(dc.run.written))
+    Tuple2(dc.run.value, transform(dc.run.written))
   }
 
   def fromSerializableForm[Value](sdc: SerializableDescribedComputation[Value]): DescribedComputation[Value] = {
