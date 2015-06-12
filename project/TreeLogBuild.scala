@@ -34,8 +34,9 @@ object WebsiteSettings {
 
 object Dependencies {
   val allDependencies = Seq(
-    "org.scalaz" %% "scalaz-core" % "7.1.0",
-    "org.scalatest" %% "scalatest" % "2.2.1" % "test")
+    "org.scalaz"    %% "scalaz-core" % "7.1.0",
+    "org.scalatest" %% "scalatest"   % "2.2.1" % "test",
+    "io.argonaut"   %% "argonaut"    % "6.1" % "test")
 }
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
