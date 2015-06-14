@@ -15,7 +15,7 @@ object BuildSettings {
     organization := "com.casualmiracles",
     name := "treelog",
     version := "1.2.5-SNAPSHOT",
-    scalaVersion := "2.11.2",
+    scalaVersion := "2.11.6",
     scalaBinaryVersion := "2.11",
     scalacOptions := Seq("-language:_"),
     incOptions := incOptions.value.withNameHashing(true)
