@@ -2,7 +2,7 @@ package treelog
 
 import scalaz.Equal
 
-sealed trait LogTreeLabel[Annotation] {
+sealed trait LogTreeLabel[Annotation] extends Product with Serializable {
   def success(): Boolean
   def fold[T](f: DescribedLogTreeLabel[Annotation] ⇒ T, g: UndescribedLogTreeLabel[Annotation] ⇒ T): T
   def annotations: Set[Annotation]
