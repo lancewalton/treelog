@@ -7,7 +7,6 @@ import com.typesafe.sbt.SbtGhPages._
 import com.typesafe.sbt.SbtGit._
 import com.typesafe.sbt.SbtSite._
 import SiteKeys._
-import scoverage.ScoverageSbtPlugin._
 
 object BuildSettings {
 
@@ -102,7 +101,6 @@ object TreeLogBuild extends Build {
     settings =  buildSettings ++
                 publishSettings ++
                 websiteSettings ++
-                instrumentSettings ++
                 Seq(resolvers := Seq(Classpaths.typesafeReleases),
                     libraryDependencies ++= allDependencies))
 }
