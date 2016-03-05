@@ -35,10 +35,10 @@ trait LogTreeSyntax[Annotation] {
           Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations), leftChildren ++ rightChildren)
 
         case (Tree.Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), rightNode @ Tree.Node(rightLabel, rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftChildren :+ rightNode)
+          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations), leftChildren :+ rightNode)
 
         case (leftNode @ Tree.Node(leftLabel, leftChildren), Tree.Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success), leftNode #:: rightChildren)
+          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations), leftNode #:: rightChildren)
 
         case (leftNode: Tree[LogTreeLabel[Annotation]], rightNode: Tree[LogTreeLabel[Annotation]]) ⇒
           Tree.node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(leftNode, rightNode))
@@ -496,7 +496,7 @@ trait LogTreeSyntax[Annotation] {
       }
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
-      case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children)), children)
+      case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
       case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
     }
 
