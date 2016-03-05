@@ -305,9 +305,11 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         } yield 0
 
         val hoistedComputation = computation ~> "Hoisted"
+        val reallyQuiteHighUpComputation = hoistedComputation ~> "Nice view from up here"
 
         assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
         assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(reallyQuiteHighUpComputation == Set(1, 2, 3, 4, 5, 6))
       }
 
       {
@@ -331,9 +333,11 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         } yield 0
 
         val hoistedComputation = computation ~> "Hoisted"
+        val reallyQuiteHighUpComputation = hoistedComputation ~> "Nice view from up here"
 
         assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
         assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(reallyQuiteHighUpComputation == Set(1, 2, 3, 4, 5, 6))
       }
 
       {
@@ -357,9 +361,11 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
         } yield 0
 
         val hoistedComputation = computation ~> "Hoisted"
+        val reallyQuiteHighUpComputation = hoistedComputation ~> "Nice view from up here"
 
         assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
         assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(reallyQuiteHighUpComputation == Set(1, 2, 3, 4, 5, 6))
       }
     }
   }
