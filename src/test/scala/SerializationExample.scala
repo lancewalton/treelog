@@ -174,7 +174,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
   }
 
-  private def showDescribedComputation(dc: DescribedComputation[List[String]]) {
+  private def showDescribedComputation(dc: DescribedComputation[List[String]]): Unit = {
     val runResult = dc.run
 
     // This will not compile unless we define a scalaz.Show for Thing (as above)

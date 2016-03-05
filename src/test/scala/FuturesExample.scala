@@ -1,4 +1,3 @@
-import treelog._
 import treelog.LogTreeSyntaxWithoutAnnotations._
 import scalaz._
 import Scalaz._
