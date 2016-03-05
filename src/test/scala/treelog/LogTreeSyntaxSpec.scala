@@ -182,6 +182,45 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
       assert(result.run.value ≟ -\/("Two"))
       assert(result.run.written ≟ node(false, node("One", true), node("Two", false)))
     }
+
+    def `preserve annotations`() = {
+      val s = new LogTreeSyntax[Int] {}
+      import s._
+
+      {
+        val computation = "Parent" ~< {
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two"
+          } yield 3
+        }
+
+
+        assert(computation.allAnnotations == Set(1))
+      }
+
+      {
+        val computation = "Parent" ~< {
+          for {
+            i ← 1 ~> "Child One"
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        }
+
+        assert(computation.allAnnotations == Set(2))
+      }
+
+      {
+        val computation = "Parent" ~< {
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        }
+
+        assert(computation.allAnnotations == Set(1, 2))
+      }
+    }
   }
 
   object `Hoisting a branch must` {
@@ -213,6 +252,115 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
       }
       assert(result.run.value ≟ \/-(3))
       assert(result.run.written ≟ node("Grandparent", true, node("Parent", true, node("One", true), node("Two", true))))
+    }
+
+    def `preserve annotations`() = {
+      val s = new LogTreeSyntax[Int] {}
+      import s._
+
+      {
+        val computationOne = "ParentOne" ~< ({
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        } ~~ 3)
+
+        val computationTwo = "ParentTwo" ~< ({
+          for {
+            i ← 1 ~> "Child Three" ~~ 4
+            j ← 2 ~> "Child Four" ~~ 5
+          } yield 3
+        } ~~ 6)
+
+        val computation = for {
+          i <- computationOne
+          j <- computationTwo
+        } yield 0
+
+        val hoistedComputation = computation ~> "Hoisted"
+
+        assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+      }
+
+      {
+        val computationOne = "ParentOne" ~< ({
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        } ~~ 3)
+
+        val computationTwo = {
+          for {
+            i ← 1 ~> "Child Three" ~~ 4
+            j ← 2 ~> "Child Four" ~~ 5
+          } yield 3
+        } ~~ 6
+
+        val computation = for {
+          i <- computationOne
+          j <- computationTwo
+        } yield 0
+
+        val hoistedComputation = computation ~> "Hoisted"
+
+        assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+      }
+
+      {
+        val computationOne = {
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        } ~~ 3
+
+        val computationTwo = "ParentTwo" ~< ({
+          for {
+            i ← 1 ~> "Child Three" ~~ 4
+            j ← 2 ~> "Child Four" ~~ 5
+          } yield 3
+        } ~~ 6)
+
+        val computation = for {
+          i <- computationOne
+          j <- computationTwo
+        } yield 0
+
+        val hoistedComputation = computation ~> "Hoisted"
+
+        assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+      }
+
+      {
+        val computationOne = {
+          for {
+            i ← 1 ~> "Child One" ~~ 1
+            j ← 2 ~> "Child Two" ~~ 2
+          } yield 3
+        } ~~ 3
+
+        val computationTwo = {
+          for {
+            i ← 1 ~> "Child Three" ~~ 4
+            j ← 2 ~> "Child Four" ~~ 5
+          } yield 3
+        } ~~ 6
+
+        val computation = for {
+          i <- computationOne
+          j <- computationTwo
+        } yield 0
+
+        val hoistedComputation = computation ~> "Hoisted"
+
+        assert(computation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+        assert(hoistedComputation.allAnnotations == Set(1, 2, 3, 4, 5, 6))
+      }
     }
   }
 
