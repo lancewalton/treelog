@@ -27,8 +27,8 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.2.4",
-    "org.scalaz" %% "scalaz-core" % "7.1.0")
+    "com.casualmiracles" %% "treelog" % "1.2.5",
+    "org.scalaz" %% "scalaz-core" % "7.1.7")
 ```
 
 For Scala 2.10.x
