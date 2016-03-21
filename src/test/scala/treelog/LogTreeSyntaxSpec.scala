@@ -1,6 +1,7 @@
 package treelog
 
 import org.scalatest._
+import scalaz.Tree.{Leaf, Node}
 import scalaz._
 import Scalaz._
 
@@ -29,7 +30,7 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
 
       val node = success(1, "Yay") ~~ 1 ~~ 2
       assert(node.run.value ≟ \/-(1))
-      assert(node.run.written ≟ Tree.leaf(DescribedLogTreeLabel("Yay", true, Set(1, 2))))
+      assert(node.run.written ≟ Leaf(DescribedLogTreeLabel("Yay", true, Set(1, 2))))
     }
   }
 
@@ -365,8 +366,8 @@ class LogTreeSyntaxSpec extends Spec with MustMatchers {
   }
 
   private def node(description: String, success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
-    Tree.node(DescribedLogTreeLabel(description, success), children.toStream)
+    Node(DescribedLogTreeLabel(description, success), children.toStream)
 
   private def node(success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
-    Tree.node(UndescribedLogTreeLabel(success), children.toStream)
+    Node(UndescribedLogTreeLabel(success), children.toStream)
 }

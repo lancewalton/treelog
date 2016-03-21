@@ -1,6 +1,6 @@
 package treelog
 
-import scalaz.Tree.Leaf
+import scalaz.Tree.{Leaf, Node}
 import scalaz._
 import scalaz.syntax.traverse._
 
@@ -19,7 +19,7 @@ trait LogTreeSyntax[Annotation] {
   type LogTreeWriter[V] = Writer[LogTree, V]
   type DescribedComputation[V] = EitherT[LogTreeWriter, String, V]
 
-  private val NilTree: LogTree = Tree(UndescribedLogTreeLabel(true))
+  private val NilTree: LogTree = Leaf(UndescribedLogTreeLabel(true))
 
   implicit val logTreeMonoid = new Monoid[LogTree] {
 
@@ -31,17 +31,17 @@ trait LogTreeSyntax[Annotation] {
 
         case (l, NilTree) ⇒ l
 
-        case (Tree.Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), Tree.Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations), leftChildren ++ rightChildren)
+        case (Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
+          Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations), leftChildren ++ rightChildren)
 
-        case (Tree.Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), rightNode @ Tree.Node(rightLabel, rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations), leftChildren :+ rightNode)
+        case (Node(leftLabel: UndescribedLogTreeLabel[Annotation], leftChildren), rightNode @ Node(rightLabel, rightChildren)) ⇒
+          Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations), leftChildren :+ rightNode)
 
-        case (leftNode @ Tree.Node(leftLabel, leftChildren), Tree.Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations), leftNode #:: rightChildren)
+        case (leftNode @ Node(leftLabel, leftChildren), Node(rightLabel: UndescribedLogTreeLabel[Annotation], rightChildren)) ⇒
+          Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations), leftNode #:: rightChildren)
 
         case (leftNode: Tree[LogTreeLabel[Annotation]], rightNode: Tree[LogTreeLabel[Annotation]]) ⇒
-          Tree.node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(leftNode, rightNode))
+          Node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(leftNode, rightNode))
       }
   }
 
@@ -61,8 +61,8 @@ trait LogTreeSyntax[Annotation] {
 
   def failureLog[V](dc: DescribedComputation[V]): DescribedComputation[V] = {
     val logTree = dc.run.written match {
-      case Tree.Node(UndescribedLogTreeLabel(s, a), c) ⇒ Tree.node(UndescribedLogTreeLabel(false, a), c)
-      case Tree.Node(DescribedLogTreeLabel(d, s, a), c) ⇒ Tree.node(DescribedLogTreeLabel(d, false, a), c)
+      case Node(UndescribedLogTreeLabel(s, a), c) ⇒ Node(UndescribedLogTreeLabel(false, a), c)
+      case Node(DescribedLogTreeLabel(d, s, a), c) ⇒ Node(DescribedLogTreeLabel(d, false, a), c)
     }
     dc.run.value match {
       case -\/(des) ⇒ failure(des, logTree)
@@ -74,7 +74,7 @@ trait LogTreeSyntax[Annotation] {
    * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a failure using the given `description` for both the log tree label and as
    * the content of the `value`, which will be a [[scalaz.-\/]].
    */
-  def failure[V](description: String): DescribedComputation[V] = failure(description, Tree.leaf(DescribedLogTreeLabel(description, false)))
+  def failure[V](description: String): DescribedComputation[V] = failure(description, Leaf(DescribedLogTreeLabel(description, false)))
 
   /**
    * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[scalaz.\/-]]) and the given
@@ -227,8 +227,8 @@ trait LogTreeSyntax[Annotation] {
      */
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[V] = {
       val newTree = w.run.written match {
-        case Tree.Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
-        case Tree.Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Tree.node(l.copy(annotations = l.annotations ++ annotations), c)
+        case Node(l: DescribedLogTreeLabel[Annotation], c) ⇒ Node(l.copy(annotations = l.annotations ++ annotations), c)
+        case Node(l: UndescribedLogTreeLabel[Annotation], c) ⇒ Node(l.copy(annotations = l.annotations ++ annotations), c)
       }
 
       w.run.value match {
@@ -418,7 +418,7 @@ trait LogTreeSyntax[Annotation] {
       val parts = monad.map(describedComputations)(m ⇒ (m.run.value, m.run.written))
 
       val children = monad.map(parts)(_._2).toList
-      val branch = Tree.node(
+      val branch = Node(
         DescribedLogTreeLabel(
           description,
           allSuccessful(children),
@@ -443,8 +443,8 @@ trait LogTreeSyntax[Annotation] {
       }
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
-      case Tree.Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
-      case Tree.Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Tree.node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
+      case Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
+      case Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
     }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success())
@@ -516,7 +516,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   def fromSerializableForm[V](sdc: SerializableDescribedComputation[V]): DescribedComputation[V] = {
-    def transform(tree: SerializableTree[Annotation]): LogTree = Tree.node(tree.label, tree.children.map(transform).toStream)
+    def transform(tree: SerializableTree[Annotation]): LogTree = Node(tree.label, tree.children.map(transform).toStream)
     sdc._1.fold(m ⇒ failure(m, transform(sdc._2)), v ⇒ success(v, transform(sdc._2)))
   }
 }
