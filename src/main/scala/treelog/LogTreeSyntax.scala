@@ -1,8 +1,8 @@
 package treelog
 
+import scalaz.Tree.Leaf
 import scalaz._
 import scalaz.syntax.traverse._
-import scalaz.syntax.monadTell._
 
 /**
  * See the [[treelog]] package documentation for a brief introduction to treelog and also,
@@ -45,67 +45,7 @@ trait LogTreeSyntax[Annotation] {
       }
   }
 
-  // TODO Remove this copy from scalaz, added to work around a 7.1.0 problem, remove when 7.2.0 is released
-
-  private[treelog] trait EitherTFunctor[F[_], E] extends Functor[({type λ[α]=EitherT[F, E, α]})#λ] {
-    implicit def F: Functor[F]
-
-    override def map[A, B](fa: EitherT[F, E, A])(f: A => B): EitherT[F, E, B] = fa map f
-  }
-
-  private[treelog] trait EitherTMonad[F[_], E] extends Monad[({type λ[α]=EitherT[F, E, α]})#λ] with EitherTFunctor[F, E] {
-    implicit def F: Monad[F]
-
-    def point[A](a: => A): EitherT[F, E, A] = EitherT(F.point(\/-(a)))
-
-    def bind[A, B](fa: EitherT[F, E, A])(f: A => EitherT[F, E, B]): EitherT[F, E, B] = fa flatMap f
-  }
-
-  private[treelog] trait EitherTHoist[A] extends Hoist[({type λ[α[_], β] = EitherT[α, A, β]})#λ] {
-    def hoist[M[_], N[_]](f: M ~> N)(implicit M: Monad[M]) = new (({type λ[α] = EitherT[M, A, α]})#λ ~> ({type λ[α] = EitherT[N, A, α]})#λ) {
-      def apply[B](mb: EitherT[M, A, B]): EitherT[N, A, B] = EitherT(f.apply(mb.run))
-    }
-
-    def liftM[M[_], B](mb: M[B])(implicit M: Monad[M]): EitherT[M, A, B] = EitherT(M.map(mb)(\/-(_)))
-
-    implicit def apply[M[_] : Monad]: Monad[({type λ[α] = EitherT[M, A, α]})#λ] = EitherT.eitherTMonad
-  }
-
-  private[treelog] trait EitherTMonadTell[F[_, _], W, A] extends MonadTell[({type λ[α, β] = EitherT[({type f[x] = F[α, x]})#f, A, β]})#λ, W] with EitherTMonad[({type λ[α] = F[W, α]})#λ, A] with EitherTHoist[A] {
-    def MT: MonadTell[F, W]
-
-    implicit def F = MT
-
-    def writer[B](w: W, v: B): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
-      liftM[({type λ[α] = F[W, α]})#λ, B](MT.writer(w, v))
-
-    def left[B](v: => A): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
-      EitherT.left[({type λ[α] = F[W, α]})#λ, A, B](MT.point(v))
-
-    def right[B](v: => B): EitherT[({type λ[α] = F[W, α]})#λ, A, B] =
-      EitherT.right[({type λ[α] = F[W, α]})#λ, A, B](MT.point(v))
-  }
-
-  private[treelog] trait EitherTMonadListen[F[_, _], W, A] extends MonadListen[({type λ[α, β] = EitherT[({type f[x] = F[α, x]})#f, A, β]})#λ, W] with EitherTMonadTell[F, W, A] {
-    implicit def MT: MonadListen[F, W]
-
-    def listen[B](ma: EitherT[({type λ[α] = F[W, α]})#λ, A, B]): EitherT[({type λ[α] = F[W, α]})#λ, A, (B, W)] = {
-      val tmp = MT.bind[(A \/ B, W), A \/ (B, W)](MT.listen(ma.run)){
-        case (-\/(a), _) => MT.point(-\/(a))
-        case (\/-(b), w) => MT.point(\/-((b, w)))
-      }
-
-      EitherT[({type λ[α] = F[W, α]})#λ, A, (B, W)](tmp)
-    }
-  }
-
-  private implicit val eitherWriter: EitherTMonadListen[Writer, LogTree, String] =
-  // TODO on scalaz 7.2.0 revert to EitherTFunctions.monadListen[Writer, LogTree, String]
-    new EitherTMonadListen[Writer, LogTree, String]{
-      def MT = implicitly[MonadListen[Writer, LogTree]]
-    }
-
-  // TODO END HACK
+  private val eitherWriter = EitherT.monadListen[LogTreeWriter, LogTree, String]
 
   private def failure[V](description: String, tree: LogTree): DescribedComputation[V] =
     for {
@@ -113,7 +53,11 @@ trait LogTreeSyntax[Annotation] {
       err ← eitherWriter.left[V](description)
     } yield err
 
-  private def success[V](value: V, tree: LogTree): DescribedComputation[V] = eitherWriter.right(value) :++>> (_ ⇒ tree)
+  private def success[V](value: V, tree: LogTree): DescribedComputation[V] =
+    for {
+      _ ← eitherWriter.tell(tree)
+      res ← eitherWriter.right[V](value)
+    } yield res
 
   def failureLog[V](dc: DescribedComputation[V]): DescribedComputation[V] = {
     val logTree = dc.run.written match {
@@ -137,7 +81,10 @@ trait LogTreeSyntax[Annotation] {
    * `description` in the log tree.
    */
   def success[V](value: V, description: String): DescribedComputation[V] =
-    eitherWriter.right(value) :++>> (_ ⇒ Tree.leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
+    for {
+      _ ← eitherWriter.tell(Leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())))
+      res ← eitherWriter.right[V](value)
+    } yield res
 
   /**
    * Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[scalaz.\/-]]) and no
