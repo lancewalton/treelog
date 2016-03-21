@@ -23,3 +23,4 @@ Release to sonatype
   1. Wait ...
   1. Keep checking the Activity tab to see if there are any problems
   1. Look for the release in https://oss.sonatype.org/content/repositories/releases/com/casualmiracles/treelog_2.11
+  1. Bump the release version up with -SNAPSHOT extension
