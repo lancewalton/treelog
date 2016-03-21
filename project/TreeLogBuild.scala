@@ -44,7 +44,8 @@ object WebsiteSettings {
 object Dependencies {
   val allDependencies = Seq(
     "org.scalaz"    %% "scalaz-core"     % "7.2.1",
-    "org.scalatest" %% "scalatest"       % "2.2.5" % "test",
+    "org.scalatest" %% "scalatest"       % "2.2.5"  % "test",
+    "io.argonaut"   %% "argonaut"        % "6.2-M1" % "test",
     "io.argonaut"   %% "argonaut-scalaz" % "6.2-M1" % "test")
 }
 

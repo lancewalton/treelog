@@ -1,8 +1,9 @@
 import argonaut.Argonaut._
 import argonaut._
+import treelog._
+
+import scalaz.Scalaz._
 import scalaz._
-import Scalaz._
-import treelog.{ DescribedLogTreeLabel, LogTreeLabel, LogTreeSyntax, SerializableTree, UndescribedLogTreeLabel }
 
 case class Thing(id: Int, name: String)
 
@@ -57,6 +58,7 @@ object Codecs {
 }
 
 object SerializationExample extends App with LogTreeSyntax[Int] {
+
   val result = listOfThings() ~>* ("Here are some things", things)
 
   println("Before serialization:")
@@ -67,7 +69,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   // Here are some things
   //   Here I described Thing1 - [1]
   //   Here I described Thing2 - [2]
-  // 
+  //
   // The value is:
   // \/-(List(Hello Thing1, Hello Thing2))
 
@@ -76,6 +78,8 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   val serializableDescribedComputation: SerializableDescribedComputation[List[String]] = toSerializableForm(result)
 
   import Codecs._
+  import DecodeJsonScalaz._
+  import EncodeJsonScalaz._
 
   val json = serializableDescribedComputation.asJson.spaces2
 
@@ -126,11 +130,10 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     ]
   */
 
-  // Now let's deserialize.
-  val deserialized = for {
-    p <- Parse.parse(json)
-    ds <- p.as[SerializableDescribedComputation[List[String]]].toDisjunction
-  } yield fromSerializableForm(ds)
+  // Now let's deserialize
+  val parsed: \/[String, Json] = Parse.parse(json).disjunction
+  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither.disjunction)
+  val deserialized = decoded.map(ds => fromSerializableForm(ds))
 
   // That's all we need to do to deserialize
 
@@ -144,7 +147,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     // Here are some things
     //   Here I described Thing1 - [1]
     //   Here I described Thing2 - [2]
-    // 
+    //
     // The value is:
     // \/-(List(Hello Thing1, Hello Thing2))
 
@@ -169,7 +172,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     //   Things that have not been serialized and deserialized
     //     Here I described Thing3 - [3]
     //     Here I described Thing4 - [4]
-    // 
+    //
     // The value is:
     // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
   }
