@@ -172,4 +172,5 @@ modified entity.
 Resources
 ---------
 
-Channing's [blog](http://typelevel.org/blog/2013/10/18/treelog.html) at typelevel.
+* Channing's [blog](http://typelevel.org/blog/2013/10/18/treelog.html) at typelevel.
+* @oranda's [project](https://github.com/oranda/treelog-scalajs) on to give TreeLog a GUI, the ScalaJS ReactTreeView
