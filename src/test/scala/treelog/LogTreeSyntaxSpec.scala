@@ -1,11 +1,12 @@
 package treelog
 
-import org.scalatest._
+import org.scalatest.refspec.RefSpec
+import org.scalatest.MustMatchers
 import scalaz.Tree.{Leaf, Node}
 import scalaz._
 import Scalaz._
 
-class LogTreeSyntaxSpec extends Spec with MustMatchers {
+class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
 
   // we need this for tests. If you just use -\/("Fail") you end up with a \/[Nothing, String]

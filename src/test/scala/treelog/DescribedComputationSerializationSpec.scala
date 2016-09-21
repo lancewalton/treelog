@@ -1,10 +1,11 @@
 package treelog
 
-import org.scalatest._
+import org.scalatest.refspec.RefSpec
+import org.scalatest.MustMatchers
 import scalaz._
 import Scalaz._
 
-class DescribedComputationSerializationSpec extends Spec with MustMatchers {
+class DescribedComputationSerializationSpec extends RefSpec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
 
   def `toSerializableForm and fromSerializableForm are inverses`() = {
