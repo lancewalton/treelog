@@ -5,7 +5,7 @@ Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
 
 Publish Snapshots to sonatype
 ----
-  For snapshots make sure the version number has a -SNAPHOT suffix. To release to staging, remove the suffix.
+  For snapshots make sure the version number has a -SNAPSHOT suffix. To release to staging, remove the suffix.
   In both cases use 'sbt publish-signed'
 
 Release to sonatype
