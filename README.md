@@ -19,6 +19,14 @@ TreeLog achieves this remarkable feat with a Writer monad writing to a Tree repr
 Getting TreeLog
 ---------------
 
+For Scala 2.12.x and scalaz 7.3.x we have a snapshot version available:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.4.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.3.0-M6")
+```
+
 For Scala 2.11.x and scalaz 7.2.x:
 
 ```scala
