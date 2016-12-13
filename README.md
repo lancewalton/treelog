@@ -35,13 +35,17 @@ libraryDependencies ++= Seq(
     "org.scalaz" %% "scalaz-core" % "7.3.0-M6")
 ```
 
+For Scala 2.12.x and scalaz 7.1.x:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog-scalaz-71x" % "1.4.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.1.11")
+```
+
 For Scala 2.11.x and scalaz 7.2.x:
 
 ```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-)
-
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.3.0",
     "org.scalaz" %% "scalaz-core" % "7.2.0")
@@ -51,10 +55,6 @@ libraryDependencies ++= Seq(
 For Scala 2.11.x and scalaz 7.1.x:
 
 ```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-)
-
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.2.6",
     "org.scalaz" %% "scalaz-core" % "7.1.7")
@@ -63,10 +63,6 @@ libraryDependencies ++= Seq(
 For Scala 2.10.x
 
 ```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-)
-
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.2.2",
     "org.scalaz" %% "scalaz-core" % "7.0.6")
