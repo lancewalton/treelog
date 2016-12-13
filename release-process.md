@@ -1,3 +1,9 @@
+Multiple Scalaz Versions Supported
+----
+Master tracks the latest version of scalaz, branches track previous minor versions. eg. master scalaz 7.3, branches scalaz-7.2 and scalaz-7.1.  
+
+Master is the master, merge into the other branches to maintain docs and compatibility.
+
 Publish the scaladoc
 ----
 Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
@@ -5,7 +11,7 @@ Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
 
 Publish Snapshots to sonatype
 ----
-  For snapshots make sure the version number has a -SNAPHOT suffix. To release to staging, remove the suffix.
+  For snapshots make sure the version number has a -SNAPSHOT suffix. To release to staging, remove the suffix.
   In both cases use 'sbt publish-signed'
 
 Release to sonatype
@@ -23,3 +29,4 @@ Release to sonatype
   1. Wait ...
   1. Keep checking the Activity tab to see if there are any problems
   1. Look for the release in https://oss.sonatype.org/content/repositories/releases/com/casualmiracles/treelog_2.11
+  1. Bump the release version up with -SNAPSHOT extension
