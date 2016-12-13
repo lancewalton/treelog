@@ -3,7 +3,7 @@ Release Notes
 
 1.4.0
 -----
-  Upgrade to scala 2.12 and scalaz 7.3
+  Upgrade to scala 2.12
 
 1.3.0
 -----
