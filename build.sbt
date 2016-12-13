@@ -7,7 +7,7 @@ import sbt._
 
 val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
-  name := "treelog",
+  name := "treelog-scalaz-71x",
   version := "1.4.0-SNAPSHOT",
   scalaVersion := "2.12.1",
   scalaBinaryVersion := "2.12",
