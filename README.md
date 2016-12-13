@@ -19,25 +19,50 @@ TreeLog achieves this remarkable feat with a Writer monad writing to a Tree repr
 Getting TreeLog
 ---------------
 
-In SBT do this for Scala 2.11.x:
+For Scala 2.12.x and scalaz 7.3.x:
 
 ```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-)
-
 libraryDependencies ++= Seq(
-    "com.casualmiracles" %% "treelog" % "1.2.5",
+    "com.casualmiracles" %% "treelog" % "1.4.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.3.0-M6")
+```
+
+For Scala 2.12.x and scalaz 7.2.x:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog-scalaz-72x" % "1.4.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.2.8")
+```
+
+For Scala 2.12.x and scalaz 7.1.x:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog-scalaz-71x" % "1.4.0-SNAPSHOT",
+    "org.scalaz" %% "scalaz-core" % "7.1.11")
+```
+
+For Scala 2.11.x and scalaz 7.2.x:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.3.0",
+    "org.scalaz" %% "scalaz-core" % "7.2.0")
+```
+
+
+For Scala 2.11.x and scalaz 7.1.x:
+
+```scala
+libraryDependencies ++= Seq(
+    "com.casualmiracles" %% "treelog" % "1.2.6",
     "org.scalaz" %% "scalaz-core" % "7.1.7")
 ```
 
 For Scala 2.10.x
 
 ```scala
-resolvers ++= Seq(
-  "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-)
-
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.2.2",
     "org.scalaz" %% "scalaz-core" % "7.0.6")
@@ -159,4 +184,5 @@ modified entity.
 Resources
 ---------
 
-Channing's [blog](http://typelevel.org/blog/2013/10/18/treelog.html) at typelevel.
+* Channing's [blog](http://typelevel.org/blog/2013/10/18/treelog.html) at typelevel.
+* @oranda's [project](https://github.com/oranda/treelog-scalajs) to give TreeLog a GUI, the ScalaJS ReactTreeView
