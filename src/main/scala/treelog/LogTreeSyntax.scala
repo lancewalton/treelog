@@ -1,7 +1,7 @@
 package treelog
 
+import scalaz.{-\/, EitherT, Monad, Monoid, Show, Traverse, Tree, Writer, \/, \/-}
 import scalaz.Tree.{Leaf, Node}
-import scalaz._
 import scalaz.syntax.traverse._
 
 /**
