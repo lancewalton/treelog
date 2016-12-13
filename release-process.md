@@ -1,3 +1,9 @@
+Multiple Scalaz Versions Supported
+----
+Master tracks the latest version of scalaz, branches track previous minor versions. eg. master scalaz 7.3, branches scalaz-7.2 and scalaz-7.1.  
+
+Master is the master, merge into the other branches to maintain docs and compatibility.
+
 Publish the scaladoc
 ----
 Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
