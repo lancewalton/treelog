@@ -1,6 +1,5 @@
 import treelog.LogTreeSyntaxWithoutAnnotations._
-import scalaz._
-import Scalaz._
+import cats.implicits._
 
 object OptionsAndEithersExample extends App {
   val simple = "Calculating sum" ~< {
@@ -10,7 +9,7 @@ object OptionsAndEithersExample extends App {
       sum ← (x + y) ~> ("Sum is " + _)
     } yield sum
   }
-  println(simple.run.written.shows)
+  println(simple.value.written.show)
 
   val options = "Calculating option sum" ~< {
     for {
@@ -28,32 +27,32 @@ object OptionsAndEithersExample extends App {
     } yield sum
   }
 
-  println(noOptions.run.written.shows)
+  println(noOptions.value.written.show)
 
   val eithers = "Calculating either sum" ~< {
     for {
-      x ← 11.right[String] ~>? ("x = " + _)
-      y ← 2.right[String] ~>? ("y = " + _)
+      x ← 11.asRight[String] ~>? ("x = " + _)
+      y ← 2.asRight[String] ~>? ("y = " + _)
       sum ← (x + y) ~> (v ⇒ "Sum is " + v)
     } yield sum
   }
 
-  println(eithers.run.written.shows)
+  println(eithers.value.written.show)
 
   val leftEithers: DescribedComputation[Int] = "Calculating left either sum" ~< {
     for {
-      x ← 11.right[String] ~>? ("x = " + _)
-      y ← "fubar".left[Int] ~>? ("y = " + _)
+      x ← 11.asRight[String] ~>? ("x = " + _)
+      y ← "fubar".asLeft[Int] ~>? ("y = " + _)
       sum ← (x + y) ~> (v ⇒ "Sum is " + v)
     } yield sum
   }
 
-  val leftEitherWriter: LogTreeWriter[\/[String, Int]] = leftEithers.run
-  println(leftEitherWriter.written.shows)
+  val leftEitherWriter: LogTreeWriter[Either[String, Int]] = leftEithers.value
+  println(leftEitherWriter.written.show)
 
   leftEitherWriter.value match {
-    case \/-(sucessValue) ⇒ println(s"Success: $sucessValue")
-    case -\/(failureValue) ⇒ println(s"Failure: $failureValue")
+    case Right(sucessValue) ⇒ println(s"Success: $sucessValue")
+    case Left(failureValue) ⇒ println(s"Failure: $failureValue")
   }
 
 }

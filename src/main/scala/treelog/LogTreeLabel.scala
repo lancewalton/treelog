@@ -1,6 +1,6 @@
 package treelog
 
-import scalaz.Equal
+import cats.kernel.Eq
 
 sealed trait LogTreeLabel[Annotation] extends Product with Serializable {
   def success(): Boolean
@@ -17,7 +17,6 @@ final case class UndescribedLogTreeLabel[Annotation](success: Boolean, annotatio
 }
 
 object LogTreeLabel {
-  implicit def LogTreeLabelEqual[A]: Equal[LogTreeLabel[A]] = new Equal[LogTreeLabel[A]] {
-    def equal(a1: LogTreeLabel[A], a2: LogTreeLabel[A]): Boolean = a1 == a2
-  }
+  implicit def LogTreeLabelEqual[A]: Eq[LogTreeLabel[A]] =
+    Eq.fromUniversalEquals[LogTreeLabel[A]]
 }

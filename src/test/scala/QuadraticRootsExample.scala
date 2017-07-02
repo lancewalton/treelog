@@ -1,6 +1,5 @@
 import treelog.LogTreeSyntaxWithoutAnnotations._
-import scalaz._
-import Scalaz._
+import cats.implicits._
 
 object QuadraticRootsExample extends App {
 
@@ -8,7 +7,7 @@ object QuadraticRootsExample extends App {
 
   // Roots are real
   println("Success case:")
-  println(root(Parameters(2, 5, 3)).run.written.shows)
+  println(root(Parameters(2, 5, 3)).value.written.show)
 
   /*
 Extracting root
@@ -36,7 +35,7 @@ Extracting root
 
   // Roots are complex
   println("Failure case:")
-  println(root(Parameters(2, 5, 10)).run.written.shows)
+  println(root(Parameters(2, 5, 10)).value.written.show)
   /*
 Extracting root: Failed
   Calculating Numerator: Failed
