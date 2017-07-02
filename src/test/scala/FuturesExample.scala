@@ -1,6 +1,5 @@
 import treelog.LogTreeSyntaxWithoutAnnotations._
-import scalaz._
-import Scalaz._
+import cats.implicits._
 import scala.concurrent._
 import scala.concurrent.duration._
 
@@ -32,10 +31,10 @@ object FuturesExample extends App {
     "Summed up" ~<+ (computations, (bits: List[Int]) ⇒ bits.sum)
 
   val ans = Await.result(summedFuture, 1.second)
-  val log = ans.run.written
-  val sum = ans.run.value
-  println(log.shows)
-  println(sum.shows)
+  val log = ans.value.written
+  val sum = ans.value.value
+  println(log.show)
+  println(sum.show)
 
   /*
    * Output is

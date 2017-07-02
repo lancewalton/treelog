@@ -37,10 +37,10 @@ val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
 )
 
 val allDependencies = Seq(
-  "org.scalaz"    %% "scalaz-core"     % "7.3.0-M8",
-  "org.scalatest" %% "scalatest"       % "3.0.0"   % "test",
-  "io.argonaut"   %% "argonaut"        % "6.2-RC1" % "test",
-  "io.argonaut"   %% "argonaut-scalaz" % "6.2-RC1" % "test")
+  "org.typelevel" %% "cats"          % "0.9.0",
+  "org.scalatest" %% "scalatest"     % "3.0.3" % "test",
+  "io.argonaut"   %% "argonaut"      % "6.2"   % "test",
+  "io.argonaut"   %% "argonaut-cats" % "6.2"   % "test")
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
  * Instructions from sonatype: https://issues.sonatype.org/browse/OSSRH-2841?focusedCommentId=150049#comment-150049
