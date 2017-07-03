@@ -1,16 +1,15 @@
 import argonaut.Argonaut._
 import argonaut._
+import cats.Show
 import treelog._
-
-import scalaz.Scalaz._
-import scalaz._
+import cats.implicits._
 
 case class Thing(id: Int, name: String)
 
 object Thing {
   implicit val codec = casecodec2(Thing.apply, Thing.unapply)("id", "name")
   implicit val show = new Show[Int] {
-    override def shows(k: Int) = k.toString
+    override def show(k: Int) = k.toString
   }
 }
 
@@ -78,8 +77,6 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   val serializableDescribedComputation: SerializableDescribedComputation[List[String]] = toSerializableForm(result)
 
   import Codecs._
-  import DecodeJsonScalaz._
-  import EncodeJsonScalaz._
 
   val json = serializableDescribedComputation.asJson.spaces2
 
@@ -131,8 +128,8 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   */
 
   // Now let's deserialize
-  val parsed: \/[String, Json] = Parse.parse(json).disjunction
-  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither.disjunction)
+  val parsed: Either[String, Json] = Parse.parse(json)
+  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither)
   val deserialized = decoded.map(ds => fromSerializableForm(ds))
 
   // That's all we need to do to deserialize
@@ -178,11 +175,11 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   }
 
   private def showDescribedComputation(dc: DescribedComputation[List[String]]): Unit = {
-    val runResult = dc.run
+    val runResult = dc.value
 
     // This will not compile unless we define a scalaz.Show for Thing (as above)
     println("The log is:")
-    println(runResult.written.shows)
+    println(runResult.written.show)
 
     println
     println("The value is:")
