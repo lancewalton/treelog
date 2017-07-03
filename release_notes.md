@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.4.1-SNAPSHOT
+--------------
+Added cats version
+
 1.4.0
 -----
   Upgrade to scala 2.12 and scalaz 7.3
