@@ -52,7 +52,7 @@ object OptionsAndEithersExample extends App {
   println(leftEitherWriter.written.shows)
 
   leftEitherWriter.value match {
-    case \/-(sucessValue) ⇒ println(s"Success: $sucessValue")
+    case \/-(successValue) ⇒ println(s"Success: $successValue")
     case -\/(failureValue) ⇒ println(s"Failure: $failureValue")
   }
 
