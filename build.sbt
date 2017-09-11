@@ -36,11 +36,15 @@ val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
   }
 )
 
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+
 val allDependencies = Seq(
-  "org.scalaz"    %% "scalaz-core"     % "7.3.0-M8",
-  "org.scalatest" %% "scalatest"       % "3.0.0"   % "test",
-  "io.argonaut"   %% "argonaut"        % "6.2-RC1" % "test",
-  "io.argonaut"   %% "argonaut-scalaz" % "6.2-RC1" % "test")
+  "org.scalaz"    %% "scalaz-core"               % "7.3.0-M8",
+  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M8" % "test",
+  "org.scalatest" %% "scalatest"                 % "3.0.0"    % "test",
+  "io.argonaut"   %% "argonaut"                  % "6.2-RC1"  % "test",
+  "io.argonaut"   %% "argonaut-scalaz"           % "6.2-RC1"  % "test")
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
  * Instructions from sonatype: https://issues.sonatype.org/browse/OSSRH-2841?focusedCommentId=150049#comment-150049
