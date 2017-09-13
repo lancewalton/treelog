@@ -1,8 +1,9 @@
 package treelog
 
-import org.scalacheck.{Arbitrary, Properties}
+import org.scalacheck.{Arbitrary, Prop, Properties}
 import treelog.LogTreeSyntaxWithoutAnnotations._
 
+import scala.collection.mutable.ListBuffer
 import scala.language.higherKinds
 import scalaz.Scalaz._
 import scalaz._
@@ -10,7 +11,7 @@ import scalaz.scalacheck.ScalazProperties._
 
 class DescribedComputationTSpec extends Properties("DescribedComputationTSpec") {
 
-  def checkAll(props: Properties) {
+  def checkAll(props: Properties): Seq[ListBuffer[(String, Prop)]] = {
     for ((name, prop) <- props.properties) yield {
       property(name) = prop
     }
