@@ -26,7 +26,7 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
 
     def map[B](f: A => B)(implicit F: Functor[F]): DescribedComputationT[F, B] = DescribedComputationT(F.map(self.run)(_ map f))
 
-    //def mapT[G[_], B](f: F[DescribedComputation[A]] => G[DescribedComputation[B]]): DescribedComputationT[G, B] = DescribedComputationT(f(self.run))
+    def mapT[G[_], B](f: F[DescribedComputation[A]] => G[DescribedComputation[B]]): DescribedComputationT[G, B] = DescribedComputationT(f(self.run))
 
     def flatMap[B](f: A => DescribedComputationT[F, B])(implicit F: Monad[F]): DescribedComputationT[F, B]
     = {
