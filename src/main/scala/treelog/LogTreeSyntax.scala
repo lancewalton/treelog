@@ -412,7 +412,7 @@ trait LogTreeSyntax[Annotation] {
       val children = monad.map(parts)(_._2).toList
       val branch   = Node(DescribedLogTreeLabel(description, allSuccessful(children), Set[Annotation]()), children.toStream)
 
-      describedComputations.sequenceU.value.run._2 match {
+      describedComputations.sequence.value.run._2 match {
         case Left(_) ⇒ failure(description, branch)
         case Right(v) ⇒ success(f(v), branch)
       }

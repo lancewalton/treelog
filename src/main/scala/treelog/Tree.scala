@@ -36,11 +36,11 @@ sealed abstract class Tree[A] {
 
     def drawSubTrees(s: Stream[Tree[A]]): Trampoline[Vector[StringBuilder]] = s match {
       case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
-      case t #:: ts if ts.isEmpty => suspend(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
+      case t #:: ts if ts.isEmpty => defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
       case t #:: ts =>
         for {
-          subtree <- suspend(t.draw)
-          otherSubtrees <- suspend(drawSubTrees(ts))
+          subtree <- defer(t.draw)
+          otherSubtrees <- defer(drawSubTrees(ts))
         } yield new StringBuilder("|") +: (shift(branch, trunk, subtree) ++ otherSubtrees)
     }
 

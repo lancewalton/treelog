@@ -1,15 +1,8 @@
-import com.typesafe.sbt.SbtGhPages._
-import com.typesafe.sbt.SbtGit.{git, _}
-import com.typesafe.sbt.SbtSite.SiteKeys._
-import com.typesafe.sbt.SbtSite._
-import sbt.Keys._
-import sbt._
-
 val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog-cats",
   version := "1.4.1-SNAPSHOT",
-  scalaVersion := "2.12.2",
+  scalaVersion := "2.12.4",
   scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
     "-language:_",
@@ -24,20 +17,20 @@ val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Xfuture",
-    "-Ywarn-unused-import"),
-  incOptions := incOptions.value.withNameHashing(true)
+    "-Ywarn-unused-import",
+    "-Ypartial-unification")
 )
 
-site.includeScaladoc()
-val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
-  git.remoteRepo := "git@github.com:lancewalton/treelog.git",
-  siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) ⇒
-    for((f, d) ← m) yield (f, if (v.trim.endsWith("SNAPSHOT")) "api/master/" + d else "api/treelog-" + v + "/" + d)
-  }
+enablePlugins(GhpagesPlugin)
+enablePlugins(SiteScaladocPlugin)
+
+val websiteSettings = Seq[Setting[_]](
+  git.remoteRepo := "git@github.com:lancewalton/treelog.git"
 )
 
 val allDependencies = Seq(
-  "org.typelevel" %% "cats"          % "0.9.0",
+  "org.typelevel" %% "cats-core"     % "1.0.0",
+  "org.typelevel" %% "cats-free"     % "1.0.0",
   "org.scalatest" %% "scalatest"     % "3.0.3" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2"   % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2"   % "test")
@@ -54,9 +47,9 @@ def publishSettings: Seq[Setting[_]] = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ ⇒ false },
-  publishTo <<= version { v: String ⇒
+  publishTo := {
     val nexus = "https://oss.sonatype.org/"
-    if (v.trim.endsWith("SNAPSHOT"))
+    if (isSnapshot.value)
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
@@ -89,10 +82,8 @@ def publishSettings: Seq[Setting[_]] = Seq(
       </developer>
     </developers>)
 
-lazy val treeLog = Project(
-  "treeLog",
-  file("."),
-  settings =
+lazy val treeLog = (project in file("."))
+  .settings(
     buildSettings ++
     publishSettings ++
     websiteSettings ++
