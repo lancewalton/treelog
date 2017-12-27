@@ -31,9 +31,9 @@ resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
 
 val allDependencies = Seq(
-  "org.scalaz"    %% "scalaz-core"               % "7.3.0-M8",
-  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M8" % "test",
-  "org.scalaz"    %% "scalaz-effect"             % "7.3.0-M8" % "test",
+  "org.scalaz"    %% "scalaz-core"               % "7.3.0-M18",
+  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M18" % "test",
+  "org.scalaz"    %% "scalaz-effect"             % "7.3.0-M18" % "test",
   "org.scalatest" %% "scalatest"                 % "3.0.0"    % "test",
   "io.argonaut"   %% "argonaut"                  % "6.2-RC1"  % "test",
   "io.argonaut"   %% "argonaut-scalaz"           % "6.2-RC1"  % "test")
