@@ -30,7 +30,7 @@ For Scala 2.12.x and scalaz 7.3.x:
 ```scala
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog" % "1.4.0",
-    "org.scalaz" %% "scalaz-core" % "7.3.0-M18")
+    "org.scalaz" %% "scalaz-core" % "7.3.0-M6")
 ```
 
 For Scala 2.12.x and scalaz 7.2.x:
@@ -38,7 +38,7 @@ For Scala 2.12.x and scalaz 7.2.x:
 ```scala
 libraryDependencies ++= Seq(
     "com.casualmiracles" %% "treelog-scalaz-72x" % "1.4.0",
-    "org.scalaz" %% "scalaz-core" % "7.2.18")
+    "org.scalaz" %% "scalaz-core" % "7.2.8")
 ```
 
 For Scala 2.12.x and scalaz 7.1.x:
