@@ -8,7 +8,7 @@ Master is the master, merge into the other branches to maintain docs and compati
 
 Publish the Scaladoc
 --------------------
-Publish the scaladoc to gh-pages: sbt "doc make-site ghpages-push-site"
+Publish the scaladoc to gh-pages: sbt "doc makeSite ghpagesPushSite"
 
    SNAPSHOT versions have docs generated under /api/master, but release versions are under /api/treelog-x.y.z
 
