@@ -1,0 +1,721 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../lib/jquery.js"></script>
+      <script type="text/javascript" src="../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../lib/index.js"></script>
+      <script type="text/javascript" src="../index.js"></script>
+      <script type="text/javascript" src="../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../lib/template.js"></script>
+      <script type="text/javascript" src="../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html"><span class="name">root</span></a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.treelog" visbl="pub" class="indented1 current" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="treelog"></a><a id="treelog:treelog"></a>
+      <span class="permalink">
+      <a href="index.html#treelog" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">treelog</span>
+      </span>
+      
+      <p class="shortcomment cmt">TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.</p><div class="fullcomment"><div class="comment cmt"><h3>Introduction</h3><p>TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.</p><p>It is often necessary to understand exactly what happened in a computation, not just that it succeeded or failed, but what was actually done
+and with what data. TreeLog produces a description of a computation (along with a result) as a hierarchical log of
+computations that led to the result. The tree could be logged as text or stored in a database so that users can see
+a detailed audit trail of the processing that has occurred for particular entities.</p><p>Note that in the remainder of this document, results of producing log trees will be shown by rendering
+the tree textually, but that is only one possible way.</p><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+a process that affects multiple entities, and you want to ensure that the audit trail is associated with each of the modified entities.</p><h3>DescribedComputation</h3><p>All of this works by <i>fting</i> the intermediate and final results of computations and the description of the steps into a type called <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>
+(declared in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>).</p><h4>Some Simple Lifting</h4><p>You can produce a <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> very simply with many of the methods in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>. The simplest few are:</p><pre><span class="cmt">// This is a concrete implementation of LogTreeSyntax that is provided for you</span>
+<span class="cmt">// to use if you don't need to use annotations (see later)</span>
+<span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+
+<span class="kw">val</span> result1 = success(<span class="num">2</span> * <span class="num">3</span>, <span class="lit">"Calculated product"</span>)
+<span class="cmt">// result1 is now a DescribedComputation and carries the successful result and</span>
+<span class="cmt">// a single node tree telling us that the product was calculated. See below for how to</span>
+<span class="cmt">// extract these things.</span>
+
+<span class="kw">val</span> result2 = failure(<span class="lit">"It's all wrong"</span>)
+<span class="cmt">// result2 is now a DescribedComputation whose value and tree both tell us that things</span>
+<span class="cmt">// went wrong</span>
+
+<span class="kw">val</span> result3 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; <span class="lit">"Calculated product"</span>
+<span class="cmt">// The same as result1</span>
+
+ <span class="kw">val</span> result4 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; (p <span class="kw">=&gt;</span> <span class="lit">"Calculated product: "</span> + p)
+<span class="cmt">// The same as result1, except the description in the tree node will be "Calculated product: 6"</span></pre><p><i>result3</i> and <i>result4</i> above introduce the first pieces of syntax related to producing
+<i>DescribedComputations</i>. In this case it lifts the value into the <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>
+and creates a leaf node in the associated log tree. See <a href="LogTreeSyntax$LeafSyntax.html" class="extype" name="treelog.LogTreeSyntax.LeafSyntax">LeafSyntax</a> for
+related simple syntax for leaves.</p><h4> Extracting the Result and Log </h4><p>When a computation result is <i>lifted</i> into a <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> by one of the many methods
+in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> trait, it is possible to retrieve the <i>value</i> of the computation like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
+<span class="kw">val</span> value = foo.run.value
+<span class="cmt">// value will now be equal to scalaz.\/-(1), which represents a successful computation.</span></pre><p>The <i>value</i> is a scalaz <i>Either</i> (scalaz.\/). Following the usual convention:</p><ul><li>If it a <i>left</i> (-\/) then the computation is a failure.</li><li>If it is a <i>right</i> (\/-), then the computation is a success.</li></ul><p>Likewise, it is possible to retrieve the log tree like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
+<span class="kw">val</span> logtree = foo.run.written
+<span class="cmt">// logtree will now be an instance of LogTree which is a type alias which in this case expands to:</span>
+<span class="cmt">// Tree[LogTreeLabel[Nothing]](DescribedLogTreeLabel[Nothing]("Here's one", true, Set[Nothing]())</span>
+<span class="cmt">// Where:</span>
+<span class="cmt">//   - "Here's one" is the description provided in the declaration of foo</span>
+<span class="cmt">//   - true indicates that the computation represented by the node was successful</span>
+<span class="cmt">//   - the empty set represents the annotations specified for this node</span></pre><p>It may seem strange that both the <i>value</i> and the log tree provide indications of success and failure (the <i>value</i>
+through the use of <i>scalaz.\/</i>, and the log tree with a <i>boolean</i> property in the <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a> label).
+The reason for this is that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy
+is tried which succeeds leading to a successful overall result.</p><h4> More Comprehensive Computations </h4><p>(An extended example of this kind of thing is the
+<a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example on GitHub</a>)</p><p>Generally, once a value has been lifted, it is a good idea to keep working with it in that form for as long
+as possible before accessing the <i>value</i> and <i>written</i> properties. Think monadically!
+The examples above show a value being lifted into the DescribedComputation. To continue to work monadically,
+for-comprehensions come into play:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> result = <span class="kw">for</span> {
+   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(3) (i.e. a successful computation of 1 + 2)</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// No description</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span></pre><p>(For those struggling with the full power of for-comprehensions, I suggest turning the above example into its unsugared flatmap/map form
+to see what is going on. The central point is that <i>foo</i> will have the value 1, <i>bar</i> will have the value 2, and
+<i>foobar</i> will have the value 3; the monadic stuff all happens in the background.)</p><h4> Non-Leaf Nodes </h4><p>Non-leaf nodes (branches) are created explicitly by the developer or implicitly by the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> under
+various conditions.</p><p>The log tree above has a root node with 'No description' and three child (leaf) nodes with descriptions obviously obtained from the
+arguments to the right of the <i>~&gt;</i> operators in the for-comprehension. This is because the three leaf nodes explicitly
+created in that for-comprehension need to be placed somewhere while the log tree is produced. An obvious thing to do was to make them
+child nodes of a branch, which <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> does, using some rules for when to create a new branch to
+contain existing children and when to just add new children to an existing branch.</p><p>However, at the time the branch is created there is no ready description available for it, hence the &quot;No description&quot; text when the tree is
+shown using the <i>scalaz.Show</i> defined for it. Producing a hierarchical log isn't much use if we
+can't describe the non-leaf elements. We can provide a description in two ways (this looks ugly, but read and it will get more elegant&#8230;):</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> result = <span class="kw">for</span> {
+   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+
+
+<span class="kw">val</span> resultWithDescription1 = result ~&gt; <span class="lit">"Adding up"</span>
+println(resultWithDescription1.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Adding up</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span>
+
+<span class="kw">val</span> resultWithDescription2 = <span class="lit">"Adding up"</span> ~&lt; result
+println(resultWithDescription2.run.written.shows)
+<span class="cmt">// Will also print:</span>
+<span class="cmt">// Adding up</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span></pre><p>The first approach (<i>resultWithDescription1</i> using <i>~gt;</i>) will generally be used when a method/function used to provide an intermediate result
+in the middle of a for-comprehension returns an undescribed root node. Then the code flows quite nicely thus:</p><pre><span class="kw">val</span> result = <span class="kw">for</span> {
+   something <span class="kw">&lt;-</span> doSomething() ~&gt; <span class="lit">"Something has been done"</span>
+   more <span class="kw">&lt;-</span> doMore(something) ~&gt; <span class="lit">"More has been done"</span>
+  } <span class="kw">yield</span> more</pre><p>Here, <i>doSomething()</i> and <i>doMore(...)</i> return DescribedComputations carrying a log tree with an undescribed root node.
+They have been given descriptions in the above for-comprehension.</p><p>The second approach (<i>resultWithDescription2</i> using <i>~&lt;</i>) will generally be used when a for-comprehension yields a
+<a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> (which will always have a log tree with an undescribed root node if the for-comprehension has more than
+one generator), and you want to immediately give the root node a description. In this case, it is more natural to write:</p><pre><span class="kw">val</span> result = <span class="lit">"Adding up"</span> ~&lt; {
+  <span class="kw">for</span> {
+    foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _)
+    bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _)
+    foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+}</pre><p>Both of these approaches are demonstrated in the
+<a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example</a>. There is no good
+reason for mixing the two approaches in that example, other than for purposes of demonstration.</p><p><i>~&lt;</i> works not only for <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>, but for any <i>F[DescribedComputation]</i> as long as
+<i>F</i> has a <i>scalaz.Monad</i> and a <i>scalaz.Traverse</i> defined and available in implicit scope.
+See <a href="LogTreeSyntax$BranchLabelingSyntax.html" class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax">BranchLabelingSyntax</a>.</p><h3> Special Lifting </h3><h4> Boolean, Option and \/ </h4><p><i>Boolean</i>, <i>Option</i> and <i>\/</i> (scalaz's <i>Either</i>), have some special syntax <i>~&gt;?</i> associated with
+them to allow <i>true</i>, <i>Some(.)</i> and <i>\/-(.)</i> to be treated as successful computational outcomes, and
+<i>false</i>, <i>None</i> and <i>-\/(.)</i> to be treated as failure conditions. For example:</p><pre><span class="kw">val</span> result = <span class="kw">false</span> ~&gt;? <span class="lit">"Doing a thing with a Boolean"</span>
+println(result.run.value)
+<span class="cmt">// Will print -\/(Doing a thing with a Boolean) (note that it's a ''left'')</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p><i>~&gt;?</i> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
+or for different descriptions to be given in the success versus failure case. Also, in the case of <i>Option</i> and <i>\/</i>,
+overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
+<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
+<i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
+means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
+to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
+to take all of the 'values' (<i>vs</i>) contained in the list of <i>DescribedComputations</i> thus produced, and create a new
+<a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> whose value is <i>vs</i> and whose log tree is a branch with a description and whose children
+are the log trees resulting from each application of <i>f(.)</i>.</p><p>We needed to do precisely that very often, so we wrote some syntax for it:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.list._
+
+<span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x <span class="kw">=&gt;</span> (x * <span class="num">2</span>) ~&gt; (y <span class="kw">=&gt;</span> s<span class="lit">"Double $x = $y"</span>))
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(List(2, 4, 6))</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Double the values</span>
+<span class="cmt">//   Double 1 = 2</span>
+<span class="cmt">//   Double 2 = 4</span>
+<span class="cmt">//   Double 3 = 6</span></pre><p>This is particularly useful if there is a possibility that <i>f(.)</i> can produce <i>DescribedComputations</i> that represent failures,
+because hoisting children into a branch of a log tree gives the branch a successful status only if all of the children are successful (this is true
+of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x <span class="kw">=&gt;</span> (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>)
+
+println(result.run.value)
+<span class="cmt">// Will print -\/(All even) - Notice that it's a 'left', meaning failure</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: All even</span>
+<span class="cmt">//   Failed: Testing if 1 is even</span>
+<span class="cmt">//   Testing if 2 is even</span>
+<span class="cmt">//   Failed: Testing if 3 is even</span></pre><p><i>~&gt;*</i> works not only for <i>List</i>, but for all kinds that have a <i>scalaz.Monad</i> and a <i>scalaz.Traverse</i>
+defined and available in implicit scope. See <a href="LogTreeSyntax$TraversableMonadSyntax.html" class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax">TraversableMonadSyntax</a>.</p><p>Another common thing you might want to do with a collection of DescribedComputations is retain their logs as children of a parent whose value
+is some function of the child values. Here is an example of summing the result of several computations:</p><pre><span class="kw">val</span> parts = <span class="std">List</span>(<span class="num">1</span> ~&gt; <span class="lit">"One"</span>, <span class="num">2</span> ~&gt; <span class="lit">"Two"</span>)
+<span class="kw">val</span> summed = <span class="lit">"Sum"</span> ~&lt;+ (parts, (bits: <span class="std">List</span>[<span class="std">Int</span>]) <span class="kw">=&gt;</span> bits.sum)
+
+println(summed.run.written.shows)
+<span class="cmt">// Will print:</span>
+Sum
+  One
+  Two
+
+println(summed.run.value)
+<span class="cmt">// Will print \/-(3)</span></pre><h4> Annotations </h4><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
+the annotation facility to carry the key (or something richer) for each modified entity.</p><p>The <i>~~</i> operator (see <a href="LogTreeSyntax$AnnotationsSyntax.html" class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax">AnnotationsSyntax</a>) is provided for this purpose. It can be applied to
+any <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> and it will add the given annotation to the set of annotations at the current root node of the log
+tree. Annotations can be of any type, but must all be of the same type for a particular log tree. You choose the type of annotations by instantiating
+the 'Annotation' type parameter of <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p><p>Here is a simple example using <i>Strings</i> as the annotations type:</p><pre><span class="kw">val</span> stringAnnotateableLogTreeSyntax = <span class="kw">new</span> treelog.LogTreeSyntax[<span class="std">String</span>] {}
+<span class="kw">import</span> stringAnnotateableLogTreeSyntax._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.string._
+
+<span class="kw">val</span> result = <span class="num">1</span> ~&gt; <span class="lit">"This is the description"</span> ~~ <span class="lit">"This is the annotation"</span>
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(1)</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// This is the description - ["This is the annotation"]</span></pre><p>See the <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala" target="_blank">annotations example</a>
+for a more comprehensive example.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="DescribedLogTreeLabel.html" title=""></a>
+                        <a href="DescribedLogTreeLabel.html" title="">DescribedLogTreeLabel</a>
+                      </li><li class="current-entities indented1">
+                        <a class="object" href="LogTreeLabel$.html" title=""></a>
+                        <a class="trait" href="LogTreeLabel.html" title=""></a>
+                        <a href="LogTreeLabel.html" title="">LogTreeLabel</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="trait" href="LogTreeSyntax.html" title="See the treelog package documentation for a brief introduction to treelog and also, examples on GitHub to get started."></a>
+                        <a href="LogTreeSyntax.html" title="See the treelog package documentation for a brief introduction to treelog and also, examples on GitHub to get started.">LogTreeSyntax</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="object" href="LogTreeSyntaxWithoutAnnotations$.html" title=""></a>
+                        <a href="LogTreeSyntaxWithoutAnnotations$.html" title="">LogTreeSyntaxWithoutAnnotations</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="SerializableTree.html" title=""></a>
+                        <a href="SerializableTree.html" title="">SerializableTree</a>
+                      </li><li class="current-entities indented1">
+                        <span class="separator"></span>
+                        <a class="class" href="UndescribedLogTreeLabel.html" title=""></a>
+                        <a href="UndescribedLogTreeLabel.html" title="">UndescribedLogTreeLabel</a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="package value">
+      <div id="definition">
+        <div class="big-circle package">p</div>
+        
+        <h1>treelog<span class="permalink">
+      <a href="../treelog/index.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">treelog</span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><h3>Introduction</h3><p>TreeLog enables logging as a tree structure so that comprehensive logging does not become incomprehensible.</p><p>It is often necessary to understand exactly what happened in a computation, not just that it succeeded or failed, but what was actually done
+and with what data. TreeLog produces a description of a computation (along with a result) as a hierarchical log of
+computations that led to the result. The tree could be logged as text or stored in a database so that users can see
+a detailed audit trail of the processing that has occurred for particular entities.</p><p>Note that in the remainder of this document, results of producing log trees will be shown by rendering
+the tree textually, but that is only one possible way.</p><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+a process that affects multiple entities, and you want to ensure that the audit trail is associated with each of the modified entities.</p><h3>DescribedComputation</h3><p>All of this works by <i>fting</i> the intermediate and final results of computations and the description of the steps into a type called <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>
+(declared in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>).</p><h4>Some Simple Lifting</h4><p>You can produce a <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> very simply with many of the methods in <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>. The simplest few are:</p><pre><span class="cmt">// This is a concrete implementation of LogTreeSyntax that is provided for you</span>
+<span class="cmt">// to use if you don't need to use annotations (see later)</span>
+<span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+
+<span class="kw">val</span> result1 = success(<span class="num">2</span> * <span class="num">3</span>, <span class="lit">"Calculated product"</span>)
+<span class="cmt">// result1 is now a DescribedComputation and carries the successful result and</span>
+<span class="cmt">// a single node tree telling us that the product was calculated. See below for how to</span>
+<span class="cmt">// extract these things.</span>
+
+<span class="kw">val</span> result2 = failure(<span class="lit">"It's all wrong"</span>)
+<span class="cmt">// result2 is now a DescribedComputation whose value and tree both tell us that things</span>
+<span class="cmt">// went wrong</span>
+
+<span class="kw">val</span> result3 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; <span class="lit">"Calculated product"</span>
+<span class="cmt">// The same as result1</span>
+
+ <span class="kw">val</span> result4 = (<span class="num">2</span> * <span class="num">3</span>) ~&gt; (p <span class="kw">=&gt;</span> <span class="lit">"Calculated product: "</span> + p)
+<span class="cmt">// The same as result1, except the description in the tree node will be "Calculated product: 6"</span></pre><p><i>result3</i> and <i>result4</i> above introduce the first pieces of syntax related to producing
+<i>DescribedComputations</i>. In this case it lifts the value into the <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>
+and creates a leaf node in the associated log tree. See <a href="LogTreeSyntax$LeafSyntax.html" class="extype" name="treelog.LogTreeSyntax.LeafSyntax">LeafSyntax</a> for
+related simple syntax for leaves.</p><h4> Extracting the Result and Log </h4><p>When a computation result is <i>lifted</i> into a <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> by one of the many methods
+in the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> trait, it is possible to retrieve the <i>value</i> of the computation like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
+<span class="kw">val</span> value = foo.run.value
+<span class="cmt">// value will now be equal to scalaz.\/-(1), which represents a successful computation.</span></pre><p>The <i>value</i> is a scalaz <i>Either</i> (scalaz.\/). Following the usual convention:</p><ul><li>If it a <i>left</i> (-\/) then the computation is a failure.</li><li>If it is a <i>right</i> (\/-), then the computation is a success.</li></ul><p>Likewise, it is possible to retrieve the log tree like this:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">val</span> foo = <span class="num">1</span> ~&gt; <span class="lit">"Here's one"</span>
+<span class="kw">val</span> logtree = foo.run.written
+<span class="cmt">// logtree will now be an instance of LogTree which is a type alias which in this case expands to:</span>
+<span class="cmt">// Tree[LogTreeLabel[Nothing]](DescribedLogTreeLabel[Nothing]("Here's one", true, Set[Nothing]())</span>
+<span class="cmt">// Where:</span>
+<span class="cmt">//   - "Here's one" is the description provided in the declaration of foo</span>
+<span class="cmt">//   - true indicates that the computation represented by the node was successful</span>
+<span class="cmt">//   - the empty set represents the annotations specified for this node</span></pre><p>It may seem strange that both the <i>value</i> and the log tree provide indications of success and failure (the <i>value</i>
+through the use of <i>scalaz.\/</i>, and the log tree with a <i>boolean</i> property in the <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a> label).
+The reason for this is that part of a computation may fail (which we want to indicate in the log tree), but then a different strategy
+is tried which succeeds leading to a successful overall result.</p><h4> More Comprehensive Computations </h4><p>(An extended example of this kind of thing is the
+<a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example on GitHub</a>)</p><p>Generally, once a value has been lifted, it is a good idea to keep working with it in that form for as long
+as possible before accessing the <i>value</i> and <i>written</i> properties. Think monadically!
+The examples above show a value being lifted into the DescribedComputation. To continue to work monadically,
+for-comprehensions come into play:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> result = <span class="kw">for</span> {
+   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(3) (i.e. a successful computation of 1 + 2)</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// No description</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span></pre><p>(For those struggling with the full power of for-comprehensions, I suggest turning the above example into its unsugared flatmap/map form
+to see what is going on. The central point is that <i>foo</i> will have the value 1, <i>bar</i> will have the value 2, and
+<i>foobar</i> will have the value 3; the monadic stuff all happens in the background.)</p><h4> Non-Leaf Nodes </h4><p>Non-leaf nodes (branches) are created explicitly by the developer or implicitly by the <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> under
+various conditions.</p><p>The log tree above has a root node with 'No description' and three child (leaf) nodes with descriptions obviously obtained from the
+arguments to the right of the <i>~&gt;</i> operators in the for-comprehension. This is because the three leaf nodes explicitly
+created in that for-comprehension need to be placed somewhere while the log tree is produced. An obvious thing to do was to make them
+child nodes of a branch, which <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a> does, using some rules for when to create a new branch to
+contain existing children and when to just add new children to an existing branch.</p><p>However, at the time the branch is created there is no ready description available for it, hence the &quot;No description&quot; text when the tree is
+shown using the <i>scalaz.Show</i> defined for it. Producing a hierarchical log isn't much use if we
+can't describe the non-leaf elements. We can provide a description in two ways (this looks ugly, but read and it will get more elegant&#8230;):</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+
+<span class="kw">val</span> result = <span class="kw">for</span> {
+   foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _) <span class="cmt">// Using the overload of ~> that gives us the ''value''</span>
+   bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _) <span class="cmt">// so that we can include it in the log messages</span>
+   foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+
+
+<span class="kw">val</span> resultWithDescription1 = result ~&gt; <span class="lit">"Adding up"</span>
+println(resultWithDescription1.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Adding up</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span>
+
+<span class="kw">val</span> resultWithDescription2 = <span class="lit">"Adding up"</span> ~&lt; result
+println(resultWithDescription2.run.written.shows)
+<span class="cmt">// Will also print:</span>
+<span class="cmt">// Adding up</span>
+<span class="cmt">//   foo = 1</span>
+<span class="cmt">//   bar = 2</span>
+<span class="cmt">//   foobar = 3</span></pre><p>The first approach (<i>resultWithDescription1</i> using <i>~gt;</i>) will generally be used when a method/function used to provide an intermediate result
+in the middle of a for-comprehension returns an undescribed root node. Then the code flows quite nicely thus:</p><pre><span class="kw">val</span> result = <span class="kw">for</span> {
+   something <span class="kw">&lt;-</span> doSomething() ~&gt; <span class="lit">"Something has been done"</span>
+   more <span class="kw">&lt;-</span> doMore(something) ~&gt; <span class="lit">"More has been done"</span>
+  } <span class="kw">yield</span> more</pre><p>Here, <i>doSomething()</i> and <i>doMore(...)</i> return DescribedComputations carrying a log tree with an undescribed root node.
+They have been given descriptions in the above for-comprehension.</p><p>The second approach (<i>resultWithDescription2</i> using <i>~&lt;</i>) will generally be used when a for-comprehension yields a
+<a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> (which will always have a log tree with an undescribed root node if the for-comprehension has more than
+one generator), and you want to immediately give the root node a description. In this case, it is more natural to write:</p><pre><span class="kw">val</span> result = <span class="lit">"Adding up"</span> ~&lt; {
+  <span class="kw">for</span> {
+    foo <span class="kw">&lt;-</span> <span class="num">1</span> ~&gt; (<span class="lit">"foo = "</span> + _)
+    bar <span class="kw">&lt;-</span> <span class="num">2</span> ~&gt; (<span class="lit">"bar = "</span> + _)
+    foobar <span class="kw">&lt;-</span> (foo + bar) ~&gt; (<span class="lit">"foobar = "</span> + _)
+  } <span class="kw">yield</span> foobar
+}</pre><p>Both of these approaches are demonstrated in the
+<a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/QuadraticRootsExample.scala" target="_blank">quadratic roots example</a>. There is no good
+reason for mixing the two approaches in that example, other than for purposes of demonstration.</p><p><i>~&lt;</i> works not only for <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>, but for any <i>F[DescribedComputation]</i> as long as
+<i>F</i> has a <i>scalaz.Monad</i> and a <i>scalaz.Traverse</i> defined and available in implicit scope.
+See <a href="LogTreeSyntax$BranchLabelingSyntax.html" class="extype" name="treelog.LogTreeSyntax.BranchLabelingSyntax">BranchLabelingSyntax</a>.</p><h3> Special Lifting </h3><h4> Boolean, Option and \/ </h4><p><i>Boolean</i>, <i>Option</i> and <i>\/</i> (scalaz's <i>Either</i>), have some special syntax <i>~&gt;?</i> associated with
+them to allow <i>true</i>, <i>Some(.)</i> and <i>\/-(.)</i> to be treated as successful computational outcomes, and
+<i>false</i>, <i>None</i> and <i>-\/(.)</i> to be treated as failure conditions. For example:</p><pre><span class="kw">val</span> result = <span class="kw">false</span> ~&gt;? <span class="lit">"Doing a thing with a Boolean"</span>
+println(result.run.value)
+<span class="cmt">// Will print -\/(Doing a thing with a Boolean) (note that it's a ''left'')</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p><i>~&gt;?</i> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
+or for different descriptions to be given in the success versus failure case. Also, in the case of <i>Option</i> and <i>\/</i>,
+overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
+<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
+<i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
+means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
+to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
+to take all of the 'values' (<i>vs</i>) contained in the list of <i>DescribedComputations</i> thus produced, and create a new
+<a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> whose value is <i>vs</i> and whose log tree is a branch with a description and whose children
+are the log trees resulting from each application of <i>f(.)</i>.</p><p>We needed to do precisely that very often, so we wrote some syntax for it:</p><pre><span class="kw">import</span> treelog.LogTreeSyntaxWithoutAnnotations._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.list._
+
+<span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"Double the values"</span>, x <span class="kw">=&gt;</span> (x * <span class="num">2</span>) ~&gt; (y <span class="kw">=&gt;</span> s<span class="lit">"Double $x = $y"</span>))
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(List(2, 4, 6))</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Double the values</span>
+<span class="cmt">//   Double 1 = 2</span>
+<span class="cmt">//   Double 2 = 4</span>
+<span class="cmt">//   Double 3 = 6</span></pre><p>This is particularly useful if there is a possibility that <i>f(.)</i> can produce <i>DescribedComputations</i> that represent failures,
+because hoisting children into a branch of a log tree gives the branch a successful status only if all of the children are successful (this is true
+of all syntax that does this). Hence:</p><pre><span class="kw">val</span> result = <span class="std">List</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>) ~&gt;* (<span class="lit">"All even"</span>, x <span class="kw">=&gt;</span> (x % <span class="num">2</span> == <span class="num">0</span>) ~&gt;? s<span class="lit">"Testing if $x is even"</span>)
+
+println(result.run.value)
+<span class="cmt">// Will print -\/(All even) - Notice that it's a 'left', meaning failure</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// Failed: All even</span>
+<span class="cmt">//   Failed: Testing if 1 is even</span>
+<span class="cmt">//   Testing if 2 is even</span>
+<span class="cmt">//   Failed: Testing if 3 is even</span></pre><p><i>~&gt;*</i> works not only for <i>List</i>, but for all kinds that have a <i>scalaz.Monad</i> and a <i>scalaz.Traverse</i>
+defined and available in implicit scope. See <a href="LogTreeSyntax$TraversableMonadSyntax.html" class="extype" name="treelog.LogTreeSyntax.TraversableMonadSyntax">TraversableMonadSyntax</a>.</p><p>Another common thing you might want to do with a collection of DescribedComputations is retain their logs as children of a parent whose value
+is some function of the child values. Here is an example of summing the result of several computations:</p><pre><span class="kw">val</span> parts = <span class="std">List</span>(<span class="num">1</span> ~&gt; <span class="lit">"One"</span>, <span class="num">2</span> ~&gt; <span class="lit">"Two"</span>)
+<span class="kw">val</span> summed = <span class="lit">"Sum"</span> ~&lt;+ (parts, (bits: <span class="std">List</span>[<span class="std">Int</span>]) <span class="kw">=&gt;</span> bits.sum)
+
+println(summed.run.written.shows)
+<span class="cmt">// Will print:</span>
+Sum
+  One
+  Two
+
+println(summed.run.value)
+<span class="cmt">// Will print \/-(3)</span></pre><h4> Annotations </h4><p>Nodes in the log tree can be annotated with important information for your program to use later. This is useful, for example, when you want to audit
+a process that affects multiple entities, and you want to make sure that the audit trail is associated with each of the modified entities. You can use
+the annotation facility to carry the key (or something richer) for each modified entity.</p><p>The <i>~~</i> operator (see <a href="LogTreeSyntax$AnnotationsSyntax.html" class="extype" name="treelog.LogTreeSyntax.AnnotationsSyntax">AnnotationsSyntax</a>) is provided for this purpose. It can be applied to
+any <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a> and it will add the given annotation to the set of annotations at the current root node of the log
+tree. Annotations can be of any type, but must all be of the same type for a particular log tree. You choose the type of annotations by instantiating
+the 'Annotation' type parameter of <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a></p><p>Here is a simple example using <i>Strings</i> as the annotations type:</p><pre><span class="kw">val</span> stringAnnotateableLogTreeSyntax = <span class="kw">new</span> treelog.LogTreeSyntax[<span class="std">String</span>] {}
+<span class="kw">import</span> stringAnnotateableLogTreeSyntax._
+<span class="kw">import</span> scalaz.syntax.show._
+<span class="kw">import</span> scalaz.std.string._
+
+<span class="kw">val</span> result = <span class="num">1</span> ~&gt; <span class="lit">"This is the description"</span> ~~ <span class="lit">"This is the annotation"</span>
+
+println(result.run.value)
+<span class="cmt">// Will print \/-(1)</span>
+
+println(result.run.written.shows)
+<span class="cmt">// Will print:</span>
+<span class="cmt">// This is the description - ["This is the annotation"]</span></pre><p>See the <a href="https://github.com/lancewalton/treelog/blob/master/src/test/scala/AnnotationsExample.scala" target="_blank">annotations example</a>
+for a more comprehensive example.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="treelog"><span>treelog</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="treelog.DescribedLogTreeLabel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DescribedLogTreeLabel[Annotation]extendsLogTreeLabel[Annotation]withProductwithSerializable"></a><a id="DescribedLogTreeLabel[Annotation]:DescribedLogTreeLabel[Annotation]"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#DescribedLogTreeLabel[Annotation]extendsLogTreeLabel[Annotation]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="DescribedLogTreeLabel.html"><span class="name">DescribedLogTreeLabel</span></a><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="success">success: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="annotations">annotations: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="treelog.DescribedLogTreeLabel.Annotation">Annotation</span>] = <span class="symbol">Set[Annotation]()</span></span>)</span><span class="result"> extends <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.DescribedLogTreeLabel.Annotation">Annotation</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="treelog.LogTreeLabel" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LogTreeLabel[Annotation]extendsProductwithSerializable"></a><a id="LogTreeLabel[Annotation]:LogTreeLabel[Annotation]"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#LogTreeLabel[Annotation]extendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogTreeLabel.html"><span class="name">LogTreeLabel</span></a><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="treelog.LogTreeSyntax" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LogTreeSyntax[Annotation]extendsAnyRef"></a><a id="LogTreeSyntax[Annotation]:LogTreeSyntax[Annotation]"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#LogTreeSyntax[Annotation]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="See the treelog package documentation for a brief introduction to treelog and also, examples on GitHub to get started." href="LogTreeSyntax.html"><span class="name">LogTreeSyntax</span></a><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">See the <a href="" class="extype" name="treelog">treelog</a> package documentation for a brief introduction to treelog and also,
+<a href="https://github.com/lancewalton/treelog#using-treelog---examples" target="_blank">examples on GitHub</a> to get started.</p><div class="fullcomment"><div class="comment cmt"><p>See the <a href="" class="extype" name="treelog">treelog</a> package documentation for a brief introduction to treelog and also,
+<a href="https://github.com/lancewalton/treelog#using-treelog---examples" target="_blank">examples on GitHub</a> to get started.</p><p>This trait provides syntax for manipulating <code>DescribedComputations</code>. Either:</p><ul><li>extend this trait, or</li><li>define an object with the appropriate Annotation type and import on demand</li></ul></div></div>
+    </li><li name="treelog.SerializableTree" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SerializableTree[Annotation]extendsProductwithSerializable"></a><a id="SerializableTree[Annotation]:SerializableTree[Annotation]"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#SerializableTree[Annotation]extendsProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="SerializableTree.html"><span class="name">SerializableTree</span></a><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="params">(<span name="label">label: <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]</span>, <span name="children">children: <span class="extype" name="scala.List">List</span>[<a href="SerializableTree.html" class="extype" name="treelog.SerializableTree">SerializableTree</a>[<span class="extype" name="treelog.SerializableTree.Annotation">Annotation</span>]]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="treelog.UndescribedLogTreeLabel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UndescribedLogTreeLabel[Annotation]extendsLogTreeLabel[Annotation]withProductwithSerializable"></a><a id="UndescribedLogTreeLabel[Annotation]:UndescribedLogTreeLabel[Annotation]"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#UndescribedLogTreeLabel[Annotation]extendsLogTreeLabel[Annotation]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="UndescribedLogTreeLabel.html"><span class="name">UndescribedLogTreeLabel</span></a><span class="tparams">[<span name="Annotation">Annotation</span>]</span><span class="params">(<span name="success">success: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="annotations">annotations: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="treelog.UndescribedLogTreeLabel.Annotation">Annotation</span>] = <span class="symbol">Set[Annotation]()</span></span>)</span><span class="result"> extends <a href="LogTreeLabel.html" class="extype" name="treelog.LogTreeLabel">LogTreeLabel</a>[<span class="extype" name="treelog.UndescribedLogTreeLabel.Annotation">Annotation</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="treelog.LogTreeLabel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogTreeLabel"></a><a id="LogTreeLabel:LogTreeLabel"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#LogTreeLabel" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogTreeLabel$.html"><span class="name">LogTreeLabel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      
+    </li><li name="treelog.LogTreeSyntaxWithoutAnnotations" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogTreeSyntaxWithoutAnnotations"></a><a id="LogTreeSyntaxWithoutAnnotations:LogTreeSyntaxWithoutAnnotations"></a>
+      <span class="permalink">
+      <a href="../treelog/index.html#LogTreeSyntaxWithoutAnnotations" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogTreeSyntaxWithoutAnnotations$.html"><span class="name">LogTreeSyntaxWithoutAnnotations</span></a><span class="result"> extends <a href="LogTreeSyntax.html" class="extype" name="treelog.LogTreeSyntax">LogTreeSyntax</a>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
+      </span>
+      
+      
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
