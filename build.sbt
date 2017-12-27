@@ -1,4 +1,4 @@
-val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
+lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog-cats",
   version := "1.4.1-SNAPSHOT",
@@ -24,11 +24,14 @@ val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting
 enablePlugins(GhpagesPlugin)
 enablePlugins(SiteScaladocPlugin)
 
-val websiteSettings = Seq[Setting[_]](
+lazy val websiteSettings = Seq[Setting[_]](
   git.remoteRepo := "git@github.com:lancewalton/treelog.git"
 )
 
-val allDependencies = Seq(
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+
+lazy val allDependencies = Seq(
   "org.typelevel" %% "cats-core"     % "1.0.0",
   "org.typelevel" %% "cats-free"     % "1.0.0",
   "org.scalatest" %% "scalatest"     % "3.0.3" % "test",
