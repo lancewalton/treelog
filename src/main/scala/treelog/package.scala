@@ -40,7 +40,7 @@
  * val result3 = (2 * 3) ~> "Calculated product"
  * // The same as result1
  *
- *  val result4 = (2 * 3) ~> (p ⇒ "Calculated product: " + p)
+ *  val result4 = (2 * 3) ~> (p => "Calculated product: " + p)
  * // The same as result1, except the description in the tree node will be "Calculated product: 6"
  * }}}
  *
@@ -101,9 +101,9 @@
  * import scalaz.syntax.show._
  *
  * val result = for {
- *    foo ← 1 ~> ("foo = " + _) // Using the overload of ~> that gives us the ''value''
- *    bar ← 2 ~> ("bar = " + _) // so that we can include it in the log messages
- *    foobar ← (foo + bar) ~> ("foobar = " + _)
+ *    foo <- 1 ~> ("foo = " + _) // Using the overload of ~> that gives us the ''value''
+ *    bar <- 2 ~> ("bar = " + _) // so that we can include it in the log messages
+ *    foobar <- (foo + bar) ~> ("foobar = " + _)
  *   } yield foobar
  *
  * println(result.run.value)
@@ -141,9 +141,9 @@
  * import scalaz.syntax.show._
  *
  * val result = for {
- *    foo ← 1 ~> ("foo = " + _) // Using the overload of ~> that gives us the ''value''
- *    bar ← 2 ~> ("bar = " + _) // so that we can include it in the log messages
- *    foobar ← (foo + bar) ~> ("foobar = " + _)
+ *    foo <- 1 ~> ("foo = " + _) // Using the overload of ~> that gives us the ''value''
+ *    bar <- 2 ~> ("bar = " + _) // so that we can include it in the log messages
+ *    foobar <- (foo + bar) ~> ("foobar = " + _)
  *   } yield foobar
  *
  *
@@ -169,8 +169,8 @@
  *
  * {{{
  * val result = for {
- *    something ← doSomething() ~> "Something has been done"
- *    more ← doMore(something) ~> "More has been done"
+ *    something <- doSomething() ~> "Something has been done"
+ *    more <- doMore(something) ~> "More has been done"
  *   } yield more
  * }}}
  *
@@ -184,9 +184,9 @@
  * {{{
  * val result = "Adding up" ~< {
  *   for {
- *     foo ← 1 ~> ("foo = " + _)
- *     bar ← 2 ~> ("bar = " + _)
- *     foobar ← (foo + bar) ~> ("foobar = " + _)
+ *     foo <- 1 ~> ("foo = " + _)
+ *     bar <- 2 ~> ("bar = " + _)
+ *     foobar <- (foo + bar) ~> ("foobar = " + _)
  *   } yield foobar
  * }
  * }}}
@@ -228,7 +228,7 @@
  *
  * == Traversable Monads ==
  *
- * Suppose you have a ''List[A]'' and a function ''f: A ⇒ DescribedComputation[B]'', and you want to apply ''f(.)''
+ * Suppose you have a ''List[A]'' and a function ''f: A => DescribedComputation[B]'', and you want to apply ''f(.)''
  * to each element of the list to produce ''DescribedComputations'' for each element. That's easy enough. But suppose you now want
  * to take all of the 'values' (''vs'') contained in the list of ''DescribedComputations'' thus produced, and create a new
  * [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]] whose value is ''vs'' and whose log tree is a branch with a description and whose children
@@ -241,7 +241,7 @@
  * import scalaz.syntax.show._
  * import scalaz.std.list._
  *
- * val result = List(1, 2, 3) ~>* ("Double the values", x ⇒ (x * 2) ~> (y ⇒ s"Double $x = $y"))
+ * val result = List(1, 2, 3) ~>* ("Double the values", x => (x * 2) ~> (y => s"Double $x = $y"))
  *
  * println(result.run.value)
  * // Will print \/-(List(2, 4, 6))
@@ -259,7 +259,7 @@
  * of all syntax that does this). Hence:
  *
  * {{{
- * val result = List(1, 2, 3) ~>* ("All even", x ⇒ (x % 2 == 0) ~>? s"Testing if $x is even")
+ * val result = List(1, 2, 3) ~>* ("All even", x => (x % 2 == 0) ~>? s"Testing if $x is even")
  *
  * println(result.run.value)
  * // Will print -\/(All even) - Notice that it's a 'left', meaning failure
@@ -280,7 +280,7 @@
  *
  * {{{
  * val parts = List(1 ~> "One", 2 ~> "Two")
- * val summed = "Sum" ~<+ (parts, (bits: List[Int]) ⇒ bits.sum)
+ * val summed = "Sum" ~<+ (parts, (bits: List[Int]) => bits.sum)
  *
  * println(summed.run.written.shows)
  * // Will print:
