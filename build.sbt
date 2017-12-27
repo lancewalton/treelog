@@ -9,7 +9,7 @@ val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting
   organization := "com.casualmiracles",
   name := "treelog-scalaz-72x",
   version := "1.4.1-SNAPSHOT",
-  scalaVersion := "2.12.1",
+  scalaVersion := "2.12.4",
   scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
     "-language:_",
@@ -37,7 +37,7 @@ val websiteSettings = site.settings ++ ghpages.settings ++ Seq[Setting[_]](
 )
 
 val allDependencies = Seq(
-  "org.scalaz"    %% "scalaz-core"     % "7.2.8",
+  "org.scalaz"    %% "scalaz-core"     % "7.2.18",
   "org.scalatest" %% "scalatest"       % "3.0.0"   % "test",
   "io.argonaut"   %% "argonaut"        % "6.2-RC1" % "test",
   "io.argonaut"   %% "argonaut-scalaz" % "6.2-RC1" % "test")
