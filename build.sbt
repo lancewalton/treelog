@@ -46,7 +46,7 @@ val allDependencies = Seq(
  * Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging
  */
 def publishSettings: Seq[Setting[_]] = Seq(
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ ⇒ false },
