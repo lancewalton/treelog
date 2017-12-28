@@ -65,10 +65,6 @@ def publishSettings: Seq[Setting[_]] = Seq(
       <distribution>repo</distribution>
     </license>
   </licenses>
-    <scm>
-      <url>https://github.com/lancewalton/treelog.git</url>
-      <connection>scm:https://github.com/lancewalton/treelog.git</connection>
-    </scm>
     <url>https://github.com/lancewalton/treelog</url>
     <developers>
       <developer>
