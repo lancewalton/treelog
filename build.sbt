@@ -1,7 +1,6 @@
 val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog-scalaz-72x",
-  version := "1.4.1-SNAPSHOT",
   scalaVersion := "2.12.4",
   scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
@@ -45,6 +44,7 @@ val allDependencies = Seq(
  * Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging
  */
 def publishSettings: Seq[Setting[_]] = Seq(
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ ⇒ false },
@@ -63,10 +63,6 @@ def publishSettings: Seq[Setting[_]] = Seq(
       <distribution>repo</distribution>
     </license>
   </licenses>
-    <scm>
-      <url>https://github.com/lancewalton/treelog.git</url>
-      <connection>scm:https://github.com/lancewalton/treelog.git</connection>
-    </scm>
     <url>https://github.com/lancewalton/treelog</url>
     <developers>
       <developer>
