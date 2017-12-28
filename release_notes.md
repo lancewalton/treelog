@@ -1,9 +1,10 @@
 Release Notes
 ====
 
-1.4.1-SNAPSHOT
+1.4.2
 --------------
 Added cats version 1.0.0
+
 Merged PR into scalaz 7.3/master branch:
     Introducing monad transformer `DescribedComputationT` by Shingo Omura (everpeace)
     https://github.com/lancewalton/treelog/commit/f93b7c56408de568f2a554b034c0bb1f59bfe3e9
