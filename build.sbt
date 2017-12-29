@@ -31,6 +31,8 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
 
 val allDependencies = Seq(
   "org.scalaz"    %% "scalaz-core"     % "7.2.18",
+  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.2.18" % "test",
+  "org.scalaz"    %% "scalaz-effect"             % "7.2.18" % "test",
   "org.scalatest" %% "scalatest"       % "3.0.0"   % "test",
   "io.argonaut"   %% "argonaut"        % "6.2-RC1" % "test",
   "io.argonaut"   %% "argonaut-scalaz" % "6.2-RC1" % "test")
