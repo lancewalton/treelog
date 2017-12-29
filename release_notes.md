@@ -1,6 +1,11 @@
 Release Notes
 ====
 
+1.4.3
+-----
+
+Copy DescribedComputationT to the scalaz 7.2 branch
+
 1.4.2
 --------------
 Added cats version 1.0.0
