@@ -1,7 +1,7 @@
 val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog",
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
   scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
     "-language:_",
@@ -27,15 +27,15 @@ val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
 
 val allDependencies = Seq(
-  "org.scalaz"    %% "scalaz-core"               % "7.3.0-M18",
-  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M18" % "test",
-  "org.scalaz"    %% "scalaz-effect"             % "7.3.0-M18" % "test",
-  "org.scalatest" %% "scalatest"                 % "3.0.0"    % "test",
-  "io.argonaut"   %% "argonaut"                  % "6.2-RC1"  % "test",
-  "io.argonaut"   %% "argonaut-scalaz"           % "6.2-RC1"  % "test")
+  "org.scalaz"    %% "scalaz-core"               % "7.3.0-SNAPSHOT",
+  "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-SNAPSHOT" % "test",
+  "org.scalaz"    %% "scalaz-effect"             % "7.3.0-SNAPSHOT" % "test",
+  "org.scalatest" %% "scalatest"                 % "3.0.5"    % "test",
+  "io.argonaut"   %% "argonaut"                  % "6.2.2"  % "test",
+  "io.argonaut"   %% "argonaut-scalaz"           % "6.2.2"  % "test")
 
 def publishSettings: Seq[Setting[_]] = Seq(
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
