@@ -1,6 +1,11 @@
 Release Notes
 ====
 
+1.4.5
+-----
+
+Cats updated to 1.3.1
+
 1.4.4
 -----
 
