@@ -120,7 +120,7 @@ println(result.run.written.shows)
 //   foobar = 3
 ```
 
-Now don't be lazy and read the [scaladoc](http://lancewalton.github.io/treelog/api/master/#treelog.package).
+Now don't be lazy and read the [scaladoc](http://lancewalton.github.io/treelog/latest/api/treelog/index.html).
 
 TreeLog Examples
 ----------
