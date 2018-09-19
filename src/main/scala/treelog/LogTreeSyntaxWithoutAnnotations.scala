@@ -6,6 +6,8 @@ import scalaz.{-\/, Functor, Monad, Show, \/-, _}
 
 object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
 
+  self: LogTreeSyntax[Nothing] =>
+  
   implicit object NothingShow extends Show[Nothing] {
     override def shows(n: Nothing): String = ""
   }
@@ -119,6 +121,8 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
     */
   implicit class DescribedComputationTSyntax[F[_], A](fa: F[A]) {
 
+    def success()(implicit F: Functor[F]): DescribedComputationT[F, A] = DescribedComputationT(fa.map(self.success(_)))
+    
     def logSuccess(description: A => String)(implicit F: Functor[F]): DescribedComputationT[F, A] = DescribedComputationT(fa.map(_.logSuccess(description)))
     def ~>(description: String)(implicit F: Functor[F]): DescribedComputationT[F, A] = ~>(_ => description)
     def ~>(description: A => String)(implicit F: Functor[F]): DescribedComputationT[F, A] = logSuccess(description)
