@@ -1,7 +1,7 @@
 lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog-cats",
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.8",
   scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
     "-language:_",
@@ -28,11 +28,11 @@ lazy val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "1.4.0",
-  "org.typelevel" %% "cats-free"     % "1.4.0",
+  "org.typelevel" %% "cats-core"     % "1.5.0",
+  "org.typelevel" %% "cats-free"     % "1.5.0",
   "org.scalatest" %% "scalatest"     % "3.0.5" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.2"   % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.2"   % "test")
