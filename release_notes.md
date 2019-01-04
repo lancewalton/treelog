@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.4.7 (cats)
+----
+Upgraded cats to 1.5.0
+
 1.4.6 (scalaz 7.3)
 -----
 Add `success` method #18
