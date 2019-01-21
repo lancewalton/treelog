@@ -207,7 +207,7 @@ println(result.run.written.shows)
 <span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p><i>~&gt;?</i> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
 or for different descriptions to be given in the success versus failure case. Also, in the case of <i>Option</i> and <i>\/</i>,
 overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
-<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
+<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$DisjunctionSyntax.html" class="extype" name="treelog.LogTreeSyntax.DisjunctionSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
 <i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
 means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
 to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
@@ -303,8 +303,12 @@ for a more comprehensive example.
                         <a href="LogTreeSyntax$BranchLabelingSyntax.html" title="Syntax for labeling or creating new branches in a log tree given a description.">BranchLabelingSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation."></a>
-                        <a href="" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation.">EitherSyntax</a>
+                        <a class="class" href="LogTreeSyntax$DisjunctionSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation."></a>
+                        <a href="LogTreeSyntax$DisjunctionSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation.">DisjunctionSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="" title="Syntax for treating scala.Either as signifiers of success or failure in a computation."></a>
+                        <a href="" title="Syntax for treating scala.Either as signifiers of success or failure in a computation.">EitherSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="LogTreeSyntax$FoldSyntax.html" title=""></a>
@@ -317,6 +321,14 @@ for a more comprehensive example.
                         <span class="separator"></span>
                         <a class="class" href="LogTreeSyntax$LeafSyntax.html" title="Syntax for lifting values into DescribedComputations and creating leaf nodes in the log tree."></a>
                         <a href="LogTreeSyntax$LeafSyntax.html" title="Syntax for lifting values into DescribedComputations and creating leaf nodes in the log tree.">LeafSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LogTreeSyntax$LeftDisjunctionSyntax.html" title=""></a>
+                        <a href="LogTreeSyntax$LeftDisjunctionSyntax.html" title="">LeftDisjunctionSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LogTreeSyntax$MaybeSyntax.html" title=""></a>
+                        <a href="LogTreeSyntax$MaybeSyntax.html" title="">MaybeSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="LogTreeSyntax$OptionSyntax.html" title="Syntax for treating Options as indicators of success or failure in a computation."></a>
@@ -353,7 +365,7 @@ for a more comprehensive example.
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myEither ~&gt;? &quot;Do I have the right?&quot;</code>. The 'value'
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Syntax for treating <code>scala.Either</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myEither ~&gt;? &quot;Do I have the right?&quot;</code>. The 'value'
 and log tree of the returned <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> will indicate success or failure
 depending on the value of <code>myEither</code>.
 </p></div><div class="toggleContainer block">
@@ -407,9 +419,9 @@ depending on the value of <code>myEither</code>.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="treelog.LogTreeSyntax.EitherSyntax#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(either:String\/V):LogTreeSyntax.this.EitherSyntax[V]"></a><a id="&lt;init&gt;:EitherSyntax[V]"></a>
+      <a id="&lt;init&gt;(e:Either[String,V]):LogTreeSyntax.this.EitherSyntax[V]"></a><a id="&lt;init&gt;:EitherSyntax[V]"></a>
       <span class="permalink">
-      <a href="../treelog/LogTreeSyntax$EitherSyntax.html#&lt;init&gt;(either:String\/V):LogTreeSyntax.this.EitherSyntax[V]" title="Permalink">
+      <a href="../treelog/LogTreeSyntax$EitherSyntax.html#&lt;init&gt;(e:Either[String,V]):LogTreeSyntax.this.EitherSyntax[V]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -418,7 +430,7 @@ depending on the value of <code>myEither</code>.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">EitherSyntax</span><span class="params">(<span name="either">either: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="treelog.LogTreeSyntax.EitherSyntax.V">V</span>]</span>)</span>
+        <span class="name">EitherSyntax</span><span class="params">(<span name="e">e: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="treelog.LogTreeSyntax.EitherSyntax.V">V</span>]</span>)</span>
       </span>
       
       
@@ -837,6 +849,22 @@ Equivalent to: <code>~&gt;?((error: String) ⇒ s&quot;$description - $error&quo
       </span>
       <span class="symbol">
         <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="leftDescription">leftDescription: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rightDescription">rightDescription: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.EitherSyntax.V">V</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Use different descriptions depending on whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.</p>
+    </li><li name="treelog.LogTreeSyntax.EitherSyntax#~&gt;?" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="~&gt;?(leftDescription:String,rightDescription:V=&gt;String):LogTreeSyntax.this.DescribedComputation[V]"></a><a id="~&gt;?(String,(V)⇒String):DescribedComputation[V]"></a>
+      <span class="permalink">
+      <a href="../treelog/LogTreeSyntax$EitherSyntax.html#~&gt;?(leftDescription:String,rightDescription:V=&gt;String):LogTreeSyntax.this.DescribedComputation[V]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde$greater$qmark" class="name">~&gt;?</span><span class="params">(<span name="leftDescription">leftDescription: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="rightDescription">rightDescription: (<span class="extype" name="treelog.LogTreeSyntax.EitherSyntax.V">V</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="LogTreeSyntax.html#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">DescribedComputation</a>[<span class="extype" name="treelog.LogTreeSyntax.EitherSyntax.V">V</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Use different descriptions depending on whether <code>either</code> is a <code>\/-</code> or a <code>-\/</code>.</p>

@@ -207,7 +207,7 @@ println(result.run.written.shows)
 <span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p><i>~&gt;?</i> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
 or for different descriptions to be given in the success versus failure case. Also, in the case of <i>Option</i> and <i>\/</i>,
 overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
-<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
+<a href="LogTreeSyntax$OptionSyntax.html" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$DisjunctionSyntax.html" class="extype" name="treelog.LogTreeSyntax.DisjunctionSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
 <i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
 means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
 to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
@@ -460,6 +460,25 @@ depending on the value of <code>myBoolean</code>.
       </span>
       
       
+    </li><li name="treelog.LogTreeSyntax.DisjunctionSyntax" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DisjunctionSyntax[V]extendsAnyRef"></a><a id="DisjunctionSyntax[V]:DisjunctionSyntax[V]"></a>
+      <span class="permalink">
+      <a href="../treelog/LogTreeSyntax.html#DisjunctionSyntax[V]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation." href="LogTreeSyntax$DisjunctionSyntax.html"><span class="name">DisjunctionSyntax</span></a><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p><div class="fullcomment"><div class="comment cmt"><p>Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myEither ~&gt;? &quot;Do I have the right?&quot;</code>. The 'value'
+and log tree of the returned <a href="#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> will indicate success or failure
+depending on the value of <code>myEither</code>.
+</p></div></div>
     </li><li name="treelog.LogTreeSyntax.EitherSyntax" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="EitherSyntax[V]extendsAnyRef"></a><a id="EitherSyntax[V]:EitherSyntax[V]"></a>
       <span class="permalink">
@@ -472,10 +491,10 @@ depending on the value of <code>myBoolean</code>.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation." href="LogTreeSyntax$EitherSyntax.html"><span class="name">EitherSyntax</span></a><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a title="Syntax for treating scala.Either as signifiers of success or failure in a computation." href="LogTreeSyntax$EitherSyntax.html"><span class="name">EitherSyntax</span></a><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
-      <p class="shortcomment cmt">Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p><div class="fullcomment"><div class="comment cmt"><p>Syntax for treating <code>scalaz.\/</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myEither ~&gt;? &quot;Do I have the right?&quot;</code>. The 'value'
+      <p class="shortcomment cmt">Syntax for treating <code>scala.Either</code> as signifiers of success or failure in a computation.</p><div class="fullcomment"><div class="comment cmt"><p>Syntax for treating <code>scala.Either</code> as signifiers of success or failure in a computation.</p><p>The simplest usage is something like: <code>myEither ~&gt;? &quot;Do I have the right?&quot;</code>. The 'value'
 and log tree of the returned <a href="#DescribedComputation[V]=scalaz.EitherT[LogTreeSyntax.this.LogTreeWriter,String,V]" class="extmbr" name="treelog.LogTreeSyntax.DescribedComputation">treelog.LogTreeSyntax.DescribedComputation</a> will indicate success or failure
 depending on the value of <code>myEither</code>.
 </p></div></div>
@@ -528,6 +547,22 @@ depending on the value of <code>myEither</code>.
       </span>
       
       <p class="shortcomment cmt">Syntax for lifting values into <code>DescribedComputations</code> and creating leaf nodes in the log tree.</p>
+    </li><li name="treelog.LogTreeSyntax.LeftDisjunctionSyntax" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LeftDisjunctionSyntax[E,V]extendsAnyRef"></a><a id="LeftDisjunctionSyntax[E,V]:LeftDisjunctionSyntax[E,V]"></a>
+      <span class="permalink">
+      <a href="../treelog/LogTreeSyntax.html#LeftDisjunctionSyntax[E,V]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogTreeSyntax$LeftDisjunctionSyntax.html"><span class="name">LeftDisjunctionSyntax</span></a><span class="tparams">[<span name="E">E</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      
     </li><li name="treelog.LogTreeSyntax.LogTree" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]"></a><a id="LogTree:LogTree"></a>
       <span class="permalink">
@@ -557,6 +592,22 @@ depending on the value of <code>myEither</code>.
       </span>
       <span class="symbol">
         <span class="name">LogTreeWriter</span><span class="tparams">[<span name="V">V</span>]</span><span class="result alias"> = <span class="extype" name="scalaz.WriterT">WriterT</span>[<span class="extype" name="scalaz.IdInstances.Id">scalaz.Id.Id</span>, <a href="#LogTree=scalaz.Tree[treelog.LogTreeLabel[Annotation]]" class="extmbr" name="treelog.LogTreeSyntax.LogTree">LogTree</a>, <span class="extype" name="treelog.LogTreeSyntax.LogTreeWriter.V">V</span>]</span>
+      </span>
+      
+      
+    </li><li name="treelog.LogTreeSyntax.MaybeSyntax" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MaybeSyntax[V]extendsAnyRef"></a><a id="MaybeSyntax[V]:MaybeSyntax[V]"></a>
+      <span class="permalink">
+      <a href="../treelog/LogTreeSyntax.html#MaybeSyntax[V]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogTreeSyntax$MaybeSyntax.html"><span class="name">MaybeSyntax</span></a><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       
       

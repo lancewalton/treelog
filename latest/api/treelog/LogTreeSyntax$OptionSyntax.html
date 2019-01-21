@@ -207,7 +207,7 @@ println(result.run.written.shows)
 <span class="cmt">// Failed: Doing a thing with a Boolean</span></pre><p><i>~&gt;?</i> is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
 or for different descriptions to be given in the success versus failure case. Also, in the case of <i>Option</i> and <i>\/</i>,
 overloads are provided to pass the values contained. See <a href="LogTreeSyntax$BooleanSyntax.html" class="extype" name="treelog.LogTreeSyntax.BooleanSyntax">BooleanSyntax</a>,
-<a href="" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$EitherSyntax.html" class="extype" name="treelog.LogTreeSyntax.EitherSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
+<a href="" class="extype" name="treelog.LogTreeSyntax.OptionSyntax">OptionSyntax</a>, <a href="LogTreeSyntax$DisjunctionSyntax.html" class="extype" name="treelog.LogTreeSyntax.DisjunctionSyntax">EitherSyntax</a>.</p><p>Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a <i>Boolean</i>
 <i>false</i> does not indicate a failure in a computation and so <i>~&gt;?</i> is not appropriate. Keep in mind that <i>failure</i>
 means that the computation will stop, whereas <i>success</i> will mean that the computation will continue.</p><h4> Traversable Monads </h4><p>Suppose you have a <i>List[A]</i> and a function <i>f: A =&gt; DescribedComputation[B]</i>, and you want to apply <i>f(.)</i>
 to each element of the list to produce <i>DescribedComputations</i> for each element. That's easy enough. But suppose you now want
@@ -303,8 +303,12 @@ for a more comprehensive example.
                         <a href="LogTreeSyntax$BranchLabelingSyntax.html" title="Syntax for labeling or creating new branches in a log tree given a description.">BranchLabelingSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
-                        <a class="class" href="LogTreeSyntax$EitherSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation."></a>
-                        <a href="LogTreeSyntax$EitherSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation.">EitherSyntax</a>
+                        <a class="class" href="LogTreeSyntax$DisjunctionSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation."></a>
+                        <a href="LogTreeSyntax$DisjunctionSyntax.html" title="Syntax for treating scalaz.\/ as signifiers of success or failure in a computation.">DisjunctionSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LogTreeSyntax$EitherSyntax.html" title="Syntax for treating scala.Either as signifiers of success or failure in a computation."></a>
+                        <a href="LogTreeSyntax$EitherSyntax.html" title="Syntax for treating scala.Either as signifiers of success or failure in a computation.">EitherSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="LogTreeSyntax$FoldSyntax.html" title=""></a>
@@ -317,6 +321,14 @@ for a more comprehensive example.
                         <span class="separator"></span>
                         <a class="class" href="LogTreeSyntax$LeafSyntax.html" title="Syntax for lifting values into DescribedComputations and creating leaf nodes in the log tree."></a>
                         <a href="LogTreeSyntax$LeafSyntax.html" title="Syntax for lifting values into DescribedComputations and creating leaf nodes in the log tree.">LeafSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LogTreeSyntax$LeftDisjunctionSyntax.html" title=""></a>
+                        <a href="LogTreeSyntax$LeftDisjunctionSyntax.html" title="">LeftDisjunctionSyntax</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="LogTreeSyntax$MaybeSyntax.html" title=""></a>
+                        <a href="LogTreeSyntax$MaybeSyntax.html" title="">MaybeSyntax</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="" title="Syntax for treating Options as indicators of success or failure in a computation."></a>
