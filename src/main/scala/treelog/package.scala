@@ -220,7 +220,7 @@
  * ''~&gt;?'' is overloaded for each of the three types above to allow either a simple description to be given (as in the example above)
  * or for different descriptions to be given in the success versus failure case. Also, in the case of ''Option'' and ''\/'',
  * overloads are provided to pass the values contained. See [[treelog.LogTreeSyntax.BooleanSyntax BooleanSyntax]],
- * [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]], [[treelog.LogTreeSyntax.EitherSyntax EitherSyntax]].
+ * [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]], [[treelog.LogTreeSyntax.DisjunctionSyntax EitherSyntax]].
  *
  * Note that it is easy to get drawn into always using this syntax for these three types. But sometimes, for example, a ''Boolean''
  * ''false'' does not indicate a failure in a computation and so ''~&gt;?'' is not appropriate. Keep in mind that ''failure''
