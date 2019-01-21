@@ -63,13 +63,13 @@ def publishSettings: Seq[Setting[_]] = Seq(
         <id>lcw</id>
         <name>Lance Walton</name>
         <email>lance [dot] walton [at] underscore [dot] io</email>
-        <organization>Casual Miracles Ltd</organization>
+        <organization>Underscore LLP</organization>
       </developer>
       <developer>
         <id>cjw</id>
         <name>Channing Walton</name>
         <email>channing [dot] walton [at] underscore [dot] io</email>
-        <organization>Casual Miracles Ltd</organization>
+        <organization>Underscore LLP</organization>
       </developer>
     </developers>)
 
