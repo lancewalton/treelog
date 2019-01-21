@@ -1,6 +1,6 @@
 package treelog
 
-import scalaz.{-\/, EitherT, Monad, Monoid, Show, Traverse, Tree, Writer, \/, \/-}
+import scalaz.{-\/, EitherT, Maybe, Monad, Monoid, Show, Traverse, Tree, Writer, \/, \/-}
 import scalaz.Tree.{Leaf, Node}
 import scalaz.syntax.traverse._
 
@@ -281,7 +281,7 @@ trait LogTreeSyntax[Annotation] {
      * Use different descriptions for the `true` and `false` cases. Note that unlike `'if'`
      * the `false` / failure description is the first parameter and the `true` / success
      * description is the second parameter. This is to maintain consistency with [[treelog.LogTreeSyntax.OptionSyntax OptionSyntax]]
-     * and [[treelog.LogTreeSyntax.EitherSyntax EitherSyntax]].
+     * and [[treelog.LogTreeSyntax.DisjunctionSyntax EitherSyntax]].
      *
      * If the boolean is `true` the 'value' of the returned DescribedComputation will be `\/-(true)`,
      * otherwise, the 'value' will be `-\/(description)`.
@@ -349,6 +349,67 @@ trait LogTreeSyntax[Annotation] {
       option.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Option(w))) getOrElse dflt
   }
 
+  implicit class MaybeSyntax[V](mb: Maybe[V])  {
+
+    /**
+      * Use the same description whether the Option is `Some` or `None`.
+      * Equivalent to `log(description, description)`
+      */
+    def log(description: String): DescribedComputation[V] = log(description, description)
+
+    /**
+      * Sugar for [[treelog.LogTreeSyntax.MaybeSyntax.log(String) log(String)]]
+      */
+    def ~>?(description: String): DescribedComputation[V] = log(description)
+
+    /**
+      * Use different descriptions for the `Just` and `Empty` cases.
+      *
+      * If the option is `Just(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
+      * otherwise, the 'value' will be `-\/(noneDescription)`.
+      */
+    def log(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[V] = ~>?(noneDescription, _ ⇒ someDescription)
+
+    /**
+      * Use different descriptions for the `Just` and `Empty` cases, providing the boxed `Just`
+      * value to the function used to produce the description for the `Just` case, so that it can be included in the
+      * description if you wish.
+      *
+      * If the option is `Just(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
+      * otherwise, the 'value' will be `-\/(noneDescription)`.
+      */
+    def ~>?(noneDescription: ⇒ String, someDescription: ⇒ String): DescribedComputation[V] = log(noneDescription, someDescription)
+
+    /**
+      * Sugar for [[treelog.LogTreeSyntax.MaybeSyntax.log() log(String, String)]]
+      */
+    def log(noneDescription: ⇒ String, someDescription: V ⇒ String): DescribedComputation[V] =
+      mb map { a ⇒ success(a, someDescription(a)) } getOrElse failure(noneDescription)
+
+    /**
+      * Sugar for [[treelog.LogTreeSyntax.MaybeSyntax.log() log(String, String)]]
+      */
+    def ~>?(noneDescription: ⇒ String, someDescription: V ⇒ String): DescribedComputation[V] = log(noneDescription, someDescription)
+
+    /**
+      * Return a default [[treelog.LogTreeSyntax.DescribedComputation]] if `option` is a `Empty`.
+      *
+      * If the option is `Just(x)` the 'value' of the returned DescribedComputation will be `\/-(Just(x))`,
+      * otherwise, the returned [[treelog.LogTreeSyntax.DescribedComputation]] will be `dflt`.
+      */
+    def ~>|[B](f: V ⇒ DescribedComputation[B], dflt: ⇒ DescribedComputation[Maybe[B]]): DescribedComputation[Maybe[B]] =
+      mb.map(f).map((v: DescribedComputation[B]) ⇒ v.map(w ⇒ Maybe.fromNullable(w))) getOrElse dflt
+  }
+
+  implicit class LeftDisjunctionSyntax[E, V](e : E \/ V) {
+    /**
+      * Use different descriptions depending on whether `either` is a `\/-` or a `-\/`.
+      */
+    def ~>?(leftDescription: String, rightDescription: V => String) : DescribedComputation[V] =
+      e.fold(_ => failure(leftDescription), a ⇒ success(a, rightDescription(a)))
+
+  }
+
   /**
    * Syntax for treating `scalaz.\/` as signifiers of success or failure in a computation.
    *
@@ -356,13 +417,12 @@ trait LogTreeSyntax[Annotation] {
    * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
    * depending on the value of `myEither`.
    */
-  implicit class EitherSyntax[V](either: \/[String, V]) {
-
+  implicit class DisjunctionSyntax[V](either: \/[String, V]) {
     /**
      * Use different descriptions depending on whether `either` is a `\/-` or a `-\/`.
      */
     def ~>?(leftDescription: String ⇒ String, rightDescription: ⇒ String): DescribedComputation[V] =
-      ~>?(leftDescription, _ ⇒ rightDescription)
+      ~>?(leftDescription, (_ : V) ⇒ rightDescription)
 
     /**
      * Use the same description regardless of whether `either` is a `\/-` or a `-\/`.
@@ -382,6 +442,47 @@ trait LogTreeSyntax[Annotation] {
      */
     def ~>?(leftDescription: String ⇒ String, rightDescription: V ⇒ String): DescribedComputation[V] =
       either.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
+  }
+
+  /**
+    * Syntax for treating `scala.Either` as signifiers of success or failure in a computation.
+    *
+    * The simplest usage is something like: `myEither ~>? "Do I have the right?"`. The 'value'
+    * and log tree of the returned [[treelog.LogTreeSyntax.DescribedComputation]] will indicate success or failure
+    * depending on the value of `myEither`.
+    */
+  implicit class EitherSyntax[V](e : Either[String, V]) {
+
+    /**
+      * Use different descriptions depending on whether `either` is a `\/-` or a `-\/`.
+      */
+    def ~>?(leftDescription: String, rightDescription: V => String) : DescribedComputation[V] =
+      ~>?((_ : String) => leftDescription, rightDescription)
+
+    /**
+      * Use different descriptions depending on whether `either` is a `\/-` or a `-\/`.
+      */
+    def ~>?(leftDescription: String ⇒ String, rightDescription: ⇒ String): DescribedComputation[V] =
+      ~>?(leftDescription, (_ : V) ⇒ rightDescription)
+
+    /**
+      * Use the same description regardless of whether `either` is a `\/-` or a `-\/`.
+      * Equivalent to: `~>?((error: String) ⇒ s"$description - $error", description)`
+      */
+    def ~>?(description: String): DescribedComputation[V] = ~>?((error: String) ⇒ s"$description - $error", description)
+
+    /**
+      * Use the given description if `either` is a `\/-`. If `either` is
+      * `-\/(message)`, use `message` as the description.
+      */
+    def ~>?(description: V ⇒ String): DescribedComputation[V] = ~>?((error: String) ⇒ error, description)
+
+    /**
+      * Use the given functions to provide descriptions depending on whether `either` is a
+      * `\/-` or `-\/`
+      */
+    def ~>?(leftDescription: String ⇒ String, rightDescription: V ⇒ String): DescribedComputation[V] =
+      e.fold(error ⇒ failure(leftDescription(error)), a ⇒ success(a, rightDescription(a)))
   }
 
   /**

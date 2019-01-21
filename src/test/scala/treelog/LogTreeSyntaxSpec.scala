@@ -12,6 +12,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   // we need this for tests. If you just use -\/("Fail") you end up with a \/[Nothing, String]
   // which upsets compiler when it cannot find an appropriate scalaz.Equal typeclass
   val aFailure: \/[String, String] = -\/("Fail")
+  val eFailure: Either[String, String] = Left("Fail")
 
   object `success must` {
     def `produce a value with the given value on the right`() = { success(1, "Yay").run.value mustBe \/-(1) }
@@ -92,6 +93,21 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
     def `do the same as 'failure' when the Option is None`() = { assert((none[Int] ~>? ("Foo", x ⇒ "Bar: " + x)).run.run ≟ failure("Foo").run.run) }
   }
 
+  object `Maybe ~>? with a description must` {
+    def `do the same as 'success' when the Maybe is Just`() = { assert((Maybe.Just(2) ~>? "Foo").run.run ≟ success(2, "Foo").run.run) }
+    def `do the same as 'failure' when the Maybe is Empty`() = { assert((Maybe.Empty[Int] ~>? "Foo").run.run ≟ failure("Foo").run.run) }
+  }
+
+  object `Maybe ~>? with a noneDescription and a someDescription must` {
+    def `do the same as 'success' when the Maybe is Just`() = { assert((Maybe.Just(2) ~>? ("Foo", "Bar")).run.run ≟ success(2, "Bar").run.run) }
+    def `do the same as 'failure' when the Maybe is Empty`() = { assert((Maybe.Empty[Int] ~>? ("Foo", "Bar")).run.run ≟ failure("Foo").run.run) }
+  }
+
+  object `Maybe ~>? with a noneDescription and a function for someDescription must` {
+    def `do the same as 'success' when the Maybe is Just`() = { assert((Maybe.Just(2) ~>? ("Foo", x ⇒ "Bar: " + x)).run.run ≟ success(2, "Bar: 2").run.run) }
+    def `do the same as 'failure' when the Maybe is Empty`() = { assert((Maybe.Empty[Int] ~>? ("Foo", x ⇒ "Bar: " + x)).run.run ≟ failure("Foo").run.run) }
+  }
+
   object `\\/ ~>? with a description must` {
     def `do the same as 'success' with right`() = { assert((\/-(2) ~>? "Foo").run.run ≟ success(2, "Foo").run.run) }
     def `do the same as 'failure' with left`() = { assert((aFailure ~>? "Foo").run.run ≟ failure("Foo - Fail").run.run) }
@@ -105,6 +121,21 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   object `\\/ ~>? with a leftDescription function and a rightDescription function must` {
     def `do the same as 'success' with right`() = { assert((\/-(2) ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ success(2, "Bar: 2").run.run) }
     def `do the same as 'failure' with left`() = { assert((aFailure ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ failure("Foo: Fail").run.run) }
+  }
+
+  object `Either ~>? with a description must` {
+    def `do the same as 'success' with right`() = { assert((Right(2) ~>? "Foo").run.run ≟ success(2, "Foo").run.run) }
+    def `do the same as 'failure' with left`() = { assert((eFailure ~>? "Foo").run.run ≟ failure("Foo - Fail").run.run) }
+  }
+
+  object `Either ~>? with a leftDescription function and a rightDescription must` {
+    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x ⇒ "Foo: " + x, "Bar")).run.run ≟ success(2, "Bar").run.run) }
+    def `do the same as 'failure' with left`() = { assert((eFailure ~>? (x ⇒ "Foo: " + x, "Bar")).run.run ≟ failure("Foo: Fail").run.run) }
+  }
+
+  object `Either ~>? with a leftDescription function and a rightDescription function must` {
+    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ success(2, "Bar: 2").run.run) }
+    def `do the same as 'failure' with left`() = { assert((eFailure ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).run.run ≟ failure("Foo: Fail").run.run) }
   }
 
   object `~>* must` {
