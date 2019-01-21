@@ -1,7 +1,7 @@
 Release Notes
 ====
 
-1.4.8 (scalaz)
+1.4.7 (scalaz)
 ----
 Add new syntax for scalaz.Maybe and scala.Either
 
