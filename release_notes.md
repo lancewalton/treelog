@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.4.9 (cats)
+----
+Upgrade to cats 1.6.0
+
 1.4.8 (scalaz)
 ----
 Add new syntax for scalaz.Maybe and scala.Either
