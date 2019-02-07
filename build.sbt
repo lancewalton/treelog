@@ -31,8 +31,8 @@ resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "1.5.0",
-  "org.typelevel" %% "cats-free"     % "1.5.0",
+  "org.typelevel" %% "cats-core"     % "1.6.0",
+  "org.typelevel" %% "cats-free"     % "1.6.0",
   "org.scalatest" %% "scalatest"     % "3.0.5" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.2"   % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.2"   % "test")
