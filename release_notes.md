@@ -1,8 +1,14 @@
 Release Notes
 ====
-1.4.9 (scalaz)
+1.4.10
+-----
+1.4.10 (scalaz)
+
+Cross build for 2.11
+
+1.4.10 (scalaz)
 ----
-Cross build for 2.11 
+Mistake, should have done a cross build
 
 1.4.9 (cats)
 ----
