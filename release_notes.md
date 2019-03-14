@@ -1,5 +1,8 @@
 Release Notes
 ====
+1.4.9 (scalaz)
+----
+Cross build for 2.11 
 
 1.4.9 (cats)
 ----
