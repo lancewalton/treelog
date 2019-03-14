@@ -1,8 +1,8 @@
 val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization := "com.casualmiracles",
   name := "treelog",
+  crossScalaVersions := List("2.11.12", "2.12.8"),
   scalaVersion := "2.12.8",
-  scalaBinaryVersion := "2.12",
   scalacOptions := Seq(
     "-language:_",
    // "-Xfatal-warnings",
