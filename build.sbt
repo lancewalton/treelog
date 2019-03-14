@@ -38,6 +38,7 @@ val allDependencies = Seq(
   "io.argonaut"   %% "argonaut-scalaz"           % "6.2.2"  % "test")
 
 def publishSettings: Seq[Setting[_]] = Seq(
+  releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
