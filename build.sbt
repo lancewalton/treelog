@@ -33,7 +33,7 @@ val allDependencies = Seq(
   "org.scalaz"    %% "scalaz-core"               % "7.3.0-M18",
   "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M18" % "test",
   "org.scalaz"    %% "scalaz-effect"             % "7.3.0-M18" % "test",
-  "org.scalatest" %% "scalatest"                 % "3.0.6"    % "test",
+  "org.scalatest" %% "scalatest"                 % "3.0.7"    % "test",
   "io.argonaut"   %% "argonaut"                  % "6.2.2"  % "test",
   "io.argonaut"   %% "argonaut-scalaz"           % "6.2.2"  % "test")
 
