@@ -3,6 +3,8 @@ package treelog
 import cats._
 import cats.free.Trampoline
 import cats.implicits._
+import treelog.ScalaCompat._
+import LazyList._
 
 /** Partially copied from Scalaz. */
 sealed abstract class Tree[A] {
@@ -11,7 +13,7 @@ sealed abstract class Tree[A] {
   def rootLabel: A
 
   /** The child nodes of this tree. */
-  def subForest: Stream[Tree[A]]
+  def subForest: LazyList[Tree[A]]
 
   /** A 2D String representation of this Tree. */
   def drawTree(implicit sh: Show[A]): String = {
@@ -34,7 +36,7 @@ sealed abstract class Tree[A] {
     val stem   = " -`" // "`- ".reverse
     val trunk  = "  |" // "|  ".reverse
 
-    def drawSubTrees(s: Stream[Tree[A]]): Trampoline[Vector[StringBuilder]] = s match {
+    def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] = s match {
       case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
       case t #:: ts if ts.isEmpty => defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
       case t #:: ts =>
@@ -58,11 +60,11 @@ sealed abstract class Tree[A] {
   }
 
   /** Pre-order traversal. */
-  def flatten: Eval[Stream[A]] = {
-    def squish(tree: Tree[A], xs: Eval[Stream[A]]): Eval[Stream[A]] =
-      Foldable[Stream].foldRight(tree.subForest, xs)(squish(_, _)).map(v => Stream.cons(tree.rootLabel, v))
+  def flatten: Eval[LazyList[A]] = {
+    def squish(tree: Tree[A], xs: Eval[LazyList[A]]): Eval[LazyList[A]] =
+      Foldable[LazyList].foldRight(tree.subForest, xs)(squish(_, _)).map(v => LazyList.cons(tree.rootLabel, v))
 
-    squish(this, Eval.now(Stream.Empty))
+    squish(this, Eval.now(LazyList.empty))
   }
 }
 
@@ -88,8 +90,8 @@ sealed abstract class TreeInstances {
       def A = A0
       override def compare(x: Tree[A], y: Tree[A]) =
         A.compare(x.rootLabel, y.rootLabel) match {
-          case 0 => Order[Stream[Tree[A]]].compare(x.subForest, y.subForest)
-          case x => x
+          case 0 => Order[LazyList[Tree[A]]].compare(x.subForest, y.subForest)
+          case i => i
         }
     }
 }
@@ -101,7 +103,7 @@ object Tree extends TreeInstances {
     * You can use Node for tree construction or pattern matching.
     */
   object Node {
-    def apply[A](root: => A, forest: => Stream[Tree[A]]): Tree[A] = {
+    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] = {
       new Tree[A] {
         def rootLabel = root
         def subForest = forest
@@ -110,7 +112,7 @@ object Tree extends TreeInstances {
       }
     }
 
-    def unapply[A](t: Tree[A]): Option[(A, Stream[Tree[A]])] = Some((t.rootLabel, t.subForest))
+    def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.rootLabel, t.subForest))
   }
 
   /** Leaf represents a tree node with no children.
@@ -119,12 +121,12 @@ object Tree extends TreeInstances {
     */
   object Leaf {
     def apply[A](root: => A): Tree[A] =
-      Node(root, Stream.empty)
+      Node(root, LazyList.empty)
 
     def unapply[A](t: Tree[A]): Option[A] =
       t match {
-        case Node(root, Stream.Empty) => Some(root)
-        case _                        => None
+        case Node(root, f) if f.isEmpty => Some(root)
+        case _                          => None
       }
   }
 }
@@ -133,7 +135,7 @@ private trait TreeEqual[A] extends Eq[Tree[A]] {
   def A: Eq[A]
 
   override final def eqv(a1: Tree[A], a2: Tree[A]) = {
-    def corresponds[B](a1: Stream[Tree[A]], a2: Stream[Tree[A]]): Trampoline[Boolean] =
+    def corresponds[B](a1: LazyList[Tree[A]], a2: LazyList[Tree[A]]): Trampoline[Boolean] =
       (a1.isEmpty, a2.isEmpty) match {
         case (true, true)          => Trampoline.done(true)
         case (_, true) | (true, _) => Trampoline.done(false)
