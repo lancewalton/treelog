@@ -4,6 +4,7 @@ import cats.data.{Writer, _}
 import cats._
 import cats.implicits._
 import treelog.Tree.{Leaf, Node}
+import treelog.ScalaCompat._
 
 /**
   * See the [[treelog]] package documentation for a brief introduction to treelog and also,
@@ -42,7 +43,7 @@ trait LogTreeSyntax[Annotation] {
           Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations), leftNode #:: rightChildren)
 
         case (leftNode: Tree[LogTreeLabel[Annotation]], rightNode: Tree[LogTreeLabel[Annotation]]) ⇒
-          Node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), Stream(leftNode, rightNode))
+          Node(UndescribedLogTreeLabel(leftNode.rootLabel.success && rightNode.rootLabel.success), LazyList(leftNode, rightNode))
       }
   }
 
@@ -410,7 +411,7 @@ trait LogTreeSyntax[Annotation] {
       val parts = monad.map(describedComputations)(m ⇒ (m.value.value, m.value.written))
 
       val children = monad.map(parts)(_._2).toList
-      val branch   = Node(DescribedLogTreeLabel(description, allSuccessful(children), Set[Annotation]()), children.toStream)
+      val branch   = Node(DescribedLogTreeLabel(description, allSuccessful(children), Set[Annotation]()), children.toLazyList)
 
       describedComputations.sequence.value.run._2 match {
         case Left(_) ⇒ failure(description, branch)
@@ -431,7 +432,7 @@ trait LogTreeSyntax[Annotation] {
 
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
       case Node(l: UndescribedLogTreeLabel[Annotation], children) ⇒ Node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
-      case Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), Stream(tree))
+      case Node(l: DescribedLogTreeLabel[Annotation], children) ⇒ Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
     }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success())
@@ -503,7 +504,7 @@ trait LogTreeSyntax[Annotation] {
   }
 
   def fromSerializableForm[V](sdc: SerializableDescribedComputation[V]): DescribedComputation[V] = {
-    def transform(tree: SerializableTree[Annotation]): LogTree = Node(tree.label, tree.children.map(transform).toStream)
+    def transform(tree: SerializableTree[Annotation]): LogTree = Node(tree.label, tree.children.map(transform).toLazyList)
     sdc._1.fold(m ⇒ failure(m, transform(sdc._2)), v ⇒ success(v, transform(sdc._2)))
   }
 }

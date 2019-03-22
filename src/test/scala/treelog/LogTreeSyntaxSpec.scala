@@ -4,6 +4,7 @@ import org.scalatest.refspec.RefSpec
 import org.scalatest.MustMatchers
 import treelog.Tree.{Leaf, Node}
 import cats.implicits._
+import ScalaCompat._
 
 class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   import LogTreeSyntaxWithoutAnnotations._
@@ -368,8 +369,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   }
 
   private def node(description: String, success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
-    Node(DescribedLogTreeLabel(description, success), children.toStream)
+    Node(DescribedLogTreeLabel(description, success), children.toLazyList)
 
   private def node(success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
-    Node(UndescribedLogTreeLabel(success), children.toStream)
+    Node(UndescribedLogTreeLabel(success), children.toLazyList)
 }

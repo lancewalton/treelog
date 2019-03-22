@@ -1,23 +1,13 @@
 lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
-  organization := "com.casualmiracles",
-  name := "treelog-cats",
-  scalaVersion := "2.12.8",
-  scalaBinaryVersion := "2.12",
-  scalacOptions := Seq(
-    "-language:_",
-   // "-Xfatal-warnings",
-    "-deprecation",
-    "-encoding", "UTF-8",
-    "-feature",
-    "-unchecked",
-    "-Xlint",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    "-Xfuture",
-    "-Ywarn-unused-import",
-    "-Ypartial-unification")
+  organization       := "com.casualmiracles",
+  name               := "treelog-cats",
+  scalaVersion       := "2.12.8",
+  crossScalaVersions := Seq(scalaVersion.value, "2.13.0-M5"),
+  releaseCrossBuild  := true,
+  scalacOptions      := util.scalacOptions(scalaVersion.value),
+  Compile / unmanagedSourceDirectories += {
+    (Compile / sourceDirectory).value / (if(util.priorTo2_13(scalaVersion.value)) "scala-2.12" else "scala-2.13")
+  }
 )
 
 enablePlugins(GhpagesPlugin)
@@ -33,9 +23,9 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 lazy val allDependencies = Seq(
   "org.typelevel" %% "cats-core"     % "1.6.0",
   "org.typelevel" %% "cats-free"     % "1.6.0",
-  "org.scalatest" %% "scalatest"     % "3.0.5" % "test",
-  "io.argonaut"   %% "argonaut"      % "6.2.2"   % "test",
-  "io.argonaut"   %% "argonaut-cats" % "6.2.2"   % "test")
+  "org.scalatest" %% "scalatest"     % "3.0.7" % "test",
+  "io.argonaut"   %% "argonaut"      % "6.2.3" % "test",
+  "io.argonaut"   %% "argonaut-cats" % "6.2.3" % "test")
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
  * Instructions from sonatype: https://issues.sonatype.org/browse/OSSRH-2841?focusedCommentId=150049#comment-150049
