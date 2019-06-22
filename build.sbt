@@ -2,7 +2,7 @@ lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Se
   organization       := "com.casualmiracles",
   name               := "treelog-cats",
   scalaVersion       := "2.12.8",
-  crossScalaVersions := Seq(scalaVersion.value, "2.13.0-M5"),
+  crossScalaVersions := Seq(scalaVersion.value, "2.13.0"),
   releaseCrossBuild  := true,
   scalacOptions      := util.scalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories += {
@@ -21,9 +21,9 @@ resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "1.6.0",
-  "org.typelevel" %% "cats-free"     % "1.6.0",
-  "org.scalatest" %% "scalatest"     % "3.0.7" % "test",
+  "org.typelevel" %% "cats-core"     % "1.6.1",
+  "org.typelevel" %% "cats-free"     % "1.6.1",
+  "org.scalatest" %% "scalatest"     % "3.0.8" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.3" % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.3" % "test")
 
