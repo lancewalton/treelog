@@ -1,5 +1,10 @@
 Release Notes
 ====
+
+1.5.0 (cats)
+-----
+Cross-build for scala 2.13
+
 1.4.10
 -----
 1.4.10 (scalaz)
