@@ -31,12 +31,6 @@ For Scala 2.12.x and cats 2.0.0-M4:
 libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.5.0")
 ```
 
-For Scala 2.12.x and cats 1.6.0:
-
-```scala
-libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.4.9")
-```
-
 For Scala 2.12.x amd 2.11.x and scalaz 7.3.x:
 
 ```scala
@@ -57,6 +51,11 @@ libraryDependencies ++= Seq(
 Older Releases
 --------------
 
+For Scala 2.12.x and cats 1.6.0:
+
+```scala
+libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.4.9")
+```
 
 For Scala 2.12.x and scalaz 7.1.x:
 
