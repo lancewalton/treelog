@@ -1,7 +1,8 @@
  language: scala
+ dist: trusty
  scala:
    - "2.12.8"
-   - "2.13.0-M5"
+   - "2.13.0"
  jdk:
    - oraclejdk8
    - oraclejdk11

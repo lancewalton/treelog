@@ -18,12 +18,12 @@ lazy val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "1.6.1",
-  "org.typelevel" %% "cats-free"     % "1.6.1",
-  "org.scalatest" %% "scalatest"     % "3.0.8" % "test",
+  "org.typelevel" %% "cats-core"     % "2.0.0-M4",
+  "org.typelevel" %% "cats-free"     % "2.0.0-M4",
+  "org.scalatest" %% "scalatest"     % "3.1.0-SNAP13" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.3" % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.3" % "test")
 
