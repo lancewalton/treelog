@@ -14,9 +14,8 @@ def scalacOptions(scalaVersion: String): Seq[String] = {
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
-    "-Xfuture",
     "-Ywarn-unused:imports"
-  ) ++ (if (priorTo2_13(scalaVersion)) Seq("-Yno-adapted-args", "-Ypartial-unification") else Nil)
+  ) ++ (if (priorTo2_13(scalaVersion)) Seq("-Yno-adapted-args", "-Ypartial-unification", "-Xfuture") else Nil)
 }
 
 def priorTo2_13(scalaVersion: String): Boolean =
