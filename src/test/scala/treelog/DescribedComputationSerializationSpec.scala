@@ -12,8 +12,8 @@ class DescribedComputationSerializationSpec extends RefSpec with MustMatchers {
   def `toSerializableForm and fromSerializableForm are inverses`() = {
     val dc =
       for {
-        _ ← 1 ~> "Hello"
-        result ← 2 ~> "Goodbye"
+        _ <- 1 ~> "Hello"
+        result <- 2 ~> "Goodbye"
       } yield result
 
     val serialisedAndDeserialised = fromSerializableForm(toSerializableForm(dc))

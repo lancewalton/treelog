@@ -37,7 +37,7 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
           case Right(a) =>
             // if dcA succeeded,
             F.map(f(a).run) {
-              dcB ⇒
+              dcB =>
                 // we can concatenate computation history like this.
                 for {
                   _ <- dcA // we can drop returned value because we just need to concatenate descriptions.

@@ -44,8 +44,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
 
       val computation = "Parent" ~< {
         for {
-          i ← 1 ~> "Child One" ~~ 1
-          j ← 2 ~> "Child Two" ~~ 2
+          i <- 1 ~> "Child One" ~~ 1
+          j <- 2 ~> "Child Two" ~~ 2
         } yield 3
       } ~~ 3
 
@@ -58,7 +58,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   }
 
   object `leaf creation with ~> and a function must` {
-    def `do the same as 'success' after applying the function to the value`() = { assert((1 ~> (x ⇒ s"Foo: $x")).value.run === success(1, "Foo: 1").value.run) }
+    def `do the same as 'success' after applying the function to the value`() = { assert((1 ~> (x => s"Foo: $x")).value.run === success(1, "Foo: 1").value.run) }
   }
 
   object `leaf creation with ~>! and a string must` {
@@ -66,7 +66,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   }
 
   object `leaf creation with ~>! and a function must` {
-    def `do the same as 'failure' after applying the function to the value`() = { assert((1 ~>! (x ⇒ s"Foo: $x")).value.run === failure("Foo: 1").value.run) }
+    def `do the same as 'failure' after applying the function to the value`() = { assert((1 ~>! (x => s"Foo: $x")).value.run === failure("Foo: 1").value.run) }
   }
 
   object `boolean ~>? with a description must` {
@@ -90,8 +90,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   }
 
   object `Option ~>? with a noneDescription and a function for someDescription must` {
-    def `do the same as 'success' when the Option is Some`() = { assert((Some(2) ~>? ("Foo", x ⇒ "Bar: " + x)).value.run === success(2, "Bar: 2").value.run) }
-    def `do the same as 'failure' when the Option is None`() = { assert((none[Int] ~>? ("Foo", x ⇒ "Bar: " + x)).value.run === failure("Foo").value.run) }
+    def `do the same as 'success' when the Option is Some`() = { assert((Some(2) ~>? ("Foo", x => "Bar: " + x)).value.run === success(2, "Bar: 2").value.run) }
+    def `do the same as 'failure' when the Option is None`() = { assert((none[Int] ~>? ("Foo", x => "Bar: " + x)).value.run === failure("Foo").value.run) }
   }
 
   object `\\/ ~>? with a description must` {
@@ -100,24 +100,24 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   }
 
   object `\\/ ~>? with a leftDescription function and a rightDescription must` {
-    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x ⇒ "Foo: " + x, "Bar")).value.run === success(2, "Bar").value.run) }
-    def `do the same as 'failure' with left`() = { assert((aFailure ~>? (x ⇒ "Foo: " + x, "Bar")).value.run === failure("Foo: Fail").value.run) }
+    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x => "Foo: " + x, "Bar")).value.run === success(2, "Bar").value.run) }
+    def `do the same as 'failure' with left`() = { assert((aFailure ~>? (x => "Foo: " + x, "Bar")).value.run === failure("Foo: Fail").value.run) }
   }
 
   object `\\/ ~>? with a leftDescription function and a rightDescription function must` {
-    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).value.run === success(2, "Bar: 2").value.run) }
-    def `do the same as 'failure' with left`() = { assert((aFailure ~>? (x ⇒ "Foo: " + x, x ⇒ "Bar: " + x)).value.run === failure("Foo: Fail").value.run) }
+    def `do the same as 'success' with right`() = { assert((Right(2) ~>? (x => "Foo: " + x, x => "Bar: " + x)).value.run === success(2, "Bar: 2").value.run) }
+    def `do the same as 'failure' with left`() = { assert((aFailure ~>? (x => "Foo: " + x, x => "Bar: " + x)).value.run === failure("Foo: Fail").value.run) }
   }
 
   object `~>* must` {
     def `return a success when all children are successes`() = {
-      val result = List(1, 2) ~>* ("Parent", x ⇒ success(3 * x, "Child: " + x))
+      val result = List(1, 2) ~>* ("Parent", x => success(3 * x, "Child: " + x))
       assert(result.value.written === node("Parent", true, node("Child: 1", true), node("Child: 2", true)))
       assert(result.value.value === Right(List(3, 6)))
     }
 
     def `return a failure when one or more children is a failure`() = {
-      val result = List(1, 2) ~>* ("Parent", x ⇒ (x === 1) ~>? s"Child: $x")
+      val result = List(1, 2) ~>* ("Parent", x => (x === 1) ~>? s"Child: $x")
       assert(result.value.written === node("Parent", false, node("Child: 1", true), node("Child: 2", false)))
       assert(result.value.value === Left("Parent"))
     }
@@ -125,7 +125,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
 
   object `~>/ must` {
     def `return success with the folded value  and a log tree describing the fold when all parts are successes`() = {
-      val result = List(1, 2, 3) ~>/ ("Foo", 0 ~> "Initial Value", (acc: Int, x: Int) ⇒ (acc + x) ~> (t ⇒ s"x=$x, result=$t"))
+      val result = List(1, 2, 3) ~>/ ("Foo", 0 ~> "Initial Value", (acc: Int, x: Int) => (acc + x) ~> (t => s"x=$x, result=$t"))
       assert(result.value.written ===
         node("Foo", true,
           node("Initial Value", true),
@@ -136,7 +136,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
     }
 
     def `return failure and a log tree describing the fold as far as it got`() = {
-      def thing(acc: Int, x: Int) = if (x === 3) failure[Int]("No") else (acc + x) ~> (t ⇒ s"x=$x, result=$t")
+      def thing(acc: Int, x: Int) = if (x === 3) failure[Int]("No") else (acc + x) ~> (t => s"x=$x, result=$t")
       val result = List(1, 2, 3) ~>/ ("Bar", 0 ~> "Initial Value", thing)
       assert(result.value.written ===
         node("Bar", false,
@@ -152,7 +152,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
     def `when the leaf is a success, create a success root node with the description with a single child which is the leaf`() = {
       val result =
         "Parent" ~< {
-          for (x ← 1 ~> "Child") yield x
+          for (x <- 1 ~> "Child") yield x
         }
       assert(result.value.written === node("Parent", true, node("Child", true)))
       assert(result.value.value === Right(1))
@@ -161,7 +161,7 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
     def `when the leaf is a failure, create a failure root node with the description with a single child which is the leaf`() = {
       val result: DescribedComputation[String] =
         "Parent" ~< {
-          for (x ← failure[String]("Child")) yield x
+          for (x <- failure[String]("Child")) yield x
         }
       assert(result.value.written === node("Parent", false, node("Child", false)))
       assert(result.value.value === Left("Parent"))
@@ -171,8 +171,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
   object `Combining two leaves using a for comprehension must` {
     def `create a branch with the yielded value, without a description and with success equal to true when both leaves have success = true`() = {
       val result = for {
-        x ← 1 ~> "One"
-        y ← 2 ~> "Two"
+        x <- 1 ~> "One"
+        y <- 2 ~> "Two"
       } yield x + y
       assert(result.value.value === Right(3))
       assert(result.value.written === node(true, node("One", true), node("Two", true)))
@@ -180,8 +180,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
 
     def `create a branch with the description of the first failed leaf on the left, without a description and with success equal to false when at least one of the leaves has success = false`() = {
       val result = for {
-        x ← 1 ~> "One"
-        y ← 2 ~>! "Two"
+        x <- 1 ~> "One"
+        y <- 2 ~>! "Two"
       } yield x + y
       assert(result.value.value === Left("Two"))
       assert(result.value.written === node(false, node("One", true), node("Two", false)))
@@ -194,8 +194,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computation = "Parent" ~< {
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two"
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two"
           } yield 3
         }
 
@@ -206,8 +206,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computation = "Parent" ~< {
           for {
-            i ← 1 ~> "Child One"
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One"
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         }
 
@@ -217,8 +217,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computation = "Parent" ~< {
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         }
 
@@ -231,8 +231,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
     def `copy the existing branch and give it the description when the hoisted branch has no description`() = {
       val result = "Parent" ~< {
         for {
-          x ← 1 ~> "One"
-          y ← 2 ~> "Two"
+          x <- 1 ~> "One"
+          y <- 2 ~> "Two"
         } yield x + y
       }
       assert(result.value.value === Right(3))
@@ -249,8 +249,8 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       val result = "Grandparent" ~< {
         "Parent" ~< {
           for {
-            x ← 1 ~> "One"
-            y ← 2 ~> "Two"
+            x <- 1 ~> "One"
+            y <- 2 ~> "Two"
           } yield x + y
         }
       }
@@ -265,15 +265,15 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computationOne = "ParentOne" ~< ({
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         } ~~ 3)
 
         val computationTwo = "ParentTwo" ~< ({
           for {
-            i ← 1 ~> "Child Three" ~~ 4
-            j ← 2 ~> "Child Four" ~~ 5
+            i <- 1 ~> "Child Three" ~~ 4
+            j <- 2 ~> "Child Four" ~~ 5
           } yield 3
         } ~~ 6)
 
@@ -291,15 +291,15 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computationOne = "ParentOne" ~< ({
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         } ~~ 3)
 
         val computationTwo = {
           for {
-            i ← 1 ~> "Child Three" ~~ 4
-            j ← 2 ~> "Child Four" ~~ 5
+            i <- 1 ~> "Child Three" ~~ 4
+            j <- 2 ~> "Child Four" ~~ 5
           } yield 3
         } ~~ 6
 
@@ -317,15 +317,15 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computationOne = {
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         } ~~ 3
 
         val computationTwo = "ParentTwo" ~< ({
           for {
-            i ← 1 ~> "Child Three" ~~ 4
-            j ← 2 ~> "Child Four" ~~ 5
+            i <- 1 ~> "Child Three" ~~ 4
+            j <- 2 ~> "Child Four" ~~ 5
           } yield 3
         } ~~ 6)
 
@@ -343,15 +343,15 @@ class LogTreeSyntaxSpec extends RefSpec with MustMatchers {
       {
         val computationOne = {
           for {
-            i ← 1 ~> "Child One" ~~ 1
-            j ← 2 ~> "Child Two" ~~ 2
+            i <- 1 ~> "Child One" ~~ 1
+            j <- 2 ~> "Child Two" ~~ 2
           } yield 3
         } ~~ 3
 
         val computationTwo = {
           for {
-            i ← 1 ~> "Child Three" ~~ 4
-            j ← 2 ~> "Child Four" ~~ 5
+            i <- 1 ~> "Child Three" ~~ 4
+            j <- 2 ~> "Child Four" ~~ 5
           } yield 3
         } ~~ 6
 

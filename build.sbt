@@ -2,7 +2,7 @@ lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Se
   organization       := "com.casualmiracles",
   name               := "treelog-cats",
   scalaVersion       := "2.13.0",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.8"),
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.9"),
   releaseCrossBuild  := true,
   scalacOptions      := util.scalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories += {
@@ -21,8 +21,8 @@ resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "2.0.0-M4",
-  "org.typelevel" %% "cats-free"     % "2.0.0-M4",
+  "org.typelevel" %% "cats-core"     % "2.0.0-RC2",
+  "org.typelevel" %% "cats-free"     % "2.0.0-RC2",
   "org.scalatest" %% "scalatest"     % "3.1.0-SNAP13" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.3" % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.3" % "test")
@@ -39,7 +39,7 @@ def publishSettings: Seq[Setting[_]] = Seq(
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  pomIncludeRepository := { _ ⇒ false },
+  pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
