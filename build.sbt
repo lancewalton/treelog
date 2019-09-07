@@ -27,7 +27,7 @@ val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10")
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
 
 val allDependencies = Seq(
   "org.scalaz"    %% "scalaz-core"               % "7.3.0-M18",
