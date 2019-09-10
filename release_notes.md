@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.6.0 (cats)
+----
+Upgrade to cats 2.0.0
+
 1.5.0 (cats)
 -----
 Cross-build for scala 2.13
