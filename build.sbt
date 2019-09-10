@@ -21,8 +21,8 @@ resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "2.0.0-RC2",
-  "org.typelevel" %% "cats-free"     % "2.0.0-RC2",
+  "org.typelevel" %% "cats-core"     % "2.0.0",
+  "org.typelevel" %% "cats-free"     % "2.0.0",
   "org.scalatest" %% "scalatest"     % "3.1.0-SNAP13" % "test",
   "io.argonaut"   %% "argonaut"      % "6.2.3" % "test",
   "io.argonaut"   %% "argonaut-cats" % "6.2.3" % "test")
@@ -76,5 +76,7 @@ lazy val treeLog = (project in file("."))
     buildSettings ++
     publishSettings ++
     websiteSettings ++
-    Seq(resolvers := Seq(Classpaths.typesafeReleases),
-        libraryDependencies ++= allDependencies))
+    Seq(
+      resolvers            := Seq(Resolver.typesafeRepo("releases")),
+      libraryDependencies ++= allDependencies)
+  )
