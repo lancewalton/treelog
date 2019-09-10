@@ -19,16 +19,16 @@ TreeLog achieves this remarkable feat with a Writer monad writing to a Tree repr
 Getting TreeLog
 ---------------
 
-For Scala 2.13.x and cats 2.0.0-M4:
+For Scala 2.13.x and cats 2.0.0:
 
 ```scala
-libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.5.0")
+libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.6.0")
 ```
 
-For Scala 2.12.x and cats 2.0.0-M4:
+For Scala 2.12.x and cats 2.0.0:
 
 ```scala
-libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.5.0")
+libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.6.0")
 ```
 
 For Scala 2.12.x amd 2.11.x and scalaz 7.3.x:
