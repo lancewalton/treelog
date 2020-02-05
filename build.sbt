@@ -1,8 +1,8 @@
 lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization       := "com.casualmiracles",
   name               := "treelog-cats",
-  scalaVersion       := "2.13.0",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.9"),
+  scalaVersion       := "2.13.1",
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.10"),
   releaseCrossBuild  := true,
   scalacOptions      := util.scalacOptions(scalaVersion.value),
   Compile / unmanagedSourceDirectories += {
