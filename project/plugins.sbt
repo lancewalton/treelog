@@ -2,7 +2,7 @@ resolvers += Classpaths.typesafeReleases
 
 resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.3.2")
 
