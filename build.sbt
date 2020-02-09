@@ -34,8 +34,8 @@ val allDependencies = Seq(
   "org.scalaz"    %% "scalaz-scalacheck-binding" % "7.3.0-M18" % "test",
   "org.scalaz"    %% "scalaz-effect"             % "7.3.0-M18" % "test",
   "org.scalatest" %% "scalatest"                 % "3.0.7"    % "test",
-  "io.argonaut"   %% "argonaut"                  % "6.2.3"  % "test",
-  "io.argonaut"   %% "argonaut-scalaz"           % "6.2.3"  % "test")
+  "io.argonaut"   %% "argonaut"                  % "6.2.4"  % "test",
+  "io.argonaut"   %% "argonaut-scalaz"           % "6.2.4"  % "test")
 
 def publishSettings: Seq[Setting[_]] = Seq(
   releaseCrossBuild := true,
