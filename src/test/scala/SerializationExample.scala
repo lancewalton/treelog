@@ -131,8 +131,8 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   */
 
   // Now let's deserialize
-  val parsed: \/[String, Json] = Parse.parse(json).disjunction
-  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither.disjunction)
+  val parsed: \/[String, Json] = Parse.parse(json).toDisjunction
+  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither.toDisjunction)
   val deserialized = decoded.map(ds => fromSerializableForm(ds))
 
   // That's all we need to do to deserialize
