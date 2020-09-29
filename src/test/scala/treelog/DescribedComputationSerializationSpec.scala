@@ -1,10 +1,10 @@
 package treelog
 
 import org.scalatest.refspec.RefSpec
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 import cats.implicits._
 
-class DescribedComputationSerializationSpec extends RefSpec with MustMatchers {
+class DescribedComputationSerializationSpec extends RefSpec with Matchers {
   import LogTreeSyntaxWithoutAnnotations._
 
   override def convertToEqualizer[T](left: T): Equalizer[T] = super.convertToEqualizer(left)

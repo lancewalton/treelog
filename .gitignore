@@ -10,3 +10,10 @@ target/
 pmip
 /.cache-main
 /.cache-tests
+
+# Metals
+.metals/*
+.bloop/*
+.vscode/*
+project/.bloop/*
+project/metals.sbt
