@@ -18,6 +18,7 @@ lazy val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.2" cross CrossVersion.full)
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
 
