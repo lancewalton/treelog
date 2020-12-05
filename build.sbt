@@ -1,7 +1,7 @@
 lazy val buildSettings: Seq[Setting[_]] = Defaults.coreDefaultSettings ++ Seq[Setting[_]](
   organization       := "com.casualmiracles",
   name               := "treelog-cats",
-  scalaVersion       := "2.13.3",
+  scalaVersion       := "2.13.4",
   crossScalaVersions := Seq(scalaVersion.value, "2.12.12"),
   releaseCrossBuild  := true,
   scalacOptions      := util.scalacOptions(scalaVersion.value),
@@ -18,14 +18,15 @@ lazy val websiteSettings = Seq[Setting[_]](
 )
 
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.2" cross CrossVersion.full)
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
 
 lazy val allDependencies = Seq(
-  "org.typelevel" %% "cats-core"     % "2.2.0",
-  "org.typelevel" %% "cats-free"     % "2.2.0",
-  "org.scalatest" %% "scalatest"     % "3.2.2" % "test",
-  "io.argonaut"   %% "argonaut"      % "6.3.1" % "test",
-  "io.argonaut"   %% "argonaut-cats" % "6.3.1" % "test")
+  "org.typelevel" %% "cats-core"     % "2.3.0",
+  "org.typelevel" %% "cats-free"     % "2.3.0",
+  "org.scalatest" %% "scalatest"     % "3.2.3" % "test",
+  "io.argonaut"   %% "argonaut"      % "6.3.2" % "test",
+  "io.argonaut"   %% "argonaut-cats" % "6.3.2" % "test")
 
 /* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
  * Instructions from sonatype: https://issues.sonatype.org/browse/OSSRH-2841?focusedCommentId=150049#comment-150049

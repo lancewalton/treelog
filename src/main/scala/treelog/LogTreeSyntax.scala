@@ -435,7 +435,7 @@ trait LogTreeSyntax[Annotation] {
       case Node(l: DescribedLogTreeLabel[Annotation], children) => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
     }
 
-    private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success())
+    private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
   }
 
   implicit class FoldSyntax[V](values: Iterable[V]) {
@@ -486,7 +486,7 @@ trait LogTreeSyntax[Annotation] {
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
       line(depth, tree.rootLabel) :: tree.subForest.flatMap(toList(_, depth + 1)).toList
 
-    private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success(), showDescription(label))))
+    private def line(depth: Int, label: LogTreeLabel[Annotation]) = (depth, showAnnotations(label.annotations, showSuccess(label.success, showDescription(label))))
 
     private def showAnnotations(annotations: Set[Annotation], line: String) =
       if (annotations.isEmpty) line else line + " - [" + annotations.map(annotationShow.show).mkString(", ") + "]"

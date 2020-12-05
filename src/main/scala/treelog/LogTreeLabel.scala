@@ -3,7 +3,7 @@ package treelog
 import cats.kernel.Eq
 
 sealed trait LogTreeLabel[Annotation] extends Product with Serializable {
-  def success(): Boolean
+  def success: Boolean
   def fold[T](f: DescribedLogTreeLabel[Annotation] => T, g: UndescribedLogTreeLabel[Annotation] => T): T
   def annotations: Set[Annotation]
 }

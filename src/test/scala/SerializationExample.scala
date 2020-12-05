@@ -80,7 +80,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
 
   val json = serializableDescribedComputation.asJson.spaces2
 
-  println
+  println()
   println("Serialized:")
   println(json)
   // The above renders:
@@ -135,7 +135,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   // That's all we need to do to deserialize
 
   deserialized.foreach { d =>
-    println
+    println()
     println("After serializing and deserializing:")
     showDescribedComputation(d)
 
@@ -154,7 +154,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
       things3And4 <- List(Thing(3, "Thing3"), Thing(4, "Thing4")) ~>* ("Things that have not been serialized and deserialized", things)
     } yield things1And2 ::: things3And4)
 
-    println
+    println()
     println("After adding some things:")
     showDescribedComputation(moreStuff)
 
@@ -181,7 +181,7 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     println("The log is:")
     println(runResult.written.show)
 
-    println
+    println()
     println("The value is:")
     println(runResult.value)
   }
