@@ -17,7 +17,7 @@ import scalaz.syntax.traverse._
 trait LogTreeSyntax[Annotation] {
   type LogTree = Tree[LogTreeLabel[Annotation]]
   type LogTreeWriter[V] = Writer[LogTree, V]
-  type DescribedComputation[V] = EitherT[LogTreeWriter, String, V]
+  type DescribedComputation[V] = EitherT[String, LogTreeWriter, V]
 
   private val NilTree: LogTree = Leaf(UndescribedLogTreeLabel(true))
 
