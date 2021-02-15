@@ -12,4 +12,4 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
 
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.4.0")
 
-addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.1.0-M11")
+addSbtPlugin("io.get-coursier" % "sbt-coursier" % "2.0.7")
