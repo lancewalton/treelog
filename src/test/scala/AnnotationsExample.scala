@@ -9,7 +9,7 @@ case class Person(key: PersonKey, name: String)
 
 object AnnotationsExample extends App with LogTreeSyntax[PersonKey] {
   // We need this implicit so that we can cats.Show the result
-  implicit val personKeyShow = Show.show[PersonKey](_.uuid.toString)
+  implicit val personKeyShow: Show[PersonKey] = Show.show[PersonKey](_.uuid.toString)
 
   val result = peopleToGreet() ~>* ("Greeting everybody", greet)
 

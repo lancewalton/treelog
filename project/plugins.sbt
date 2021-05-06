@@ -10,4 +10,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.3")
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
 
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.1")
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.3")
+
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.1.17")

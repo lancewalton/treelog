@@ -87,7 +87,7 @@ sealed abstract class TreeInstances {
 
   implicit def treeOrder[A](implicit A0: Order[A]): Order[Tree[A]] =
     new Order[Tree[A]] with TreeEqual[A] {
-      def A = A0
+      def A: Order[A] = A0
       override def compare(x: Tree[A], y: Tree[A]) =
         A.compare(x.rootLabel, y.rootLabel) match {
           case 0 => Order[LazyList[Tree[A]]].compare(x.subForest, y.subForest)
