@@ -87,6 +87,28 @@ def publishSettings: Seq[Setting[_]] = Seq(
         <email>channing [dot] walton [at] underscore [dot] io</email>
         <organization>Underscore LLP</organization>
       </developer>
+      <developer>
+        <id>dpg</id>
+        <name>Dave Pereira-Gurnell</name>
+        <email>dave [dot] gurnell [at] underscore [dot] io</email>
+        <organization>Underscore LLP</organization>
+      </developer>
+      <developer>
+        <id>everpeace</id>
+        <name>Shingo Omura</name>
+      </developer>
+      <developer>
+        <id>stremlenye</id>
+        <name>Yury Ankudinov</name>
+      </developer>
+      <developer>
+        <id>0xdevalias</id>
+        <name>Glenn Grant</name>
+      </developer>
+      <developer>
+        <id>ahjohannessen</id>
+        <name>Alex Henning Johannessen</name>
+      </developer>
     </developers>
 )
 
