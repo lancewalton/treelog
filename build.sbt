@@ -9,7 +9,13 @@ lazy val buildSettings: Seq[Setting[_]] =
     scalaVersion := Scala3,
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
     releaseCrossBuild := true,
-    scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings"))
+    scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
+    scalacOptions += {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, minor)) => "-Xtarget:8"
+        case _                => "-target:jvm-1.8"
+      }
+    }
   )
 
 enablePlugins(GhpagesPlugin)

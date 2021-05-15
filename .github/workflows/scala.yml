@@ -3,10 +3,7 @@ name: Scala CI
 on:
   push:
     branches:
-      - '*'
-  pull_request:
-    branches:
-      - '*'
+      - cats
 
 jobs:
   build:
@@ -21,4 +18,4 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Run tests
-        run: sbt test
+        run: sbt +test
