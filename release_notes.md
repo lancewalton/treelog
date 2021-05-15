@@ -3,7 +3,7 @@ Release Notes
 
 1.8.0 (cats)
 ---
-Add cats 3.0 support
+Scala 3.0!
 
 1.7.0 (cats)
 ----
