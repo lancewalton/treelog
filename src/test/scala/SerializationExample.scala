@@ -1,14 +1,26 @@
+import cats.syntax.all._
+import cats.Show
 import argonaut.Argonaut._
 import argonaut._
-import cats.Show
 import treelog._
-import cats.implicits._
 
-case class Thing(id: Int, name: String)
+final case class Thing(id: Int, name: String)
 
 object Thing {
-  implicit val codec = casecodec2(Thing.apply, Thing.unapply)("id", "name")
-  implicit val show = new Show[Int] {
+
+  implicit def ThingCodecJson: CodecJson[Thing] = 
+  CodecJson(
+    (t: Thing) =>
+      ("id" := t.id) ->:
+      ("name" := t.name) ->:
+      jEmptyObject,
+    c => for {
+      id <- (c --\ "id").as[Int]
+      name <- (c --\ "name").as[String]
+    } yield Thing(id, name)
+  )
+
+  implicit val show: Show[Int] = new Show[Int] {
     override def show(k: Int) = k.toString
   }
 }
@@ -16,7 +28,8 @@ object Thing {
 // This defines the Argonaut JSON encoders and decoders we need in order to serialize and deserialize the serializable form
 // of the DescribedComputation
 object Codecs {
-  private implicit val logTreeLabelEncoder: EncodeJson[LogTreeLabel[Int]] = EncodeJson { l =>
+
+  implicit val logTreeLabelEncoder: EncodeJson[LogTreeLabel[Int]] = EncodeJson { l =>
     ("success" := l.success) ->:
       ("annotations" := l.annotations) ->:
       l.fold(
@@ -24,7 +37,7 @@ object Codecs {
         _ => jEmptyObject)
   }
 
-  private implicit val logTreeLabelDecoder: DecodeJson[LogTreeLabel[Int]] = DecodeJson { c =>
+  implicit val logTreeLabelDecoder: DecodeJson[LogTreeLabel[Int]] = DecodeJson { c =>
     if ((c --\ "description").succeeded)
       for {
         success <- (c --\ "success").as[Boolean]
@@ -38,27 +51,27 @@ object Codecs {
       } yield UndescribedLogTreeLabel(success, annotations)
   }
 
-  implicit val logTreeLabelCodec = CodecJson.derived[LogTreeLabel[Int]]
+  implicit val logTreeLabelCodec: CodecJson[LogTreeLabel[Int]] = CodecJson.derived[LogTreeLabel[Int]]
 
-  private implicit val serializableTreeEncoder: EncodeJson[SerializableTree[Int]] = EncodeJson { t =>
+  implicit val serializableTreeEncoder: EncodeJson[SerializableTree[Int]] = EncodeJson { t =>
     ("label" := t.label) ->:
       ("children" := t.children) ->:
       jEmptyObject
   }
 
-  private implicit val serializableTreeDecoder: DecodeJson[SerializableTree[Int]] = DecodeJson { c =>
+  implicit val serializableTreeDecoder: DecodeJson[SerializableTree[Int]] = DecodeJson { c =>
     for {
       label <- (c --\ "label").as[LogTreeLabel[Int]]
       children <- (c --\ "children").as[List[SerializableTree[Int]]]
     } yield SerializableTree(label, children)
   }
 
-  implicit val serializableTreeCodec = CodecJson.derived[SerializableTree[Int]]
+  implicit val serializableTreeCodec: CodecJson[SerializableTree[Int]] = CodecJson.derived[SerializableTree[Int]]
 }
 
 object SerializationExample extends App with LogTreeSyntax[Int] {
 
-  val result = listOfThings() ~>* ("Here are some things", things)
+  val result: DescribedComputation[List[String]] = listOfThings() ~>* ("Here are some things", things)
 
   println("Before serialization:")
   showDescribedComputation(result)
@@ -128,9 +141,13 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
   */
 
   // Now let's deserialize
-  val parsed: Either[String, Json] = Parse.parse(json)
-  val decoded = parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither)
-  val deserialized = decoded.map(ds => fromSerializableForm(ds))
+  private val parsed: Either[String, Json] = Parse.parse(json)
+  
+  private val decoded = 
+    parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither)
+  
+  private val deserialized = 
+    decoded.map(ds => fromSerializableForm(ds))
 
   // That's all we need to do to deserialize
 

@@ -1,11 +1,11 @@
  language: scala
  dist: trusty
  scala:
-   - "2.12.12"
-   - "2.13.4"
+   - "2.12.13"
+   - "2.13.5"
+   - "3.0.0"
  jdk:
    - oraclejdk8
-   - oraclejdk11
 
  cache:
    directories:

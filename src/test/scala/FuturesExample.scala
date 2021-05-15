@@ -5,7 +5,7 @@ import scala.concurrent.duration._
 
 object FuturesExample extends App {
 
-  implicit val ec = ExecutionContext.global
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
   /*
    * Lets start with some extremely complicated parallel computations
