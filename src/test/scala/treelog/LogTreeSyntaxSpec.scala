@@ -126,24 +126,32 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
   object `~>/ must` {
     def `return success with the folded value  and a log tree describing the fold when all parts are successes`() = {
       val result = List(1, 2, 3) ~>/ ("Foo", 0 ~> "Initial Value", (acc: Int, x: Int) => (acc + x) ~> (t => s"x=$x, result=$t"))
-      assert(result.value.written ===
+      val expected: Tree[LogTreeLabel[Nothing]] =
         node("Foo", true,
-          node("Initial Value", true),
-          node("x=1, result=1", true),
-          node("x=2, result=3", true),
-          node("x=3, result=6", true)))
+          leaf("Initial Value", true),
+          leaf("x=1, result=1", true),
+          leaf("x=2, result=3", true),
+          leaf("x=3, result=6", true))
+
+      println(expected.show)
+      println(result.value.written.show)
+
+      assert(result.value.written === expected)
+      println(result.value.value)
       result.value.value must equal(Right(6))
     }
 
     def `return failure and a log tree describing the fold as far as it got`() = {
       def thing(acc: Int, x: Int) = if (x === 3) failure[Int]("No") else (acc + x) ~> (t => s"x=$x, result=$t")
       val result = List(1, 2, 3) ~>/ ("Bar", 0 ~> "Initial Value", thing)
-      assert(result.value.written ===
-        node("Bar", false,
-          node("Initial Value", true),
-          node("x=1, result=1", true),
-          node("x=2, result=3", true),
-          node("No", false)))
+      val expected: Tree[LogTreeLabel[Nothing]] = node("Bar", false,
+        leaf("Initial Value", true),
+        leaf("x=1, result=1", true),
+        leaf("x=2, result=3", true),
+        leaf("No", false))
+//      println(expected.show)
+//      println(result.value.written.show)
+      assert(result.value.written === expected)
       result.value.value must equal(Left("Bar"))
     }
   }
@@ -154,7 +162,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
         "Parent" ~< {
           for (x <- 1 ~> "Child") yield x
         }
-      assert(result.value.written === node("Parent", true, node("Child", true)))
+      assert(result.value.written === node("Parent", true, leaf("Child", true)))
       assert(result.value.value === Right(1))
     }
 
@@ -163,7 +171,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
         "Parent" ~< {
           for (x <- failure[String]("Child")) yield x
         }
-      assert(result.value.written === node("Parent", false, node("Child", false)))
+      assert(result.value.written === node("Parent", false, leaf("Child", false)))
       assert(result.value.value === Left("Parent"))
     }
   }
@@ -371,6 +379,12 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
   private def node(description: String, success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
     Node(DescribedLogTreeLabel(description, success), children.toLazyList)
 
+  private def leaf(description: String, success: Boolean):Tree[LogTreeLabel[Nothing]] =
+    Leaf(DescribedLogTreeLabel(description, success))
+
   private def node(success: Boolean, children: Tree[LogTreeLabel[Nothing]]*) =
     Node(UndescribedLogTreeLabel(success), children.toLazyList)
+
+  private def leaf(success: Boolean): Leaf[LogTreeLabel[Nothing]] =
+      Leaf(UndescribedLogTreeLabel(success))
 }

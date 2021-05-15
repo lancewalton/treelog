@@ -54,9 +54,11 @@ trait LogTreeSyntax[Annotation] {
     EitherT[LogTreeWriter, String, V](Writer(tree, value.asRight))
 
   def failureLog[V](dc: DescribedComputation[V]): DescribedComputation[V] = {
-    val logTree = dc.value.written match {
+    val logTree: Tree[LogTreeLabel[Annotation]] = dc.value.written match {
       case Node(UndescribedLogTreeLabel(_, a), c) => Node(UndescribedLogTreeLabel(false, a), c)
       case Node(DescribedLogTreeLabel(d, _, a), c) => Node(DescribedLogTreeLabel(d, false, a), c)
+      case Leaf(UndescribedLogTreeLabel(_, a)) => Leaf(UndescribedLogTreeLabel(false, a))
+      case Leaf(DescribedLogTreeLabel(d, _, a)) => Leaf(DescribedLogTreeLabel(d, false, a))
     }
     dc.value.value match {
       case Left(des) => failure(des, logTree)
@@ -218,9 +220,11 @@ trait LogTreeSyntax[Annotation] {
       * Annotate a [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]].
       */
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[V] = {
-      val newTree = w.value.written match {
+      val newTree: Tree[LogTreeLabel[Annotation]] = w.value.written match {
         case Node(l: DescribedLogTreeLabel[Annotation], c) => Node(l.copy(annotations   = l.annotations ++ annotations), c)
         case Node(l: UndescribedLogTreeLabel[Annotation], c) => Node(l.copy(annotations = l.annotations ++ annotations), c)
+        case Leaf(l: DescribedLogTreeLabel[Annotation]) => Leaf(l.copy(annotations   = l.annotations ++ annotations))
+        case Leaf(l: UndescribedLogTreeLabel[Annotation]) => Leaf(l.copy(annotations = l.annotations ++ annotations))
       }
 
       w.value.value match {
@@ -433,6 +437,8 @@ trait LogTreeSyntax[Annotation] {
     private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
       case Node(l: UndescribedLogTreeLabel[Annotation], children) => Node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
       case Node(_: DescribedLogTreeLabel[Annotation], _) => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
+      case Leaf(l: UndescribedLogTreeLabel[Annotation]) => Leaf(DescribedLogTreeLabel(description, tree.rootLabel.success, l.annotations))
+      case Leaf(_: DescribedLogTreeLabel[Annotation]) => Node(DescribedLogTreeLabel(description, tree.rootLabel.success), LazyList(tree))
     }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
@@ -453,7 +459,9 @@ trait LogTreeSyntax[Annotation] {
             case Right(_) => recurse(remainingValues.tail, partialResult.flatMap(p => f(p, remainingValues.head)))
           }
 
-      description ~< recurse(values, initial)
+      val value: DescribedComputation[R] = recurse(values, initial)
+      println(value.value.written)
+      description ~< value
     }
   }
 
@@ -481,7 +489,7 @@ trait LogTreeSyntax[Annotation] {
 
   implicit def logTreeShow(implicit annotationShow: Show[Annotation]): Show[LogTree] = new Show[LogTree] {
 
-    override def show(t: LogTree): String = 
+    override def show(t: LogTree): String =
       toList(t).map(line => "  " * line._1 + line._2).mkString(System.getProperty("line.separator"))
 
     private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =

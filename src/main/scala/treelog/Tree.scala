@@ -7,7 +7,7 @@ import treelog.ScalaCompat._
 import LazyList._
 
 /** Partially copied from Scalaz. */
-sealed abstract class Tree[A] {
+sealed abstract class Tree[A] extends Product with Serializable {
 
   /** The label at the root of this tree. */
   def rootLabel: A
@@ -102,32 +102,16 @@ object Tree extends TreeInstances {
     *
     * You can use Node for tree construction or pattern matching.
     */
-  object Node {
-    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] = {
-      new Tree[A] {
-        def rootLabel = root
-        def subForest = forest
-
-        override def toString = "<tree>"
-      }
-    }
-
-    def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.rootLabel, t.subForest))
+  final case class Node[A](rootLabel: A, subForest: LazyList[Tree[A]]) extends Tree[A] {
+    override def toString = s"Node($rootLabel, ${subForest.toList})"
   }
 
   /** Leaf represents a tree node with no children.
     *
     *  You can use Leaf for tree construction or pattern matching.
     */
-  object Leaf {
-    def apply[A](root: => A): Tree[A] =
-      Node(root, LazyList.empty)
-
-    def unapply[A](t: Tree[A]): Option[A] =
-      t match {
-        case Node(root, f) if f.isEmpty => Some(root)
-        case _                          => None
-      }
+  final case class Leaf[A](rootLabel: A) extends Tree[A] {
+    val subForest: LazyList[Tree[A]] = LazyList.empty
   }
 }
 

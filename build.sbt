@@ -7,7 +7,6 @@ lazy val buildSettings: Seq[Setting[_]] =
     organization := "com.casualmiracles",
     name := "treelog-cats",
     scalaVersion := Scala3,
-    scalacOptions += "-target:jvm-1.8",
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
     releaseCrossBuild := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings"))
