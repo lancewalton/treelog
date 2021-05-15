@@ -3,7 +3,7 @@ treelog
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lancewalton/treelog?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/lancewalton/treelog.png?branch=master)](https://travis-ci.org/lancewalton/treelog)
+[![Scala CI](https://github.com/lancewalton/treelog/actions/workflows/scala.yml/badge.svg)](https://github.com/lancewalton/treelog/actions/workflows/scala.yml)
 
 It is often necessary to understand exactly what happened in a computation: what went right, what went wrong,
  what was done with what, why it was done, and how a result was derived.
