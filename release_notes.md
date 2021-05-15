@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.8.0 (cats)
+---
+Add cats 3.0 support
+
 1.7.0 (cats)
 ----
 Upgrade to cats 2.3.0
