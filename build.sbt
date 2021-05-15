@@ -11,18 +11,12 @@ lazy val buildSettings: Seq[Setting[_]] =
     releaseCrossBuild := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     scalacOptions += {
-      if (priorTo3(scalaVersion.value))
-        "-target:jvm-1.8"
-      else
-        "-Xtarget:8"
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, minor)) => "-Xtarget:8"
+        case _                => "-target:jvm-1.8"
+      }
     }
   )
-
-def priorTo3(version: String): Boolean =
-  CrossVersion.partialVersion(version) match {
-    case Some((3, minor)) => false
-    case _                => true
-  }
 
 enablePlugins(GhpagesPlugin)
 enablePlugins(SiteScaladocPlugin)
