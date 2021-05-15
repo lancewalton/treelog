@@ -7,11 +7,22 @@ lazy val buildSettings: Seq[Setting[_]] =
     organization := "com.casualmiracles",
     name := "treelog-cats",
     scalaVersion := Scala3,
-    scalacOptions += "-target:jvm-1.8",
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
     releaseCrossBuild := true,
-    scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings"))
+    scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
+    scalacOptions += {
+      if (priorTo3(scalaVersion.value))
+        "-target:jvm-1.8"
+      else
+        "-Xtarget:8"
+    }
   )
+
+def priorTo3(version: String): Boolean =
+  CrossVersion.partialVersion(version) match {
+    case Some((3, minor)) => false
+    case _                => true
+  }
 
 enablePlugins(GhpagesPlugin)
 enablePlugins(SiteScaladocPlugin)

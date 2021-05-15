@@ -46,7 +46,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
         for {
           i <- 1 ~> "Child One" ~~ 1
           j <- 2 ~> "Child Two" ~~ 2
-        } yield 3
+        } yield i + j
       } ~~ 3
 
       assert(computation.allAnnotations === Set(1, 2, 3))
@@ -196,7 +196,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two"
-          } yield 3
+          } yield i + j
         }
 
 
@@ -208,7 +208,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One"
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         }
 
         assert(computation.allAnnotations === Set(2))
@@ -219,7 +219,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         }
 
         assert(computation.allAnnotations === Set(1, 2))
@@ -267,20 +267,20 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         } ~~ 3)
 
         val computationTwo = "ParentTwo" ~< ({
           for {
             i <- 1 ~> "Child Three" ~~ 4
             j <- 2 ~> "Child Four" ~~ 5
-          } yield 3
+          } yield i + j
         } ~~ 6)
 
         val computation = for {
           i <- computationOne
           j <- computationTwo
-        } yield 0
+        } yield i + j
 
         val hoistedComputation = computation ~> "Hoisted"
 
@@ -293,20 +293,20 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         } ~~ 3)
 
         val computationTwo = {
           for {
             i <- 1 ~> "Child Three" ~~ 4
             j <- 2 ~> "Child Four" ~~ 5
-          } yield 3
+          } yield i + j
         } ~~ 6
 
         val computation = for {
           i <- computationOne
           j <- computationTwo
-        } yield 0
+        } yield i + j
 
         val hoistedComputation = computation ~> "Hoisted"
 
@@ -319,20 +319,20 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         } ~~ 3
 
         val computationTwo = "ParentTwo" ~< ({
           for {
             i <- 1 ~> "Child Three" ~~ 4
             j <- 2 ~> "Child Four" ~~ 5
-          } yield 3
+          } yield i + j
         } ~~ 6)
 
         val computation = for {
           i <- computationOne
           j <- computationTwo
-        } yield 0
+        } yield i + j
 
         val hoistedComputation = computation ~> "Hoisted"
 
@@ -345,20 +345,20 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
           for {
             i <- 1 ~> "Child One" ~~ 1
             j <- 2 ~> "Child Two" ~~ 2
-          } yield 3
+          } yield i + j
         } ~~ 3
 
         val computationTwo = {
           for {
             i <- 1 ~> "Child Three" ~~ 4
             j <- 2 ~> "Child Four" ~~ 5
-          } yield 3
+          } yield i + j
         } ~~ 6
 
         val computation = for {
           i <- computationOne
           j <- computationTwo
-        } yield 0
+        } yield i + j
 
         val hoistedComputation = computation ~> "Hoisted"
 
