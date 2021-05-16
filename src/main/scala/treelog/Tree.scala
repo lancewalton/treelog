@@ -4,7 +4,6 @@ import cats._
 import cats.free.Trampoline
 import cats.implicits._
 import treelog.ScalaCompat._
-import LazyList._
 
 /** Partially copied from Scalaz. */
 sealed abstract class Tree[A] {
@@ -29,22 +28,23 @@ sealed abstract class Tree[A] {
   /** A 2D String representation of this Tree, separated into lines.
     * Uses reversed StringBuilders for performance, because they are
     * prepended to.
-    **/
+    */
   private def draw(implicit sh: Show[A]): Trampoline[Vector[StringBuilder]] = {
     import Trampoline._
     val branch = " -+" // "+- ".reverse
     val stem   = " -`" // "`- ".reverse
     val trunk  = "  |" // "|  ".reverse
 
-    def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] = s match {
-      case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
-      case t #:: ts if ts.isEmpty => defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
-      case t #:: ts =>
-        for {
-          subtree <- defer(t.draw)
-          otherSubtrees <- defer(drawSubTrees(ts))
-        } yield new StringBuilder("|") +: (shift(branch, trunk, subtree) ++ otherSubtrees)
-    }
+    def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] =
+      s match {
+        case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
+        case t #:: ts if ts.isEmpty => defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
+        case t #:: ts               =>
+          for {
+            subtree       <- defer(t.draw)
+            otherSubtrees <- defer(drawSubTrees(ts))
+          } yield new StringBuilder("|") +: (shift(branch, trunk, subtree) ++ otherSubtrees)
+      }
 
     def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] = {
       var i = 0
@@ -66,9 +66,11 @@ sealed abstract class Tree[A] {
 
     squish(this, Eval.now(LazyList.empty))
   }
+
 }
 
 sealed abstract class TreeInstances {
+
   implicit val treeTraverse: Traverse[Tree] = new Traverse[Tree] {
 
     override def map[A, B](fa: Tree[A])(f: A => B): Tree[B] = fa map f
@@ -82,18 +84,20 @@ sealed abstract class TreeInstances {
     override def foldMap[A, B](fa: Tree[A])(f: A => B)(implicit F: Monoid[B]): B = fa foldMap f
   }
 
-  implicit def treeEqual[A](implicit A0: Eq[A]): Eq[Tree[A]] =
-    new TreeEqual[A] { def A = A0 }
+  implicit def treeEqual[A](implicit A0: Eq[A]): Eq[Tree[A]] = new TreeEqual[A] { def A = A0 }
 
   implicit def treeOrder[A](implicit A0: Order[A]): Order[Tree[A]] =
     new Order[Tree[A]] with TreeEqual[A] {
       def A: Order[A] = A0
+
       override def compare(x: Tree[A], y: Tree[A]) =
         A.compare(x.rootLabel, y.rootLabel) match {
           case 0 => Order[LazyList[Tree[A]]].compare(x.subForest, y.subForest)
           case i => i
         }
+
     }
+
 }
 
 object Tree extends TreeInstances {
@@ -103,14 +107,14 @@ object Tree extends TreeInstances {
     * You can use Node for tree construction or pattern matching.
     */
   object Node {
-    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] = {
+
+    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] =
       new Tree[A] {
         def rootLabel = root
         def subForest = forest
 
         override def toString = "<tree>"
       }
-    }
 
     def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.rootLabel, t.subForest))
   }
@@ -120,26 +124,27 @@ object Tree extends TreeInstances {
     *  You can use Leaf for tree construction or pattern matching.
     */
   object Leaf {
-    def apply[A](root: => A): Tree[A] =
-      Node(root, LazyList.empty)
+    def apply[A](root: => A): Tree[A] = Node(root, LazyList.empty)
 
     def unapply[A](t: Tree[A]): Option[A] =
       t match {
         case Node(root, f) if f.isEmpty => Some(root)
         case _                          => None
       }
+
   }
+
 }
 
 private trait TreeEqual[A] extends Eq[Tree[A]] {
   def A: Eq[A]
 
-  override final def eqv(a1: Tree[A], a2: Tree[A]) = {
+  final override def eqv(a1: Tree[A], a2: Tree[A]): Boolean = {
     def corresponds[B](a1: LazyList[Tree[A]], a2: LazyList[Tree[A]]): Trampoline[Boolean] =
       (a1.isEmpty, a2.isEmpty) match {
         case (true, true)          => Trampoline.done(true)
         case (_, true) | (true, _) => Trampoline.done(false)
-        case _ =>
+        case _                     =>
           for {
             heads <- trampolined(a1.head, a2.head)
             tails <- corresponds(a1.tail, a2.tail)
@@ -148,10 +153,11 @@ private trait TreeEqual[A] extends Eq[Tree[A]] {
 
     def trampolined(a1: Tree[A], a2: Tree[A]): Trampoline[Boolean] =
       for {
-        roots <- Trampoline.done(A.eqv(a1.rootLabel, a2.rootLabel))
+        roots      <- Trampoline.done(A.eqv(a1.rootLabel, a2.rootLabel))
         subForests <- corresponds(a1.subForest, a2.subForest)
       } yield roots && subForests
 
     trampolined(a1, a2).run
   }
+
 }

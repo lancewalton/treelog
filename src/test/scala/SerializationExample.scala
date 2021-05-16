@@ -1,28 +1,30 @@
-import cats.syntax.all._
-import cats.Show
-import argonaut.Argonaut._
 import argonaut._
+import argonaut.Argonaut._
+import cats.Show
+import cats.syntax.all._
 import treelog._
 
 final case class Thing(id: Int, name: String)
 
 object Thing {
 
-  implicit def ThingCodecJson: CodecJson[Thing] = 
-  CodecJson(
-    (t: Thing) =>
-      ("id" := t.id) ->:
-      ("name" := t.name) ->:
-      jEmptyObject,
-    c => for {
-      id <- (c --\ "id").as[Int]
-      name <- (c --\ "name").as[String]
-    } yield Thing(id, name)
-  )
+  implicit def ThingCodecJson: CodecJson[Thing] =
+    CodecJson(
+      (t: Thing) =>
+        ("id" := t.id) ->:
+          ("name" := t.name) ->:
+          jEmptyObject,
+      c =>
+        for {
+          id   <- (c --\ "id").as[Int]
+          name <- (c --\ "name").as[String]
+        } yield Thing(id, name)
+    )
 
   implicit val show: Show[Int] = new Show[Int] {
     override def show(k: Int) = k.toString
   }
+
 }
 
 // This defines the Argonaut JSON encoders and decoders we need in order to serialize and deserialize the serializable form
@@ -32,21 +34,19 @@ object Codecs {
   implicit val logTreeLabelEncoder: EncodeJson[LogTreeLabel[Int]] = EncodeJson { l =>
     ("success" := l.success) ->:
       ("annotations" := l.annotations) ->:
-      l.fold(
-        d => ("description" := d.description) ->: jEmptyObject,
-        _ => jEmptyObject)
+      l.fold(d => ("description" := d.description) ->: jEmptyObject, _ => jEmptyObject)
   }
 
   implicit val logTreeLabelDecoder: DecodeJson[LogTreeLabel[Int]] = DecodeJson { c =>
     if ((c --\ "description").succeeded)
       for {
-        success <- (c --\ "success").as[Boolean]
+        success     <- (c --\ "success").as[Boolean]
         annotations <- (c --\ "annotations").as[Set[Int]]
         description <- (c --\ "description").as[String]
       } yield DescribedLogTreeLabel(description, success, annotations)
     else
       for {
-        success <- (c --\ "success").as[Boolean]
+        success     <- (c --\ "success").as[Boolean]
         annotations <- (c --\ "annotations").as[Set[Int]]
       } yield UndescribedLogTreeLabel(success, annotations)
   }
@@ -61,7 +61,7 @@ object Codecs {
 
   implicit val serializableTreeDecoder: DecodeJson[SerializableTree[Int]] = DecodeJson { c =>
     for {
-      label <- (c --\ "label").as[LogTreeLabel[Int]]
+      label    <- (c --\ "label").as[LogTreeLabel[Int]]
       children <- (c --\ "children").as[List[SerializableTree[Int]]]
     } yield SerializableTree(label, children)
   }
@@ -138,15 +138,15 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
         }
       }
     ]
-  */
+   */
 
   // Now let's deserialize
   private val parsed: Either[String, Json] = Parse.parse(json)
-  
-  private val decoded = 
+
+  private val decoded =
     parsed.flatMap(_.jdecode[SerializableDescribedComputation[List[String]]].toEither)
-  
-  private val deserialized = 
+
+  private val deserialized =
     decoded.map(ds => fromSerializableForm(ds))
 
   // That's all we need to do to deserialize
@@ -175,20 +175,20 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     println("After adding some things:")
     showDescribedComputation(moreStuff)
 
-    // The above will print:
-    // The log is:
-    // The log is:
-    // FTW!
-    //   Some things that have been serialized and deserialized
-    //     Here are some things
-    //       Here I described Thing1 - [1]
-    //       Here I described Thing2 - [2]
-    //   Things that have not been serialized and deserialized
-    //     Here I described Thing3 - [3]
-    //     Here I described Thing4 - [4]
-    //
-    // The value is:
-    // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
+  // The above will print:
+  // The log is:
+  // The log is:
+  // FTW!
+  //   Some things that have been serialized and deserialized
+  //     Here are some things
+  //       Here I described Thing1 - [1]
+  //       Here I described Thing2 - [2]
+  //   Things that have not been serialized and deserialized
+  //     Here I described Thing3 - [3]
+  //     Here I described Thing4 - [4]
+  //
+  // The value is:
+  // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
   }
 
   private def showDescribedComputation(dc: DescribedComputation[List[String]]): Unit = {

@@ -1,8 +1,8 @@
-import treelog.LogTreeSyntax
-import cats.implicits._
 import java.util.UUID
 
 import cats.Show
+import cats.implicits._
+import treelog.LogTreeSyntax
 
 case class PersonKey(uuid: UUID = UUID.randomUUID())
 case class Person(key: PersonKey, name: String)
@@ -11,7 +11,7 @@ object AnnotationsExample extends App with LogTreeSyntax[PersonKey] {
   // We need this implicit so that we can cats.Show the result
   implicit val personKeyShow: Show[PersonKey] = Show.show[PersonKey](_.uuid.toString)
 
-  val result = peopleToGreet() ~>* ("Greeting everybody", greet)
+  val result: DescribedComputation[List[String]] = peopleToGreet() ~>* ("Greeting everybody", greet)
 
   // This will not compile unless we define a scalaz.Show for PersonKey (as above)
   println(result.value.written.show)
