@@ -245,10 +245,14 @@ trait LogTreeSyntax[Annotation] {
     */
   implicit class BooleanSyntax(b: Boolean) {
 
+    /** Syntactic sugar equivalent to [[treelog.LogTreeSyntax.BooleanSyntax.describedBy describedBy(description)]]
+      */
+    def ~>?(description: String): DescribedComputation[Boolean] = describedBy(description)
+
     /** Use the same description whether the boolean is `true` or `false`.
       * Equivalent to `~>?(description, description)`
       */
-    def ~>?(description: String): DescribedComputation[Boolean] = ~>?(description, description)
+    def describedBy(description: String): DescribedComputation[Boolean] = ~>?(description, description)
 
     /** Use different descriptions for the `true` and `false` cases. Note that unlike `'if'`
       * the `false` / failure description is the first parameter and the `true` / success
@@ -258,8 +262,13 @@ trait LogTreeSyntax[Annotation] {
       * If the boolean is `true` the 'value' of the returned DescribedComputation will be `\/-(true)`,
       * otherwise, the 'value' will be `-\/(description)`.
       */
-    def ~>?(failureDescription: => String, successDescription: => String): DescribedComputation[Boolean] =
+    def decribedWith(failureDescription: => String, successDescription: => String): DescribedComputation[Boolean] =
       if (b) success(true, successDescription) else failure(failureDescription)
+
+    /** Syntactic sugar equivalent to [[treelog.LogTreeSyntax.BooleanSyntax.decribedWith decribedWith(failureDescription, successDescription)]]
+      */
+    def ~>?(failureDescription: => String, successDescription: => String): DescribedComputation[Boolean] =
+      decribedWith(failureDescription, successDescription)
   }
 
   /** Syntax for treating `Options` as indicators of success or failure in a computation.
