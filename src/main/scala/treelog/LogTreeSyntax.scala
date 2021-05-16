@@ -205,10 +205,8 @@ trait LogTreeSyntax[Annotation] {
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[V] = {
       val originalLogTree: LogTree = w.value.written
 
-      val newTree = originalLogTree.rootLabel match {
-        case l: DescribedLogTreeLabel[Annotation]   => Node(l.copy(annotations = l.annotations ++ annotations), originalLogTree.subForest)
-        case l: UndescribedLogTreeLabel[Annotation] => Node(l.copy(annotations = l.annotations ++ annotations), originalLogTree.subForest)
-      }
+      val newTree =
+        Node(originalLogTree.rootLabel.addAnnotations(annotations), originalLogTree.subForest)
 
       w.value.value match {
         case Left(error)  => failure(error, newTree)
