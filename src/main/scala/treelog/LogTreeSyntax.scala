@@ -54,9 +54,11 @@ trait LogTreeSyntax[Annotation] {
     EitherT[LogTreeWriter, String, V](Writer(tree, value.asRight))
 
   def failureLog[V](dc: DescribedComputation[V]): DescribedComputation[V] = {
-    val logTree = dc.value.written match {
-      case Node(UndescribedLogTreeLabel(_, a), c) => Node(UndescribedLogTreeLabel(false, a), c)
-      case Node(DescribedLogTreeLabel(d, _, a), c) => Node(DescribedLogTreeLabel(d, false, a), c)
+    val originalLogTree: LogTree = dc.value.written
+
+    val logTree = originalLogTree.rootLabel match {
+      case UndescribedLogTreeLabel(_, a) => Node(UndescribedLogTreeLabel(false, a), originalLogTree.subForest)
+      case DescribedLogTreeLabel(d, _, a) => Node(DescribedLogTreeLabel(d, false, a), originalLogTree.subForest)
     }
     dc.value.value match {
       case Left(des) => failure(des, logTree)
@@ -218,9 +220,11 @@ trait LogTreeSyntax[Annotation] {
       * Annotate a [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]].
       */
     def annotateWith(annotations: Set[Annotation]): DescribedComputation[V] = {
-      val newTree = w.value.written match {
-        case Node(l: DescribedLogTreeLabel[Annotation], c) => Node(l.copy(annotations   = l.annotations ++ annotations), c)
-        case Node(l: UndescribedLogTreeLabel[Annotation], c) => Node(l.copy(annotations = l.annotations ++ annotations), c)
+      val originalLogTree: LogTree = w.value.written
+
+      val newTree = originalLogTree.rootLabel match {
+        case l: DescribedLogTreeLabel[Annotation] => Node(l.copy(annotations   = l.annotations ++ annotations), originalLogTree.subForest)
+        case l: UndescribedLogTreeLabel[Annotation] => Node(l.copy(annotations = l.annotations ++ annotations), originalLogTree.subForest)
       }
 
       w.value.value match {
@@ -430,10 +434,11 @@ trait LogTreeSyntax[Annotation] {
         case Right(value) => success(value, branchHoister(dc.value.written, description))
       }
 
-    private def branchHoister(tree: LogTree, description: String): LogTree = tree match {
-      case Node(l: UndescribedLogTreeLabel[Annotation], children) => Node(DescribedLogTreeLabel(description, allSuccessful(children), l.annotations), children)
-      case Node(_: DescribedLogTreeLabel[Annotation], _) => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
-    }
+    private def branchHoister(tree: LogTree, description: String): LogTree =
+      tree.rootLabel match {
+        case l: UndescribedLogTreeLabel[Annotation] => Node(DescribedLogTreeLabel(description, allSuccessful(tree.subForest), l.annotations), tree.subForest)
+        case _ => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
+      }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
   }

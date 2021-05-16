@@ -128,3 +128,5 @@ lazy val treeLog = (project in file("."))
         libraryDependencies ++= allDependencies(scalaVersion.value)
       )
   )
+
+addCommandAlias("testAll", ";clean;+test")
