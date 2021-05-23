@@ -1,5 +1,5 @@
 val Scala3 = "3.0.0"
-val Scala213 = "2.13.5"
+val Scala213 = "2.13.6"
 val Scala212 = "2.12.13"
 
 lazy val buildSettings: Seq[Setting[_]] =
@@ -46,7 +46,7 @@ def allDependencies(scalaVersion: String) = {
     )
   else
     deps ++ Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector" % "0.12.0" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
     )
 
