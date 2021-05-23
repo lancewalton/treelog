@@ -1,6 +1,6 @@
 package treelog
 
-import cats.{ Functor, Monad, Show }
+import cats.{Functor, Monad, Show}
 
 object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
 
@@ -24,7 +24,9 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
   case class DescribedComputationT[F[_], A](run: F[DescribedComputation[A]]) {
     self =>
 
-    def map[B](f: A => B)(implicit F: Functor[F]): DescribedComputationT[F, B] = DescribedComputationT(F.map(self.run)(_ map f))
+    def map[B](f: A => B)(implicit F: Functor[F]): DescribedComputationT[F, B] = DescribedComputationT(
+      F.map(self.run)(_ map f)
+    )
 
     def mapT[G[_], B](f: F[DescribedComputation[A]] => G[DescribedComputation[B]]): DescribedComputationT[G, B] =
       DescribedComputationT(f(self.run))
@@ -43,7 +45,7 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
                 b <- dcB // extracting final result of type B
               } yield b // final result of this described computation should be B
             }
-          case Left(_)  =>
+          case Left(_) =>
             // if previous computation failed, we just return the history.
             // but we need to convert type of return value into B.
             F.map(run)(_.asInstanceOf[DescribedComputation[B]])

@@ -37,9 +37,10 @@ sealed abstract class Tree[A] {
 
     def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] =
       s match {
-        case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
-        case t #:: ts if ts.isEmpty => defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
-        case t #:: ts               =>
+        case ts if ts.isEmpty => done(Vector.empty[StringBuilder])
+        case t #:: ts if ts.isEmpty =>
+          defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
+        case t #:: ts =>
           for {
             subtree       <- defer(t.draw)
             otherSubtrees <- defer(drawSubTrees(ts))
@@ -144,7 +145,7 @@ private trait TreeEqual[A] extends Eq[Tree[A]] {
       (a1.isEmpty, a2.isEmpty) match {
         case (true, true)          => Trampoline.done(true)
         case (_, true) | (true, _) => Trampoline.done(false)
-        case _                     =>
+        case _ =>
           for {
             heads <- trampolined(a1.head, a2.head)
             tails <- corresponds(a1.tail, a2.tail)

@@ -1,4 +1,4 @@
-val Scala3 = "3.0.0"
+val Scala3   = "3.0.0"
 val Scala213 = "2.13.6"
 val Scala212 = "2.12.13"
 
@@ -10,16 +10,18 @@ lazy val buildSettings: Seq[Setting[_]] =
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
     releaseCrossBuild := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
-    scalacOptions += {
+    scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((3, minor)) => "-Xtarget:8"
-        case _                => "-target:jvm-1.8"
+        case Some((3, minor)) => Seq("-Xtarget:8")
+        case _                => Seq("-target:jvm-1.8", "-Xsource:3")
       }
     }
   )
 
 enablePlugins(GhpagesPlugin)
 enablePlugins(SiteScaladocPlugin)
+
+Compile / scalafmtConfig := file(".scalafmt.conf")
 
 lazy val websiteSettings = Seq[Setting[_]](
   git.remoteRepo := "git@github.com:lancewalton/treelog.git"
@@ -31,11 +33,11 @@ credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core" % "2.6.1",
-    "org.typelevel" %% "cats-free" % "2.6.1",
-    "org.scalatest" %% "scalatest" % "3.2.9" % "test",
-    "io.argonaut" %% "argonaut" % "6.3.3" % "test",
-    "io.argonaut" %% "argonaut-cats" % "6.3.3" % "test"
+    "org.typelevel" %% "cats-core"     % "2.6.1",
+    "org.typelevel" %% "cats-free"     % "2.6.1",
+    "org.scalatest" %% "scalatest"     % "3.2.9" % "test",
+    "io.argonaut"   %% "argonaut"      % "6.3.3" % "test",
+    "io.argonaut"   %% "argonaut-cats" % "6.3.3" % "test"
   )
 
   if (util.isScala3(scalaVersion))
@@ -46,8 +48,8 @@ def allDependencies(scalaVersion: String) = {
     )
   else
     deps ++ Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
-      compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
+      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.0" cross CrossVersion.full),
+      compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
 
 }

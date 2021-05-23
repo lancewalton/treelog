@@ -168,7 +168,10 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     // Now let's carry on doing something:
     val moreStuff = "FTW!" ~< (for {
       things1And2 <- d ~> "Some things that have been serialized and deserialized"
-      things3And4 <- List(Thing(3, "Thing3"), Thing(4, "Thing4")) ~>* ("Things that have not been serialized and deserialized", things)
+      things3And4 <- List(
+        Thing(3, "Thing3"),
+        Thing(4, "Thing4")
+      ) ~>* ("Things that have not been serialized and deserialized", things)
     } yield things1And2 ::: things3And4)
 
     println()

@@ -1,10 +1,10 @@
 package treelog
 
 import cats._
-import cats.data.{ Writer, _ }
+import cats.data.{Writer, _}
 import cats.implicits._
 import treelog.ScalaCompat._
-import treelog.Tree.{ Leaf, Node }
+import treelog.Tree.{Leaf, Node}
 
 /** See the [[treelog]] package documentation for a brief introduction to treelog and also,
   * [[https://github.com/lancewalton/treelog#using-treelog---examples examples on GitHub]] to get started.
@@ -33,15 +33,24 @@ trait LogTreeSyntax[Annotation] {
         (l.rootLabel, r.rootLabel) match {
           case (leftLabel: UndescribedLogTreeLabel[Annotation], rightLabel: UndescribedLogTreeLabel[Annotation]) =>
             Node(
-              UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations ++ rightLabel.annotations),
+              UndescribedLogTreeLabel(
+                leftLabel.success && rightLabel.success,
+                leftLabel.annotations ++ rightLabel.annotations
+              ),
               l.subForest ++ r.subForest
             )
 
           case (leftLabel: UndescribedLogTreeLabel[Annotation], rightLabel) =>
-            Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations), l.subForest :+ r)
+            Node(
+              UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, leftLabel.annotations),
+              l.subForest :+ r
+            )
 
           case (leftLabel, rightLabel: UndescribedLogTreeLabel[Annotation]) =>
-            Node(UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations), l #:: r.subForest)
+            Node(
+              UndescribedLogTreeLabel(leftLabel.success && rightLabel.success, rightLabel.annotations),
+              l #:: r.subForest
+            )
 
           case (leftNode: LogTreeLabel[Annotation], rightNode: LogTreeLabel[Annotation]) =>
             Node(UndescribedLogTreeLabel(leftNode.success && rightNode.success), LazyList(l, r))
@@ -52,7 +61,8 @@ trait LogTreeSyntax[Annotation] {
   private def failure[V](description: String, tree: LogTree): DescribedComputation[V] =
     EitherT[LogTreeWriter, String, V](Writer(tree, description.asLeft[V]))
 
-  private def success[V](value: V, tree: LogTree): DescribedComputation[V] = EitherT[LogTreeWriter, String, V](Writer(tree, value.asRight))
+  private def success[V](value: V, tree: LogTree): DescribedComputation[V] =
+    EitherT[LogTreeWriter, String, V](Writer(tree, value.asRight))
 
   def failureLog[V](dc: DescribedComputation[V]): DescribedComputation[V] = {
     val originalLogTree: LogTree = dc.value.written
@@ -70,13 +80,16 @@ trait LogTreeSyntax[Annotation] {
   /** Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a failure using the given `description` for both the log tree label and as
     * the content of the `value`, which will be a [[Left]].
     */
-  def failure[V](description: String): DescribedComputation[V] = failure(description, Leaf(DescribedLogTreeLabel(description, false)))
+  def failure[V](description: String): DescribedComputation[V] =
+    failure(description, Leaf(DescribedLogTreeLabel(description, false)))
 
   /** Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[Right]]) and the given
     * `description` in the log tree.
     */
   def success[V](value: V, description: String): DescribedComputation[V] =
-    EitherT[LogTreeWriter, String, V](Writer(Leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())), value.asRight))
+    EitherT[LogTreeWriter, String, V](
+      Writer(Leaf(DescribedLogTreeLabel(description, true, Set[Annotation]())), value.asRight)
+    )
 
   /** Create a [[treelog.LogTreeSyntax.DescribedComputation]] representing a success with the given `value` (lifted into a [[Right]]) and no
     * description.
@@ -293,11 +306,13 @@ trait LogTreeSyntax[Annotation] {
       * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(x)`,
       * otherwise, the 'value' will be `-\/(noneDescription)`.
       */
-    def log(noneDescription: => String, someDescription: => String): DescribedComputation[V] = ~>?(noneDescription, _ => someDescription)
+    def log(noneDescription: => String, someDescription: => String): DescribedComputation[V] =
+      ~>?(noneDescription, _ => someDescription)
 
     /** Sugar for [[treelog.LogTreeSyntax.OptionSyntax.log(String, String) log(String, String)]]
       */
-    def ~>?(noneDescription: => String, someDescription: => String): DescribedComputation[V] = log(noneDescription, someDescription)
+    def ~>?(noneDescription: => String, someDescription: => String): DescribedComputation[V] =
+      log(noneDescription, someDescription)
 
     /** Use different descriptions for the `Some` and `None` cases, providing the boxed `Some`
       * value to the function used to produce the description for the `Some` case, so that it can be included in the
@@ -313,14 +328,18 @@ trait LogTreeSyntax[Annotation] {
 
     /** Sugar for [[treelog.LogTreeSyntax.OptionSyntax.log() log(String, String)]]
       */
-    def ~>?(noneDescription: => String, someDescription: V => String): DescribedComputation[V] = log(noneDescription, someDescription)
+    def ~>?(noneDescription: => String, someDescription: V => String): DescribedComputation[V] =
+      log(noneDescription, someDescription)
 
     /** Return a default [[treelog.LogTreeSyntax.DescribedComputation]] if `option` is a `None`.
       *
       * If the option is `Some(x)` the 'value' of the returned DescribedComputation will be `\/-(Some(x))`,
       * otherwise, the returned [[treelog.LogTreeSyntax.DescribedComputation]] will be `dflt`.
       */
-    def ~>|[B](f: V => DescribedComputation[B], dflt: => DescribedComputation[Option[B]]): DescribedComputation[Option[B]] =
+    def ~>|[B](
+        f: V => DescribedComputation[B],
+        dflt: => DescribedComputation[Option[B]]
+    ): DescribedComputation[Option[B]] =
       option.map(f).map((v: DescribedComputation[B]) => v.map(w => Option(w))) getOrElse dflt
   }
 
@@ -340,7 +359,8 @@ trait LogTreeSyntax[Annotation] {
     /** Use the same description regardless of whether `either` is a `\/-` or a `-\/`.
       * Equivalent to: `~>?((error: String) => s"$description - $error", description)`
       */
-    def ~>?(description: String): DescribedComputation[V] = ~>?((error: String) => s"$description - $error", description)
+    def ~>?(description: String): DescribedComputation[V] =
+      ~>?((error: String) => s"$description - $error", description)
 
     /** Use the given description if `either` is a `\/-`. If `either` is
       * `-\/(message)`, use `message` as the description.
@@ -380,12 +400,16 @@ trait LogTreeSyntax[Annotation] {
       * For example, given l = List[DescribedComputation[Int]], and f = List[Int] => Int (say summing the list), then
       * `"Sum" ~&lt;+(l, f)` would return a DescribedComputation containing the sum of the elements of the list.
       */
-    def ~<+[F[_]: Monad: Traverse, V, R](describedComputations: F[DescribedComputation[V]], f: F[V] => R): DescribedComputation[R] = {
+    def ~<+[F[_]: Monad: Traverse, V, R](
+        describedComputations: F[DescribedComputation[V]],
+        f: F[V] => R
+    ): DescribedComputation[R] = {
       val monad = implicitly[Monad[F]]
       val parts = monad.map(describedComputations)(m => (m.value.value, m.value.written))
 
       val children = monad.map(parts)(_._2).toList
-      val branch   = Node(DescribedLogTreeLabel(description, allSuccessful(children), Set[Annotation]()), children.toLazyList)
+      val branch =
+        Node(DescribedLogTreeLabel(description, allSuccessful(children), Set[Annotation]()), children.toLazyList)
 
       describedComputations.sequence.value.run._2 match {
         case Left(_)  => failure(description, branch)
@@ -407,7 +431,7 @@ trait LogTreeSyntax[Annotation] {
       tree.rootLabel match {
         case l: UndescribedLogTreeLabel[Annotation] =>
           Node(DescribedLogTreeLabel(description, allSuccessful(tree.subForest), l.annotations), tree.subForest)
-        case _                                      => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
+        case _ => Node(DescribedLogTreeLabel(description, allSuccessful(List(tree))), LazyList(tree))
       }
 
     private def allSuccessful(trees: Iterable[LogTree]) = trees.forall(_.rootLabel.success)
@@ -417,7 +441,11 @@ trait LogTreeSyntax[Annotation] {
 
     /** Starting with a given value and description, foldleft over an Iterable of values and 'add' them, describing each 'addition'.
       */
-    def ~>/[R](description: String, initial: DescribedComputation[R], f: (R, V) => DescribedComputation[R]): DescribedComputation[R] = {
+    def ~>/[R](
+        description: String,
+        initial: DescribedComputation[R],
+        f: (R, V) => DescribedComputation[R]
+    ): DescribedComputation[R] = {
       @scala.annotation.tailrec
       def recurse(remainingValues: Iterable[V], partialResult: DescribedComputation[R]): DescribedComputation[R] =
         if (remainingValues.isEmpty) partialResult
@@ -454,7 +482,8 @@ trait LogTreeSyntax[Annotation] {
   implicit def logTreeShow(implicit annotationShow: Show[Annotation]): Show[LogTree] =
     new Show[LogTree] {
 
-      override def show(t: LogTree): String = toList(t).map(line => "  " * line._1 + line._2).mkString(System.getProperty("line.separator"))
+      override def show(t: LogTree): String =
+        toList(t).map(line => "  " * line._1 + line._2).mkString(System.getProperty("line.separator"))
 
       private def toList(tree: LogTree, depth: Int = 0): List[(Int, String)] =
         line(depth, tree.rootLabel) :: tree.subForest.flatMap(toList(_, depth + 1)).toList
@@ -473,13 +502,15 @@ trait LogTreeSyntax[Annotation] {
   type SerializableDescribedComputation[V] = (Either[String, V], SerializableTree[Annotation])
 
   def toSerializableForm[V](dc: DescribedComputation[V]): SerializableDescribedComputation[V] = {
-    def transform(tree: LogTree): SerializableTree[Annotation] = SerializableTree(tree.rootLabel, tree.subForest.map(transform).toList)
+    def transform(tree: LogTree): SerializableTree[Annotation] =
+      SerializableTree(tree.rootLabel, tree.subForest.map(transform).toList)
 
     Tuple2(dc.value.value, transform(dc.value.written))
   }
 
   def fromSerializableForm[V](sdc: SerializableDescribedComputation[V]): DescribedComputation[V] = {
-    def transform(tree: SerializableTree[Annotation]): LogTree = Node(tree.label, tree.children.map(transform).toLazyList)
+    def transform(tree: SerializableTree[Annotation]): LogTree =
+      Node(tree.label, tree.children.map(transform).toLazyList)
 
     sdc._1.fold(m => failure(m, transform(sdc._2)), v => success(v, transform(sdc._2)))
   }
