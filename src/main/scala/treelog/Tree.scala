@@ -25,9 +25,8 @@ sealed abstract class Tree[A] {
       .toString
   }
 
-  /** A 2D String representation of this Tree, separated into lines.
-    * Uses reversed StringBuilders for performance, because they are
-    * prepended to.
+  /** A 2D String representation of this Tree, separated into lines. Uses reversed StringBuilders for performance,
+    * because they are prepended to.
     */
   private def draw(implicit sh: Show[A]): Trampoline[Vector[StringBuilder]] = {
     import Trampoline._
@@ -122,7 +121,7 @@ object Tree extends TreeInstances {
 
   /** Leaf represents a tree node with no children.
     *
-    *  You can use Leaf for tree construction or pattern matching.
+    * You can use Leaf for tree construction or pattern matching.
     */
   object Leaf {
     def apply[A](root: => A): Tree[A] = Node(root, LazyList.empty)
