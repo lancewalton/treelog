@@ -4,11 +4,11 @@ val Scala212 = "2.12.13"
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
-    organization := "com.casualmiracles",
-    name := "treelog-cats",
-    scalaVersion := Scala3,
+    organization       := "com.casualmiracles",
+    name               := "treelog-cats",
+    scalaVersion       := Scala3,
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
-    releaseCrossBuild := true,
+    releaseCrossBuild  := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
@@ -64,9 +64,9 @@ def allDependencies(scalaVersion: String) = {
  */
 def publishSettings: Seq[Setting[_]] = Seq(
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  publishMavenStyle := true,
-  Test / publishArtifact := false,
-  pomIncludeRepository := { _ => false },
+  publishMavenStyle             := true,
+  Test / publishArtifact        := false,
+  pomIncludeRepository          := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
