@@ -11,7 +11,7 @@ object Thing {
   implicit def ThingCodecJson: CodecJson[Thing] =
     CodecJson(
       (t: Thing) =>
-        ("id" := t.id) ->:
+        ("id"     := t.id) ->:
           ("name" := t.name) ->:
           jEmptyObject,
       c =>
@@ -32,7 +32,7 @@ object Thing {
 object Codecs {
 
   implicit val logTreeLabelEncoder: EncodeJson[LogTreeLabel[Int]] = EncodeJson { l =>
-    ("success" := l.success) ->:
+    ("success"       := l.success) ->:
       ("annotations" := l.annotations) ->:
       l.fold(d => ("description" := d.description) ->: jEmptyObject, _ => jEmptyObject)
   }
@@ -54,7 +54,7 @@ object Codecs {
   implicit val logTreeLabelCodec: CodecJson[LogTreeLabel[Int]] = CodecJson.derived[LogTreeLabel[Int]]
 
   implicit val serializableTreeEncoder: EncodeJson[SerializableTree[Int]] = EncodeJson { t =>
-    ("label" := t.label) ->:
+    ("label"      := t.label) ->:
       ("children" := t.children) ->:
       jEmptyObject
   }
