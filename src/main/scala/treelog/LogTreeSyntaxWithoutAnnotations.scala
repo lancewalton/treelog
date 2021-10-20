@@ -43,7 +43,7 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
               for {
                 _ <- dcA // we can drop returned value because we just need to concatenate descriptions.
                 b <- dcB // extracting final result of type B
-              } yield b // final result of this described computation should be B
+              } yield b  // final result of this described computation should be B
             }
           case Left(_) =>
             // if previous computation failed, we just return the history.
