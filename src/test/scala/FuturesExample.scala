@@ -14,7 +14,7 @@ object FuturesExample extends App {
   val future1: Future[DescribedComputation[Int]] = Future(1 ~> "Got 1")
   val future2: Future[DescribedComputation[Int]] = Future(2 ~> "Got 2")
   // Use this to see how a failure is dealt with
-  //val future2: Future[DescribedComputation[Int]] = Future(failure("Couldn't get a 2"))
+  // val future2: Future[DescribedComputation[Int]] = Future(failure("Couldn't get a 2"))
   val future3: Future[DescribedComputation[Int]] = Future(3 ~> "Got 3")
 
   // Sequence the Futures to work on the results below
