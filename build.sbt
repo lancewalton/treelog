@@ -1,6 +1,6 @@
-val Scala3 = "3.0.0"
-val Scala213 = "2.13.5"
-val Scala212 = "2.12.13"
+val Scala3 = "3.1.0"
+val Scala213 = "2.13.7"
+val Scala212 = "2.12.15"
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
@@ -31,22 +31,18 @@ credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core" % "2.6.1",
-    "org.typelevel" %% "cats-free" % "2.6.1",
+    "org.typelevel" %% "cats-core" % "2.7.0",
+    "org.typelevel" %% "cats-free" % "2.7.0",
     "org.scalatest" %% "scalatest" % "3.2.9" % "test",
-    "io.argonaut" %% "argonaut" % "6.3.3" % "test",
-    "io.argonaut" %% "argonaut-cats" % "6.3.3" % "test"
+    "io.argonaut" %% "argonaut" % "6.3.7" % "test",
+    "io.argonaut" %% "argonaut-cats" % "6.3.7" % "test"
   )
 
-  if (util.isScala3(scalaVersion))
-    deps.map(
-      _.exclude("org.typelevel", "cats-effect_2.13")
-        .exclude("org.typelevel", "cats-effect_2.13")
-        .exclude("org.typelevel", "cats-core_2.13")
-    )
+  if (util.isScala3(scalaVersion)) 
+    deps
   else
     deps ++ Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector" % "0.12.0" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
     )
 
