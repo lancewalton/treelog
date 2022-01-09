@@ -19,6 +19,13 @@ Publish Snapshots to Sonatype
 
 Release to Sonatype
 -------------------
+
+Add your sonatype credentials to ~/.sbt/sonatype_credentials
+
+    host=oss.sonatype.org
+    user=username
+    password=password
+
 1. Add changes to the [release notes](release_notes.md).
 2. run: sbt release release-version <release version> next-version <next release, usually XXX-SNAPSHOT>
 3. (See section 8a https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7b.StageExistingArtifacts)
