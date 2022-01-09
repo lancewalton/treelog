@@ -1,3 +1,3 @@
 # Readme
 
-See the master README
+DO NOT USE THIS BRANCH. Main is now cats.
