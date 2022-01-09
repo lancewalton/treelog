@@ -1,6 +1,10 @@
 Release Notes
 ====
 
+1.8.1
+---
+[Minor upgrades](https://github.com/lancewalton/treelog/pull/149#issuecomment-1008368494)
+
 1.8.0 (cats)
 ---
 Scala 3.0!

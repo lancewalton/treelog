@@ -20,7 +20,7 @@ Getting TreeLog
 Scala 2.13.x, 3.0.x and Cats 2.6.1:
 
 ```scala
-libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.8.0")
+libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.8.1")
 ```
 
 TreeLog Examples
