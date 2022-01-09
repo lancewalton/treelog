@@ -17,7 +17,7 @@ TreeLog achieves this remarkable feat with a Writer monad writing to a Tree repr
 Getting TreeLog
 ---------------
 
-Scala 2.13.x, 3.0.x and Cats 2.6.1:
+Scala 2.13.x, 3.0.x and Cats 2.7.0:
 
 ```scala
 libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.8.1")
