@@ -1,14 +1,14 @@
 val Scala3   = "3.1.0"
 val Scala213 = "2.13.7"
-val Scala212 = "2.12.15"
+val Scala212 = "2.12.17"
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
-    organization := "com.casualmiracles",
-    name := "treelog-cats",
-    scalaVersion := Scala3,
+    organization       := "com.casualmiracles",
+    name               := "treelog-cats",
+    scalaVersion       := Scala3,
     crossScalaVersions := Seq(Scala3, Scala213, Scala212),
-    releaseCrossBuild := true,
+    releaseCrossBuild  := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
@@ -64,17 +64,17 @@ def allDependencies(scalaVersion: String) = {
  */
 def publishSettings: Seq[Setting[_]] = Seq(
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  publishMavenStyle := true,
-  Test / publishArtifact := false,
-  pomIncludeRepository := { _ => false },
-  publishTo := {
+  publishMavenStyle             := true,
+  Test / publishArtifact        := false,
+  pomIncludeRepository          := { _ => false },
+  publishTo                     := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
-  pomExtra := <licenses>
+  pomExtra                      := <licenses>
     <license>
       <name>MIT License</name>
       <url>http://www.opensource.org/licenses/mit-license/</url>
