@@ -1,6 +1,11 @@
 Release Notes
 ====
 
+1.9.0
+---
+
+Upgrade Scala and lib dependencies
+
 1.8.1
 ---
 [Minor upgrades](https://github.com/lancewalton/treelog/pull/149#issuecomment-1008368494)
