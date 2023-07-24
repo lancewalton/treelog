@@ -16,16 +16,16 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
   val aFailure: Either[String, String] = Left("Fail")
 
   object `success must` {
-    def `produce a value with the given value on the right`() = success(1, "Yay").value.value mustBe Right(1)
+    def `produce a value with the given value on the right`()                    = success(1, "Yay").value.value mustBe Right(1)
     def `produce a written with a success leaf node and the given description`() =
       assert(success(1, "Yay").value.written === node("Yay", true))
-    def `produce a written with a success leaf node and no description`() = assert(
+    def `produce a written with a success leaf node and no description`()        = assert(
       success(1).value.written === node(true)
     )
   }
 
   object `failure must` {
-    def `produce a value with the given message on the left`() = failure("Boo").value.value mustBe Left("Boo")
+    def `produce a value with the given message on the left`()                    = failure("Boo").value.value mustBe Left("Boo")
     def `produce a written with a failure leaf node and the given desscription`() =
       assert(failure("Boo").value.written === node("Boo", false))
   }
@@ -80,7 +80,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
   }
 
   object `boolean ~>? with a description must` {
-    def `do the same as 'success' when the boolean is true`() = assert(
+    def `do the same as 'success' when the boolean is true`()  = assert(
       (true ~>? "Foo").value.run === success(true, "Foo").value.run
     )
     def `do the same as 'failure' when the boolean is false`() = assert(
@@ -89,7 +89,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
   }
 
   object `boolean ~>? with a failureDescription and a successDescription must` {
-    def `do the same as 'success' with the successDescription when the boolean is true`() =
+    def `do the same as 'success' with the successDescription when the boolean is true`()  =
       assert((true ~>? ("Foo", "Bar")).value.run === success(true, "Bar").value.run)
     def `do the same as 'failure' with the failureDescription when the boolean is false`() =
       assert((false ~>? ("Foo", "Bar")).value.run === failure("Foo").value.run)
@@ -121,7 +121,7 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
 
   object `\\/ ~>? with a description must` {
     def `do the same as 'success' with right`() = assert((Right(2) ~>? "Foo").value.run === success(2, "Foo").value.run)
-    def `do the same as 'failure' with left`() = assert(
+    def `do the same as 'failure' with left`()  = assert(
       (aFailure ~>? "Foo").value.run === failure("Foo - Fail").value.run
     )
   }
@@ -130,14 +130,14 @@ class LogTreeSyntaxSpec extends RefSpec with Matchers {
     def `do the same as 'success' with right`() = assert(
       (Right(2) ~>? (x => "Foo: " + x, "Bar")).value.run === success(2, "Bar").value.run
     )
-    def `do the same as 'failure' with left`() =
+    def `do the same as 'failure' with left`()  =
       assert((aFailure ~>? (x => "Foo: " + x, "Bar")).value.run === failure("Foo: Fail").value.run)
   }
 
   object `\\/ ~>? with a leftDescription function and a rightDescription function must` {
     def `do the same as 'success' with right`() =
       assert((Right(2) ~>? (x => "Foo: " + x, x => "Bar: " + x)).value.run === success(2, "Bar: 2").value.run)
-    def `do the same as 'failure' with left`() =
+    def `do the same as 'failure' with left`()  =
       assert((aFailure ~>? (x => "Foo: " + x, x => "Bar: " + x)).value.run === failure("Foo: Fail").value.run)
   }
 

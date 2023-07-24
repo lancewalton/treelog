@@ -11,7 +11,7 @@ object Thing {
   implicit def ThingCodecJson: CodecJson[Thing] =
     CodecJson(
       (t: Thing) =>
-        ("id" := t.id) ->:
+        ("id"     := t.id) ->:
           ("name" := t.name) ->:
           jEmptyObject,
       c =>
@@ -32,7 +32,7 @@ object Thing {
 object Codecs {
 
   implicit val logTreeLabelEncoder: EncodeJson[LogTreeLabel[Int]] = EncodeJson { l =>
-    ("success" := l.success) ->:
+    ("success"       := l.success) ->:
       ("annotations" := l.annotations) ->:
       l.fold(d => ("description" := d.description) ->: jEmptyObject, _ => jEmptyObject)
   }
@@ -54,7 +54,7 @@ object Codecs {
   implicit val logTreeLabelCodec: CodecJson[LogTreeLabel[Int]] = CodecJson.derived[LogTreeLabel[Int]]
 
   implicit val serializableTreeEncoder: EncodeJson[SerializableTree[Int]] = EncodeJson { t =>
-    ("label" := t.label) ->:
+    ("label"      := t.label) ->:
       ("children" := t.children) ->:
       jEmptyObject
   }
@@ -169,29 +169,29 @@ object SerializationExample extends App with LogTreeSyntax[Int] {
     val moreStuff = "FTW!" ~< (for {
       things1And2 <- d ~> "Some things that have been serialized and deserialized"
       things3And4 <- List(
-        Thing(3, "Thing3"),
-        Thing(4, "Thing4")
-      ) ~>* ("Things that have not been serialized and deserialized", things)
+                       Thing(3, "Thing3"),
+                       Thing(4, "Thing4")
+                     ) ~>* ("Things that have not been serialized and deserialized", things)
     } yield things1And2 ::: things3And4)
 
     println()
     println("After adding some things:")
     showDescribedComputation(moreStuff)
 
-  // The above will print:
-  // The log is:
-  // The log is:
-  // FTW!
-  //   Some things that have been serialized and deserialized
-  //     Here are some things
-  //       Here I described Thing1 - [1]
-  //       Here I described Thing2 - [2]
-  //   Things that have not been serialized and deserialized
-  //     Here I described Thing3 - [3]
-  //     Here I described Thing4 - [4]
-  //
-  // The value is:
-  // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
+    // The above will print:
+    // The log is:
+    // The log is:
+    // FTW!
+    //   Some things that have been serialized and deserialized
+    //     Here are some things
+    //       Here I described Thing1 - [1]
+    //       Here I described Thing2 - [2]
+    //   Things that have not been serialized and deserialized
+    //     Here I described Thing3 - [3]
+    //     Here I described Thing4 - [4]
+    //
+    // The value is:
+    // \/-(List(Hello Thing1, Hello Thing2, Hello Thing3, Hello Thing4))
   }
 
   private def showDescribedComputation(dc: DescribedComputation[List[String]]): Unit = {

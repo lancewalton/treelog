@@ -10,19 +10,19 @@ sealed trait LogTreeLabel[Annotation] extends Product with Serializable {
 }
 
 final case class DescribedLogTreeLabel[Annotation](
-    description: String,
-    success: Boolean,
-    annotations: Set[Annotation] = Set[Annotation]()
+  description: String,
+  success: Boolean,
+  annotations: Set[Annotation] = Set[Annotation]()
 ) extends LogTreeLabel[Annotation] {
   def fold[T](f: DescribedLogTreeLabel[Annotation] => T, g: UndescribedLogTreeLabel[Annotation] => T): T = f(this)
-  def addAnnotations(a: Set[Annotation]): LogTreeLabel[Annotation] =
+  def addAnnotations(a: Set[Annotation]): LogTreeLabel[Annotation]                                       =
     copy(annotations = annotations ++ a)
 }
 
 final case class UndescribedLogTreeLabel[Annotation](success: Boolean, annotations: Set[Annotation] = Set[Annotation]())
     extends LogTreeLabel[Annotation] {
   def fold[T](f: DescribedLogTreeLabel[Annotation] => T, g: UndescribedLogTreeLabel[Annotation] => T): T = g(this)
-  def addAnnotations(a: Set[Annotation]): LogTreeLabel[Annotation] =
+  def addAnnotations(a: Set[Annotation]): LogTreeLabel[Annotation]                                       =
     copy(annotations = annotations ++ a)
 }
 

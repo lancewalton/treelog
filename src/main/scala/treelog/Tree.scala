@@ -25,8 +25,7 @@ sealed abstract class Tree[A] {
       .toString
   }
 
-  /** A 2D String representation of this Tree, separated into lines.
-    * Uses reversed StringBuilders for performance, because they are
+  /** A 2D String representation of this Tree, separated into lines. Uses reversed StringBuilders for performance, because they are
     * prepended to.
     */
   private def draw(implicit sh: Show[A]): Trampoline[Vector[StringBuilder]] = {
@@ -37,10 +36,10 @@ sealed abstract class Tree[A] {
 
     def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] =
       s match {
-        case ts if ts.isEmpty => done(Vector.empty[StringBuilder])
+        case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
         case t #:: ts if ts.isEmpty =>
           defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
-        case t #:: ts =>
+        case t #:: ts               =>
           for {
             subtree       <- defer(t.draw)
             otherSubtrees <- defer(drawSubTrees(ts))
@@ -122,7 +121,7 @@ object Tree extends TreeInstances {
 
   /** Leaf represents a tree node with no children.
     *
-    *  You can use Leaf for tree construction or pattern matching.
+    * You can use Leaf for tree construction or pattern matching.
     */
   object Leaf {
     def apply[A](root: => A): Tree[A] = Node(root, LazyList.empty)
@@ -145,7 +144,7 @@ private trait TreeEqual[A] extends Eq[Tree[A]] {
       (a1.isEmpty, a2.isEmpty) match {
         case (true, true)          => Trampoline.done(true)
         case (_, true) | (true, _) => Trampoline.done(false)
-        case _ =>
+        case _                     =>
           for {
             heads <- trampolined(a1.head, a2.head)
             tails <- corresponds(a1.tail, a2.tail)

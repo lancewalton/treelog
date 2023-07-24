@@ -45,7 +45,7 @@ object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
                 b <- dcB // extracting final result of type B
               } yield b // final result of this described computation should be B
             }
-          case Left(_) =>
+          case Left(_)  =>
             // if previous computation failed, we just return the history.
             // but we need to convert type of return value into B.
             F.map(run)(_.asInstanceOf[DescribedComputation[B]])
