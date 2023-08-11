@@ -18,7 +18,7 @@ Add your sonatype credentials to ~/.sbt/sonatype_credentials
     user=username
     password=password
 
-1. Add changes to the [release notes](release_notes.md).
+1. Add changes to the [release notes](release_notes.md) and the versions in the [README](README.md).
 2. run: sbt release release-version <release version> next-version <next release, usually XXX-SNAPSHOT>
 3. (See section 8a https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7b.StageExistingArtifacts)
 4. Login to the Nexus UI at https://oss.sonatype.org/
