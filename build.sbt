@@ -33,8 +33,8 @@ credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core"     % "2.9.0",
-    "org.typelevel" %% "cats-free"     % "2.9.0",
+    "org.typelevel" %% "cats-core"     % "2.10.0",
+    "org.typelevel" %% "cats-free"     % "2.10.0",
     "org.scalatest" %% "scalatest"     % "3.2.16" % "test",
     "io.argonaut"   %% "argonaut"      % "6.3.8"  % "test",
     "io.argonaut"   %% "argonaut-cats" % "6.3.8"  % "test"
