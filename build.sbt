@@ -1,5 +1,5 @@
 val Scala3   = "3.3.1"
-val Scala213 = "2.13.11"
+val Scala213 = "2.13.12"
 val Scala212 = "2.12.18"
 
 lazy val buildSettings: Seq[Setting[_]] =
@@ -35,7 +35,7 @@ def allDependencies(scalaVersion: String) = {
   val deps = Seq(
     "org.typelevel" %% "cats-core"     % "2.10.0",
     "org.typelevel" %% "cats-free"     % "2.10.0",
-    "org.scalatest" %% "scalatest"     % "3.2.16" % "test",
+    "org.scalatest" %% "scalatest"     % "3.2.17" % "test",
     "io.argonaut"   %% "argonaut"      % "6.3.8"  % "test",
     "io.argonaut"   %% "argonaut-cats" % "6.3.8"  % "test"
   )
