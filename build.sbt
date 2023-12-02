@@ -36,8 +36,8 @@ def allDependencies(scalaVersion: String) = {
     "org.typelevel" %% "cats-core"     % "2.10.0",
     "org.typelevel" %% "cats-free"     % "2.10.0",
     "org.scalatest" %% "scalatest"     % "3.2.17" % "test",
-    "io.argonaut"   %% "argonaut"      % "6.3.8"  % "test",
-    "io.argonaut"   %% "argonaut-cats" % "6.3.8"  % "test"
+    "io.argonaut"   %% "argonaut"      % "6.3.9"  % "test",
+    "io.argonaut"   %% "argonaut-cats" % "6.3.9"  % "test"
   )
 
   if (util.isScala3(scalaVersion))
