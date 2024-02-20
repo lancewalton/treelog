@@ -35,7 +35,7 @@ def allDependencies(scalaVersion: String) = {
   val deps = Seq(
     "org.typelevel" %% "cats-core"     % "2.10.0",
     "org.typelevel" %% "cats-free"     % "2.10.0",
-    "org.scalatest" %% "scalatest"     % "3.2.17" % "test",
+    "org.scalatest" %% "scalatest"     % "3.2.18" % "test",
     "io.argonaut"   %% "argonaut"      % "6.3.9"  % "test",
     "io.argonaut"   %% "argonaut-cats" % "6.3.9"  % "test"
   )
