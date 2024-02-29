@@ -1,13 +1,14 @@
-val Scala3   = "3.3.1"
-val Scala213 = "2.13.12"
-val Scala212 = "2.12.18"
+val Scala34  = "3.4.0"
+val Scala33  = "3.3.3"
+val Scala213 = "2.13.13"
+val Scala212 = "2.12.19"
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
     organization       := "com.casualmiracles",
     name               := "treelog-cats",
-    scalaVersion       := Scala3,
-    crossScalaVersions := Seq(Scala3, Scala213, Scala212),
+    scalaVersion       := Scala33,
+    crossScalaVersions := Seq(Scala34, Scala33, Scala213, Scala212),
     releaseCrossBuild  := true,
     scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     scalacOptions ++= {
@@ -48,7 +49,7 @@ def allDependencies(scalaVersion: String) = {
     )
   else
     deps ++ Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
       compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
 
