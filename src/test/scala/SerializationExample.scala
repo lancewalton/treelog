@@ -51,8 +51,6 @@ object Codecs {
       } yield UndescribedLogTreeLabel(success, annotations)
   }
 
-  implicit val logTreeLabelCodec: CodecJson[LogTreeLabel[Int]] = CodecJson.derived[LogTreeLabel[Int]]
-
   implicit val serializableTreeEncoder: EncodeJson[SerializableTree[Int]] = EncodeJson { t =>
     ("label"      := t.label) ->:
       ("children" := t.children) ->:
@@ -65,8 +63,6 @@ object Codecs {
       children <- (c --\ "children").as[List[SerializableTree[Int]]]
     } yield SerializableTree(label, children)
   }
-
-  implicit val serializableTreeCodec: CodecJson[SerializableTree[Int]] = CodecJson.derived[SerializableTree[Int]]
 }
 
 object SerializationExample extends App with LogTreeSyntax[Int] {

@@ -2,7 +2,7 @@ package treelog
 
 import cats._
 import cats.free.Trampoline
-import cats.implicits._
+import cats.syntax.all._
 import treelog.ScalaCompat._
 
 /** Partially copied from Scalaz. */
@@ -35,26 +35,19 @@ sealed abstract class Tree[A] {
     val trunk  = "  |" // "|  ".reverse
 
     def drawSubTrees(s: LazyList[Tree[A]]): Trampoline[Vector[StringBuilder]] =
-      s match {
-        case ts if ts.isEmpty       => done(Vector.empty[StringBuilder])
-        case t #:: ts if ts.isEmpty =>
-          defer(t.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
-        case t #:: ts               =>
-          for {
-            subtree       <- defer(t.draw)
-            otherSubtrees <- defer(drawSubTrees(ts))
-          } yield new StringBuilder("|") +: (shift(branch, trunk, subtree) ++ otherSubtrees)
-      }
+      if (s.isEmpty) done(Vector.empty[StringBuilder])
+      else if (s.length == 1) defer(s.head.draw).map(subtree => new StringBuilder("|") +: shift(stem, "   ", subtree))
+      else
+        for {
+          subtree       <- defer(s.head.draw)
+          otherSubtrees <- defer(drawSubTrees(s.tail))
+        } yield new StringBuilder("|") +: (shift(branch, trunk, subtree) ++ otherSubtrees)
 
-    def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] = {
-      var i = 0
-      while (i < s.length) {
-        if (i == 0) s(i).append(first)
-        else s(i).append(other)
-        i += 1
+    def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] =
+      s.zipWithIndex.map { case (sb, i) =>
+        if (i == 0) sb.append(first)
+        else sb.append(other)
       }
-      s
-    }
 
     drawSubTrees(subForest).map(subtrees => new StringBuilder(sh.show(rootLabel).reverse) +: subtrees)
   }

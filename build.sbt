@@ -1,3 +1,5 @@
+import org.typelevel.scalacoptions.ScalacOptions
+
 val Scala34  = "3.4.1"
 val Scala33  = "3.3.3"
 val Scala213 = "2.13.13"
@@ -10,12 +12,19 @@ lazy val buildSettings: Seq[Setting[_]] =
     scalaVersion       := Scala33,
     crossScalaVersions := Seq(Scala34, Scala33, Scala213, Scala212),
     releaseCrossBuild  := true,
-    scalacOptions ~= (_.filterNot(_ == "-Xfatal-warnings")),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((3, minor)) => Seq("-Xtarget:8")
-        case _                => Seq("-target:jvm-1.8", "-Xsource:3")
+        case Some((3, minor)) => Seq("-release:8")
+        case _                => Seq("-release:8", "-Xsource:3")
       }
+    },
+    tpolecatExcludeOptions ++= {
+      Set(ScalacOptions.lintImplicitRecursion, ScalacOptions.warnUnusedImports)
+    },
+    Test / tpolecatExcludeOptions ++= {
+      Set(
+        ScalacOptions.warnNonUnitStatement
+      )
     }
   )
 
@@ -132,4 +141,4 @@ lazy val treeLog = (project in file("."))
       )
   )
 
-addCommandAlias("testAll", ";clean;+test")
+addCommandAlias("testAll", "clean;+test")

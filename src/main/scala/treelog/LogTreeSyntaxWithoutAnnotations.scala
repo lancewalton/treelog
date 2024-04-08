@@ -1,9 +1,11 @@
 package treelog
 
 import cats.{Functor, Monad, Show}
+import scala.annotation.nowarn
 
 object LogTreeSyntaxWithoutAnnotations extends LogTreeSyntax[Nothing] {
 
+  @nowarn
   implicit object NothingShow extends Show[Nothing] {
     override def show(n: Nothing): String = ""
   }
