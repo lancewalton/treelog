@@ -31,3 +31,10 @@ Add your sonatype credentials to ~/.sbt/sonatype_credentials
 11. Keep checking the Activity tab to see if there are any problems
 12. Look for the release in https://oss.sonatype.org/content/repositories/releases/com/casualmiracles/
 13. Create a release in github with the version and link to differences.
+
+## Statistics
+
+1. Go to https://oss.sonatype.org
+2. Login with the account you publish artifacts with.
+3. Click "Central Statistics Repositories"
+4. Search for com.casualmiracles
