@@ -3,7 +3,7 @@ import org.typelevel.scalacoptions.ScalacOptions
 val Scala34  = "3.4.3"
 val Scala33  = "3.3.3"
 val Scala213 = "2.13.14"
-val Scala212 = "2.12.19"
+val Scala212 = "2.12.20"
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
