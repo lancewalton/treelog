@@ -1,8 +1,7 @@
 import org.typelevel.scalacoptions.ScalacOptions
 
-val Scala36  = "3.6.2"
-val Scala35  = "3.5.2"
-val Scala34  = "3.4.3"
+// We use the oldest minor and latest patch version of each scala major version to ensuire
+// binary compatibility with the latest patch version of each scala major version
 val Scala33  = "3.3.4"
 val Scala213 = "2.13.15"
 val Scala212 = "2.12.20"
@@ -11,8 +10,8 @@ lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
     organization       := "com.casualmiracles",
     name               := "treelog-cats",
-    scalaVersion       := Scala36,
-    crossScalaVersions := Seq(Scala36, Scala35, Scala34, Scala33, Scala213, Scala212),
+    scalaVersion       := Scala33,
+    crossScalaVersions := Seq(Scala33, Scala213, Scala212),
     releaseCrossBuild  := true,
     versionScheme      := Some("early-semver"),
     scalacOptions ++= {
