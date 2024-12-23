@@ -6,18 +6,18 @@ treelog
 It is often necessary to understand exactly what happened in a computation: what went right, what went wrong,
  what was done with what, why it was done, and how a result was derived.
 
-Such complex computations are trees, and so attempting to describe whats going on in a linear fashion is difficult to follow after the fact. 
-What treelog offers is a means of writing a log together with a computation, with values computed on the way with all information relevant to
+Such complex computations are trees, and so attempting to describe what's going on in a linear fashion is difficult to follow after the fact. 
+What TreeLog offers is a means of writing a log together with a computation, with values computed on the way with all information relevant to
 the computation. 
 
-Logtree is a veritable complect of computation and description in perfect harmony.
+TreeLog is a veritable complect of computation and description in perfect harmony.
 
 TreeLog achieves this remarkable feat with a Writer monad writing to a Tree representing the hierarchical log of computation.
 
 Getting TreeLog
 ---------------
 
-Scala 2.13.x, 3.3.x and Cats 2.10.0:
+Scala 2.13.x, 3.3.x, 3.4.x, 3.5.x, 3.6.x:
 
 ```scala
 libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.9.1")
