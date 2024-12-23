@@ -1,6 +1,6 @@
 Publish the Scaladoc
 --------------------
-Publish the scaladoc to gh-pages: sbt "doc makeSite ghpagesPushSite"
+Publish the Scaladoc to gh-pages: sbt "doc makeSite ghpagesPushSite"
 
    SNAPSHOT versions have docs generated under /api/master, but release versions are under /api/treelog-x.y.z
 
@@ -12,7 +12,7 @@ Publish Snapshots to Sonatype
 Release to Sonatype
 -------------------
 
-Add your sonatype credentials to ~/.sbt/sonatype_credentials
+Add your Sonatype credentials to ~/.sbt/sonatype_credentials
 
     host=oss.sonatype.org
     user=username
@@ -30,7 +30,7 @@ Add your sonatype credentials to ~/.sbt/sonatype_credentials
 10. Wait ...
 11. Keep checking the Activity tab to see if there are any problems
 12. Look for the release in https://oss.sonatype.org/content/repositories/releases/com/casualmiracles/
-13. Create a release in github with the version and link to differences.
+13. Create a release in GitHub with the version and link to differences.
 
 ## Statistics
 
