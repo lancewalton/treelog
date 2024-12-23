@@ -1,5 +1,7 @@
 import org.typelevel.scalacoptions.ScalacOptions
 
+val Scala36  = "3.6.2"
+val Scala35  = "3.5.2"
 val Scala34  = "3.4.3"
 val Scala33  = "3.3.3"
 val Scala213 = "2.13.15"
@@ -10,7 +12,7 @@ lazy val buildSettings: Seq[Setting[_]] =
     organization       := "com.casualmiracles",
     name               := "treelog-cats",
     scalaVersion       := Scala33,
-    crossScalaVersions := Seq(Scala34, Scala33, Scala213, Scala212),
+    crossScalaVersions := Seq(Scala36, Scala35, Scala34, Scala33, Scala213, Scala212),
     releaseCrossBuild  := true,
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
