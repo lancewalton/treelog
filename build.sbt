@@ -75,6 +75,8 @@ def allDependencies(scalaVersion: String) = {
  * Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging
  */
 def publishSettings: Seq[Setting[_]] = Seq(
+  publishConfiguration          := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration     := publishLocalConfiguration.value.withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle             := true,
   Test / publishArtifact        := false,
