@@ -11,9 +11,10 @@ lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
     organization       := "com.casualmiracles",
     name               := "treelog-cats",
-    scalaVersion       := Scala33,
+    scalaVersion       := Scala36,
     crossScalaVersions := Seq(Scala36, Scala35, Scala34, Scala33, Scala213, Scala212),
     releaseCrossBuild  := true,
+    versionScheme      := Some("early-semver"),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, minor)) => Seq("-release:8")
