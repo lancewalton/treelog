@@ -20,14 +20,12 @@ lazy val buildSettings: Seq[Setting[_]] =
         case _                => Seq("-release:8", "-Xsource:3")
       }
     },
-    tpolecatExcludeOptions ++= {
-      Set(ScalacOptions.lintImplicitRecursion, ScalacOptions.warnUnusedImports)
-    },
-    Test / tpolecatExcludeOptions ++= {
+    tpolecatExcludeOptions ++=
+      Set(ScalacOptions.lintImplicitRecursion, ScalacOptions.warnUnusedImports),
+    Test / tpolecatExcludeOptions ++=
       Set(
         ScalacOptions.warnNonUnitStatement
       )
-    }
   )
 
 enablePlugins(GhpagesPlugin)
