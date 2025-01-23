@@ -3,7 +3,7 @@ import org.typelevel.scalacoptions.ScalacOptions
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
 val Scala33  = "3.3.4"
-val Scala213 = "2.13.15"
+val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
 lazy val buildSettings: Seq[Setting[_]] =
@@ -45,8 +45,8 @@ credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core"     % "2.12.0",
-    "org.typelevel" %% "cats-free"     % "2.12.0",
+    "org.typelevel" %% "cats-core"     % "2.13.0",
+    "org.typelevel" %% "cats-free"     % "2.13.0",
     "org.scalatest" %% "scalatest"     % "3.2.19" % "test",
     "io.argonaut"   %% "argonaut"      % "6.3.10" % "test",
     "io.argonaut"   %% "argonaut-cats" % "6.3.10" % "test"
