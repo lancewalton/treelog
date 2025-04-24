@@ -4,13 +4,13 @@ Publish the Scaladoc to gh-pages: sbt "doc makeSite ghpagesPushSite"
 
    SNAPSHOT versions have docs generated under /api/master, but release versions are under /api/treelog-x.y.z
 
-Publish Snapshots to Sonatype
------------------------------
+Publish Snapshots to Central
+----------------------------
   For snapshots make sure the version number has a -SNAPSHOT suffix. To release to staging, remove the suffix.
   In both cases use 'sbt publishSigned'
 
-Release to Sonatype
--------------------
+Release to Central
+------------------
 
 Add your Sonatype credentials to ~/.sbt/sonatype_credentials
 
