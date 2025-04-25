@@ -16,7 +16,7 @@
   *
   * =DescribedComputation=
   *
-  * All of this works by ''fting'' the intermediate and final results of computations and the description of the steps into a type called
+  * All of this works by ''lifting'' the intermediate and final results of computations and the description of the steps into a type called
   * [[treelog.LogTreeSyntax.DescribedComputation DescribedComputation]] (declared in [[treelog.LogTreeSyntax LogTreeSyntax]]).
   *
   * ==Some Simple Lifting==
