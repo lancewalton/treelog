@@ -12,7 +12,6 @@ ThisBuild / name := "treelog-cats"
 ThisBuild / organization := "com.casualmiracles"
 ThisBuild / homepage := Some(url("https://github.com/lancewalton/treelog/"))
 ThisBuild / licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
-ThisBuild / sbtPluginPublishLegacyMavenStyle := false
 ThisBuild / developers := List(
   Developer(
     "lcw",
