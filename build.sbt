@@ -14,7 +14,6 @@ lazy val buildSettings: Seq[Setting[_]] =
     scalaVersion       := Scala33,
     crossScalaVersions := Seq(Scala33, Scala213, Scala212),
     versionScheme      := Some("early-semver"),
-    Compile / doc / scalacOptions += "-Wconf:cat=scaladoc:warning",
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, minor)) => Seq("-release:8")

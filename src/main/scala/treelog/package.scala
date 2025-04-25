@@ -234,15 +234,11 @@
   *
   * {{{
   * import treelog.LogTreeSyntaxWithoutAnnotations._
-  * import scalaz.syntax.show._
-  * import scalaz.std.list._
+  * import cats.syntax.all._
   *
-  * val result = List(1, 2, 3) ~>* ("Double the values", x => (x * 2) ~> (y => s"Double $x = $y"))
+  * val result: DescribedComputation[List[Int]] = List(1, 2, 3) ~>* ("Double the values", x => (x * 2) ~> (y => s"Double $x = $y"))
   *
-  * println(result.run.value)
-  * // Will print \/-(List(2, 4, 6))
-  *
-  * println(result.run.written.shows)
+  * println(result.value.written.show)
   * // Will print:
   * // Double the values
   * //   Double 1 = 2
@@ -257,10 +253,11 @@
   * {{{
   * val result = List(1, 2, 3) ~>* ("All even", x => (x % 2 == 0) ~>? s"Testing if $x is even")
   *
-  * println(result.run.value)
-  * // Will print -\/(All even) - Notice that it's a 'left', meaning failure
+  * println(result.value.value)
+  * println(result.value.written.show)
+  * // Will print -`Left(All even)` - Notice that it's a 'left', meaning failure
   *
-  * println(result.run.written.shows)
+  * println(result.value.written.shows)
   * // Will print:
   * // Failed: All even
   * //   Failed: Testing if 1 is even
@@ -275,17 +272,18 @@
   * value is some function of the child values. Here is an example of summing the result of several computations:
   *
   * {{{
+  * import cats.syntax.all._
   * val parts = List(1 ~> "One", 2 ~> "Two")
   * val summed = "Sum" ~<+ (parts, (bits: List[Int]) => bits.sum)
   *
-  * println(summed.run.written.shows)
+  * println(summed.value.written.show)
   * // Will print:
   * Sum
   *   One
   *   Two
   *
-  * println(summed.run.value)
-  * // Will print \/-(3)
+  * println(summed.value.value)
+  * // Will print `Right(3)`
   * }}}
   *
   * ==Annotations==
@@ -304,15 +302,14 @@
   * {{{
   * val stringAnnotateableLogTreeSyntax = new treelog.LogTreeSyntax[String] {}
   * import stringAnnotateableLogTreeSyntax._
-  * import scalaz.syntax.show._
-  * import scalaz.std.string._
+  * import cats.syntax.all._
   *
   * val result = 1 ~> "This is the description" ~~ "This is the annotation"
   *
-  * println(result.run.value)
-  * // Will print \/-(1)
+  *  println (result.value.value)
+  * // Will print Right(1)
   *
-  * println(result.run.written.shows)
+  * println(result.value.written.show)
   * // Will print:
   * // This is the description - ["This is the annotation"]
   * }}}
