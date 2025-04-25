@@ -25,7 +25,11 @@ lazy val buildSettings: Seq[Setting[_]] =
     Test / tpolecatExcludeOptions ++=
       Set(
         ScalacOptions.warnNonUnitStatement
-      )
+      ),
+    Compile / doc / sources := {
+      if (scalaVersion.value.startsWith("3")) (Compile / doc / sources).value
+      else Seq.empty
+    }
   )
 
 Compile / scalafmtConfig := file(".scalafmt.conf")
