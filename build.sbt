@@ -1,8 +1,9 @@
 import org.typelevel.scalacoptions.ScalacOptions
+import xerial.sbt.Sonatype.sonatypeCentralHost
 
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
-val Scala33  = "3.3.4"
+val Scala33  = "3.3.5"
 val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
@@ -12,7 +13,6 @@ lazy val buildSettings: Seq[Setting[_]] =
     name               := "treelog-cats",
     scalaVersion       := Scala33,
     crossScalaVersions := Seq(Scala33, Scala213, Scala212),
-    releaseCrossBuild  := true,
     versionScheme      := Some("early-semver"),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
@@ -28,17 +28,7 @@ lazy val buildSettings: Seq[Setting[_]] =
       )
   )
 
-enablePlugins(GhpagesPlugin)
-enablePlugins(SiteScaladocPlugin)
-
 Compile / scalafmtConfig := file(".scalafmt.conf")
-
-lazy val websiteSettings = Seq[Setting[_]](
-  git.remoteRepo := "git@github.com:lancewalton/treelog.git"
-)
-
-resolvers += Resolver.sonatypeRepo("releases")
-credentials += Credentials(Path.userHome / ".sbt" / "sonatype_credentials")
 
 def allDependencies(scalaVersion: String) = {
 
@@ -64,29 +54,11 @@ def allDependencies(scalaVersion: String) = {
 
 }
 
-/* see http://www.scala-sbt.org/using_sonatype.html and http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
- * Instructions from sonatype: https://issues.sonatype.org/browse/OSSRH-2841?focusedCommentId=150049#comment-150049
- * Deploy snapshot artifacts into repository https://oss.sonatype.org/content/repositories/snapshots
- * Deploy release artifacts into the staging repository https://oss.sonatype.org/service/local/staging/deploy/maven2
- * Promote staged artifacts into repository 'Releases'
- * Download snapshot and release artifacts from group https://oss.sonatype.org/content/groups/public
- * Download snapshot, release and staged artifacts from staging group https://oss.sonatype.org/content/groups/staging
- */
 def publishSettings: Seq[Setting[_]] = Seq(
-  publishConfiguration          := publishConfiguration.value.withOverwrite(true),
-  publishLocalConfiguration     := publishLocalConfiguration.value.withOverwrite(true),
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  publishMavenStyle             := true,
-  Test / publishArtifact        := false,
-  pomIncludeRepository          := { _ => false },
-  publishTo                     := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
-  pomExtra                      := <licenses>
+  Test / publishArtifact := false,
+  sonatypeCredentialHost := sonatypeCentralHost,
+  pomIncludeRepository   := { _ => false },
+  pomExtra               := <licenses>
     <license>
       <name>MIT License</name>
       <url>http://www.opensource.org/licenses/mit-license/</url>
@@ -136,7 +108,6 @@ lazy val treeLog = (project in file("."))
   .settings(
     buildSettings ++
       publishSettings ++
-      websiteSettings ++
       Seq(
         resolvers := Seq(Resolver.typesafeRepo("releases")),
         libraryDependencies ++= allDependencies(scalaVersion.value)
