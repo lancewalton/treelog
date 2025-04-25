@@ -7,6 +7,8 @@ val Scala33  = "3.3.5"
 val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
+
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
     organization       := "com.casualmiracles",
@@ -60,7 +62,6 @@ def allDependencies(scalaVersion: String) = {
 
 def publishSettings: Seq[Setting[_]] = Seq(
   Test / publishArtifact := false,
-  sonatypeCredentialHost := sonatypeCentralHost,
   pomIncludeRepository   := { _ => false },
   pomExtra               := <licenses>
     <license>
