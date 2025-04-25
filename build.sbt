@@ -8,11 +8,59 @@ val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
+ThisBuild / name := "treelog-cats"
+ThisBuild / organization := "com.casualmiracles"
+ThisBuild / homepage := Some(url("https://github.com/lancewalton/treelog/"))
+ThisBuild / licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
+ThisBuild / developers := List(
+  Developer(
+    "lcw",
+    "Lance Walton",
+    "lancewalton@mac.com",
+    url("http://underscore.io/")
+  ),
+  Developer(
+    "cjw",
+    "Channing Walton",
+    "channingwalton@mac.com",
+    url("http://underscore.io/")
+  ),
+  Developer(
+    "dpg",
+    "Dave Pereira-Gurnell",
+    "dave.gurnell@underscore.io",
+    url("http://underscore.io/")
+  ),
+    Developer(
+        "everpeace",
+        "Shingo Omura",
+        "",
+        url("https://github.com/lancewalton/treelog/")
+    ),
+    Developer(
+        "stremlenye",
+        "Yury Ankudinov",
+        "",
+        url("https://github.com/lancewalton/treelog/")
+    ),
+    Developer(
+        "0xdevalias",
+        "Glenn Grant",
+        "",
+        url("https://github.com/lancewalton/treelog/")
+    ),
+    Developer(
+        "ahjohannessen",
+        "Alex Henning Johannessen",
+        "",
+        url("https://github.com/lancewalton/treelog/")
+    )
+)
+ThisBuild / versionScheme := Some("early-semver")
+
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
-    organization       := "com.casualmiracles",
-    name               := "treelog-cats",
     scalaVersion       := Scala33,
     crossScalaVersions := Seq(Scala33, Scala213, Scala212),
     versionScheme      := Some("early-semver"),
@@ -57,62 +105,11 @@ def allDependencies(scalaVersion: String) = {
       compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
       compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
-
 }
-
-def publishSettings: Seq[Setting[_]] = Seq(
-  Test / publishArtifact := false,
-  pomIncludeRepository   := { _ => false },
-  pomExtra               := <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license/</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-    <url>https://github.com/lancewalton/treelog</url>
-    <developers>
-      <developer>
-        <id>lcw</id>
-        <name>Lance Walton</name>
-        <email>lance [dot] walton [at] underscore [dot] io</email>
-        <organization>Underscore LLP</organization>
-      </developer>
-      <developer>
-        <id>cjw</id>
-        <name>Channing Walton</name>
-        <email>channing [dot] walton [at] underscore [dot] io</email>
-        <organization>Underscore LLP</organization>
-      </developer>
-      <developer>
-        <id>dpg</id>
-        <name>Dave Pereira-Gurnell</name>
-        <email>dave [dot] gurnell [at] underscore [dot] io</email>
-        <organization>Underscore LLP</organization>
-      </developer>
-      <developer>
-        <id>everpeace</id>
-        <name>Shingo Omura</name>
-      </developer>
-      <developer>
-        <id>stremlenye</id>
-        <name>Yury Ankudinov</name>
-      </developer>
-      <developer>
-        <id>0xdevalias</id>
-        <name>Glenn Grant</name>
-      </developer>
-      <developer>
-        <id>ahjohannessen</id>
-        <name>Alex Henning Johannessen</name>
-      </developer>
-    </developers>
-)
 
 lazy val treeLog = (project in file("."))
   .settings(
     buildSettings ++
-      publishSettings ++
       Seq(
         resolvers := Seq(Resolver.typesafeRepo("releases")),
         libraryDependencies ++= allDependencies(scalaVersion.value)
