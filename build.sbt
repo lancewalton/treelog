@@ -116,4 +116,4 @@ lazy val treeLog = (project in file("."))
       )
   )
 
-addCommandAlias("testAll", "clean;+test")
+addCommandAlias("commitCheck", "clean;+test")
