@@ -7,6 +7,7 @@ val Scala33  = "3.3.5"
 val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
+ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 ThisBuild / name := "treelog-cats"
 ThisBuild / organization := "com.casualmiracles"
