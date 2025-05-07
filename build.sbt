@@ -9,11 +9,11 @@ val Scala212 = "2.12.20"
 
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
-ThisBuild / name := "treelog-cats"
-ThisBuild / organization := "com.casualmiracles"
-ThisBuild / homepage := Some(url("https://github.com/lancewalton/treelog/"))
-ThisBuild / licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
-ThisBuild / developers := List(
+ThisBuild / name                   := "treelog-cats"
+ThisBuild / organization           := "com.casualmiracles"
+ThisBuild / homepage               := Some(url("https://github.com/lancewalton/treelog/"))
+ThisBuild / licenses               := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
+ThisBuild / developers             := List(
   Developer(
     "lcw",
     "Lance Walton",
@@ -32,39 +32,38 @@ ThisBuild / developers := List(
     "dave.gurnell@underscore.io",
     url("http://underscore.io/")
   ),
-    Developer(
-        "everpeace",
-        "Shingo Omura",
-        "",
-        url("https://github.com/lancewalton/treelog/")
-    ),
-    Developer(
-        "stremlenye",
-        "Yury Ankudinov",
-        "",
-        url("https://github.com/lancewalton/treelog/")
-    ),
-    Developer(
-        "0xdevalias",
-        "Glenn Grant",
-        "",
-        url("https://github.com/lancewalton/treelog/")
-    ),
-    Developer(
-        "ahjohannessen",
-        "Alex Henning Johannessen",
-        "",
-        url("https://github.com/lancewalton/treelog/")
-    )
+  Developer(
+    "everpeace",
+    "Shingo Omura",
+    "",
+    url("https://github.com/lancewalton/treelog/")
+  ),
+  Developer(
+    "stremlenye",
+    "Yury Ankudinov",
+    "",
+    url("https://github.com/lancewalton/treelog/")
+  ),
+  Developer(
+    "0xdevalias",
+    "Glenn Grant",
+    "",
+    url("https://github.com/lancewalton/treelog/")
+  ),
+  Developer(
+    "ahjohannessen",
+    "Alex Henning Johannessen",
+    "",
+    url("https://github.com/lancewalton/treelog/")
+  )
 )
-ThisBuild / versionScheme := Some("early-semver")
-
+ThisBuild / versionScheme          := Some("early-semver")
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
-    scalaVersion       := Scala33,
-    crossScalaVersions := Seq(Scala33, Scala213, Scala212),
-    versionScheme      := Some("early-semver"),
+    scalaVersion            := Scala33,
+    crossScalaVersions      := Seq(Scala33, Scala213, Scala212),
+    versionScheme           := Some("early-semver"),
     scalacOptions ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, minor)) => Seq("-release:8")
