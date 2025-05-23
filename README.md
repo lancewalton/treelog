@@ -1,5 +1,4 @@
-treelog
-=======
+# treelog
 
 [![Scala CI](https://github.com/lancewalton/treelog/actions/workflows/scala.yml/badge.svg)](https://github.com/lancewalton/treelog/actions/workflows/scala.yml)
 
@@ -14,17 +13,15 @@ TreeLog is a veritable complect of computation and description in perfect harmon
 
 TreeLog achieves this remarkable feat with a Writer monad writing to a Tree representing the hierarchical log of computation.
 
-Getting TreeLog
----------------
+## Getting TreeLog
 
 Scala 2.13.x, 3.3.x, 3.4.x, 3.5.x, 3.6.x:
 
 ```scala
-libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.9.1")
+libraryDependencies ++= Seq("com.casualmiracles" %% "treelog-cats" % "1.9.2")
 ```
 
-TreeLog Examples
-----------
+## TreeLog Examples
 
 [QuadraticRootsExample.scala](https://github.com/lancewalton/treelog/blob/main/src/test/scala/QuadraticRootsExample.scala) and
 [OptionsAndEithersExample.scala](https://github.com/lancewalton/treelog/blob/main/src/test/scala/OptionsAndEithersExample.scala)
@@ -89,8 +86,7 @@ Extracting root: Failed
 </pre>
 
 
-Older Releases
---------------
+## Older Releases
 
 For Scala 2.12.x and scalaz 7.2.x:
 
