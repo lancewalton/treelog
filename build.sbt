@@ -36,25 +36,25 @@ ThisBuild / developers    := List(
     "everpeace",
     "Shingo Omura",
     "",
-    url("https://github.com/lancewalton/treelog/")
+    url("https://github.com/everpeace")
   ),
   Developer(
     "stremlenye",
     "Yury Ankudinov",
     "",
-    url("https://github.com/lancewalton/treelog/")
+    url("https://github.com/stremlenye")
   ),
   Developer(
     "0xdevalias",
     "Glenn Grant",
     "",
-    url("https://github.com/lancewalton/treelog/")
+    url("https://github.com/0xdevalias")
   ),
   Developer(
     "ahjohannessen",
     "Alex Henning Johannessen",
     "",
-    url("https://github.com/lancewalton/treelog/")
+    url("https://github.com/ahjohannessen")
   )
 )
 ThisBuild / versionScheme := Some("early-semver")
