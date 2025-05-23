@@ -1,5 +1,4 @@
 import org.typelevel.scalacoptions.ScalacOptions
-import xerial.sbt.Sonatype.sonatypeCentralHost
 
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
@@ -8,12 +7,13 @@ val Scala213 = "2.13.16"
 val Scala212 = "2.12.20"
 
 ThisBuild / versionScheme := Some("early-semver")
-ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
-ThisBuild / name                   := "treelog-cats"
-ThisBuild / organization           := "com.casualmiracles"
-ThisBuild / homepage               := Some(url("https://github.com/lancewalton/treelog/"))
-ThisBuild / licenses               := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
-ThisBuild / developers             := List(
+ThisBuild / name          := "treelog-cats"
+ThisBuild / organization  := "com.casualmiracles"
+ThisBuild / homepage      := Some(url("https://github.com/lancewalton/treelog/"))
+ThisBuild / licenses      := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license/"))
+ThisBuild / publishTo     := localStaging.value
+
+ThisBuild / developers    := List(
   Developer(
     "lcw",
     "Lance Walton",
@@ -57,7 +57,7 @@ ThisBuild / developers             := List(
     url("https://github.com/lancewalton/treelog/")
   )
 )
-ThisBuild / versionScheme          := Some("early-semver")
+ThisBuild / versionScheme := Some("early-semver")
 
 lazy val buildSettings: Seq[Setting[_]] =
   Defaults.coreDefaultSettings ++ Seq[Setting[_]](
