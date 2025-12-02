@@ -2,8 +2,8 @@ import org.typelevel.scalacoptions.ScalacOptions
 
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
-val Scala33  = "3.3.6"
-val Scala213 = "2.13.16"
+val Scala33  = "3.3.7"
+val Scala213 = "2.13.18"
 val Scala212 = "2.12.20"
 
 ThisBuild / versionScheme := Some("early-semver")
@@ -102,7 +102,7 @@ def allDependencies(scalaVersion: String) = {
     )
   else
     deps ++ Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.4" cross CrossVersion.full),
       compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
 }
