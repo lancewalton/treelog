@@ -87,11 +87,11 @@ Compile / scalafmtConfig := file(".scalafmt.conf")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core"     % "2.13.0",
-    "org.typelevel" %% "cats-free"     % "2.13.0",
-    "org.scalatest" %% "scalatest"     % "3.2.19" % "test",
-    "io.argonaut"   %% "argonaut"      % "6.3.10" % "test",
-    "io.argonaut"   %% "argonaut-cats" % "6.3.10" % "test"
+    "org.typelevel"         %% "cats-core"     % "2.13.0",
+    "org.typelevel"         %% "cats-free"     % "2.13.0",
+    "org.scalatest"         %% "scalatest"     % "3.2.19" % "test",
+    "io.github.argonaut-io" %% "argonaut"      % "6.3.12" % "test",
+    "io.github.argonaut-io" %% "argonaut-cats" % "6.3.12" % "test"
   )
 
   if (util.isScala3(scalaVersion))
