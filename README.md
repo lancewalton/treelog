@@ -13,6 +13,8 @@ TreeLog is a veritable complect of computation and description in perfect harmon
 
 TreeLog achieves this remarkable feat with a Writer monad writing to a Tree representing the hierarchical log of computation.
 
+An experimental direct-style is [here](https://github.com/channingwalton/treelog-direct).
+
 ## Getting TreeLog
 
 Scala 2.13.x, 3.3.x, 3.4.x, 3.5.x, 3.6.x:
