@@ -2,7 +2,7 @@ import org.typelevel.scalacoptions.ScalacOptions
 
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
-val Scala33  = "3.3.7"
+val Scala33  = "3.3.8"
 val Scala213 = "2.13.18"
 val Scala212 = "2.12.21"
 
@@ -87,11 +87,11 @@ Compile / scalafmtConfig := file(".scalafmt.conf")
 def allDependencies(scalaVersion: String) = {
 
   val deps = Seq(
-    "org.typelevel" %% "cats-core"     % "2.13.0",
-    "org.typelevel" %% "cats-free"     % "2.13.0",
-    "org.scalatest" %% "scalatest"     % "3.2.19" % "test",
-    "io.argonaut"   %% "argonaut"      % "6.3.10" % "test",
-    "io.argonaut"   %% "argonaut-cats" % "6.3.10" % "test"
+    "org.typelevel"         %% "cats-core"     % "2.13.0",
+    "org.typelevel"         %% "cats-free"     % "2.13.0",
+    "org.scalatest"         %% "scalatest"     % "3.2.19" % "test",
+    "io.github.argonaut-io" %% "argonaut"      % "6.3.13" % "test",
+    "io.github.argonaut-io" %% "argonaut-cats" % "6.3.13" % "test"
   )
 
   if (util.isScala3(scalaVersion))
