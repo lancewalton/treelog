@@ -3,7 +3,7 @@ import org.typelevel.scalacoptions.ScalacOptions
 // We use the oldest minor and latest patch version of each scala major version to ensuire
 // binary compatibility with the latest patch version of each scala major version
 val Scala33  = "3.3.8"
-val Scala213 = "2.13.18"
+val Scala213 = "3.9.0"
 val Scala212 = "2.12.21"
 
 ThisBuild / versionScheme := Some("early-semver")
